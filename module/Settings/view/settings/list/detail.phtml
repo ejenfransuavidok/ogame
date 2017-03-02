@@ -1,0 +1,20 @@
+<h1>Параметр для настройки</h1>
+
+<dl>
+    <div class="alert alert-success" role="alert">
+        <strong>Наименование:</strong>
+        <?= $this->escapeHtml($this->setting->getTitle()) ?>
+    </div>
+    <div class="alert alert-info" role="alert">
+        <strong>Тип настройки:</strong>
+        <?= $this->escapeHtml($this->setting->getTypeof()->getTitle()) ?>
+    </div>
+    <div class="alert alert-success" role="alert">
+        <strong>Ключ настройки:</strong>
+        <?= $this->escapeHtml($this->setting->getKey()) ?>
+    </div>
+    <div class="alert alert-info" role="alert">
+        <strong>Значение:</strong>
+        <?= $this->escapeHtml($this->setting->getText()) ?>
+    </div>
+</dl>

@@ -1,0 +1,1 @@
+CREATE TABLE technologies (id INTEGER PRIMARY KEY AUTO_INCREMENT, name varchar(100) NOT NULL, description TEXT NOT NULL);

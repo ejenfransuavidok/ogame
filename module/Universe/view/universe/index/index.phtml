@@ -1,0 +1,19 @@
+<script>
+    SystemJS.config({
+        baseURL: '<?= $this->basePath('js/') ?>'
+    });
+    SystemJS.import('main.js');
+</script>
+<div class="jumbotron">
+    <h1>Модуль генерации <span class="zf-green">игрового мира</span></h1>
+    <div class="alert alert-danger" role="alert">
+        модуль производит генерацию игрового мира на основании внесенных настроек, все данные (относящиеся к игровому миру) в базе данных будут перезаписаны!
+    </div>
+    <p><a id="universe-start-generation" class="btn btn-success btn-lg" href="#">Приступить к генерации &raquo;</a></p>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">Консоль сообщений</div>
+    <div id="console" class="panel-body" style="font-size: 10px;">
+
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<h1>Настройки</h1>
+
+<div class="list-group">
+<?php foreach ($this->settings as $setting) : ?>
+  <div class="list-group-item">
+    <h4 class="list-group-item-heading">
+      <a href="<?= $this->url('settings/detail', ['id' => $setting->getId()]) ?>">
+        <?= $setting->getTitle() ?>
+      </a>
+    </h4>
+    <div class="alert alert-success" role="alert">
+        <strong>Тип данных:</strong> <?= $setting->getTypeof()->getTitle() ?>
+    </div>
+    <div class="alert alert-info" role="alert">
+        <strong>Ключ:</strong> <?= $setting->getKey() ?>
+    </div>
+    <div class="alert alert-success" role="alert">
+        <strong>Значение:</strong> <?= $setting->getText() ?>
+    </div>
+    <div class="btn-group" role="group" aria-label="Post actions">
+      <a class="btn btn-xs btn-default" href="<?= $this->url('settings/edit', ['id' => $setting->getId()]) ?>">Редактировать</a>
+      <a class="btn btn-xs btn-danger" href="<?= $this->url('settings/delete', ['id' => $setting->getId()]) ?>">Удалить</a>
+    </div>
+  </div>    
+<?php endforeach ?>
+</div>
+
+<?= $this->paginationControl(
+    // The paginator object:
+    $this->settings,
+    // The scrolling style:
+    'sliding',
+    // The partial to use to render the control:
+    'partial/paginator',
+    // The route to link to when a user clicks a control link:
+    ['route' => 'settings']
+) ?>
+
+<div class="btn-group" role="group" aria-label="Post actions">
+  <a class="btn btn-primary" href="<?= $this->url('settings/add') ?>">Добавить новую настройку</a>
+</div>

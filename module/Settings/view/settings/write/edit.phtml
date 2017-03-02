@@ -1,0 +1,9 @@
+<h1>Редактировать настройку</h1>
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('settings/edit', [], true));
+echo $this->partial('settings/write/form', [
+    'form' => $form,
+    'submitLabel' => 'Обновить настройку',
+]);

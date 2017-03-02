@@ -1,0 +1,26 @@
+<?= $this->headLink()->prependStylesheet($this->basePath('css/signin.css')); ?>
+<div class="panel panel-default">
+    <div class="panel-heading">Тестовые полеты</div>
+    <div class="panel-body">
+        <?php if(!$auth->hasIdentity()) : ?>
+        <div class="container">
+            <form class="form-signin" action="/flight/authorize" method="post" >
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input name="login" type="text" id="inputEmail" class="form-control" placeholder="User name" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                  </label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            </form>
+        </div>
+        <?php else: ?>
+            <div class="alert alert-success" role="alert">Привет <?= $auth->getIdentity();?></div>
+        <?php endif; ?>
+    </div>
+    <div class="panel-footer">Тестовые полеты</div>
+</div>

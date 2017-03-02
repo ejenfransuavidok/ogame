@@ -1,0 +1,61 @@
+<?=     $this->headLink()
+             ->prependStylesheet($this->basePath('file_upload/css/style.css'))
+             ->prependStylesheet($this->basePath('file_upload/css/jquery.fileupload.css'))
+?>
+<?=     $this->headScript()
+             ->prependFile($this->basePath('file_upload/js/jquery.fileupload.js'))
+             ->prependFile($this->basePath('file_upload/js/jquery.iframe-transport.js'))
+             ->prependFile($this->basePath('file_upload/js/vendor/jquery.ui.widget.js'))
+?>
+  <!--
+  <div class="panel-heading">Генерация технологий</div>
+  <div class="panel-body">
+        Basic panel example
+  </div>
+  -->
+<div class="panel panel-default">
+    <div class="panel-heading">Генерация технологий</div>
+    <div class="panel-body">
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Выбрать файл...</span>
+            <input id="fileupload" type="file" name="files[]" multiple>
+        </span>
+    </div>
+</div>
+<div class="panel">
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+    <div id="files" class="files"></div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">Консоль сообщений</div>
+    <div id="console" class="panel-body" style="font-size: 10px;">
+
+    </div>
+</div>    
+
+<script>
+$(function () {
+    'use strict';
+    var url = '/techload';
+    $('#fileupload').fileupload({
+        url: url,
+        acceptFileTypes: /(\.|\/)(xmi)$/i,
+        dataType: 'json',
+        done: function (e, data) {
+            var text = $('#console').html();
+            $('#console').html(text + '<p>'+data.result.message+'</p>');
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
+</script>

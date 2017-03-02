@@ -1,0 +1,9 @@
+<h1>Добавить новую настройку</h1>
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url());
+echo $this->partial('settings/write/form', [
+    'form' => $form,
+    'submitLabel' => 'Insert new setting',
+]);
