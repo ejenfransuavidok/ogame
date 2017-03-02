@@ -50,10 +50,13 @@ class TechnologyRepository implements EntityRepositoryInterface
      *
      * @return Technology[]
      */
-    public function findAllEntities()
+    public function findAllEntities($criteria='')
     {
         $sql       = new Sql($this->db);
         $select    = $sql->select('technologies');
+        if($criteria) {
+            $select->where($criteria);
+        }
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
@@ -66,11 +69,11 @@ class TechnologyRepository implements EntityRepositoryInterface
         return $resultSet;
     }
     
-    public function findEntity($id)
+    public function findEntity($id, $criteria='')
     {
         $sql       = new Sql($this->db);
         $select    = $sql->select('technologies');
-        $select->where(['id = ?' => $id]);
+        $select->where($criteria ? $criteria : ['id = ?' => $id]);
 
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
@@ -94,6 +97,16 @@ class TechnologyRepository implements EntityRepositoryInterface
         }
 
         return $technology;
+    }
+    
+    public function findBy($criteria, $orderBy='', $limit='', $offset='')
+    {
+        return $this->findAllEntities($criteria);
+    }
+    
+    public function findOneBy($criteria, $orderBy='')
+    {
+        return $this->findEntity(0, $criteria);
     }
 
 }

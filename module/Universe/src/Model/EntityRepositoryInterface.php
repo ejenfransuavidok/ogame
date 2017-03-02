@@ -20,4 +20,8 @@ interface EntityRepositoryInterface
      * @return Settings
      */
     public function findEntity($id);
+    
+    public function findBy($criteria, $orderBy='', $limit='', $offset='');
+    
+    public function findOneBy($criteria, $orderBy='');
 }

@@ -50,7 +50,7 @@ class SpaceSheepRepository implements EntityRepositoryInterface
      *
      * @return SpaceSheep[]
      */
-    public function findAllEntities($value='', $field='')
+    public function findAllEntities($criteria='')
     {
         $sql       = new Sql($this->db);
         $select    = $sql->select('spacesheeps')
@@ -108,8 +108,8 @@ class SpaceSheepRepository implements EntityRepositoryInterface
                     'stars.star_type'           => 'star_type',
                     'stars.planet_system'       => 'planet_system'
                 ]);
-        if ($field && $value) {
-            $select->where(['spacesheeps.'.$field.' = ?' => $value]);
+        if($criteria) {
+            $select->where($criteria);
         }
             
         $statement = $sql->prepareStatementForSqlObject($select);
@@ -124,7 +124,7 @@ class SpaceSheepRepository implements EntityRepositoryInterface
         return $resultSet;
     }
     
-    public function findEntity($id)
+    public function findEntity($id, $criteria='')
     {
         $sql       = new Sql($this->db);
         $select    = $sql->select('spacesheeps')
@@ -182,7 +182,7 @@ class SpaceSheepRepository implements EntityRepositoryInterface
                     'stars.star_type'           => 'star_type',
                     'stars.planet_system'       => 'planet_system'
                 ]);
-        $select->where(['id = ?' => $id]);
+        $select->where($criteria ? $criteria : ['spacesheeps.id = ?' => $id]);
 
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
@@ -206,6 +206,16 @@ class SpaceSheepRepository implements EntityRepositoryInterface
         }
 
         return $spaceSheep;
+    }
+    
+    public function findBy($criteria, $orderBy='', $limit='', $offset='')
+    {
+        return $this->findAllEntities($criteria);
+    }
+    
+    public function findOneBy($criteria, $orderBy='')
+    {
+        return $this->findEntity(0, $criteria);
     }
 
 }

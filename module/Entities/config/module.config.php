@@ -21,6 +21,7 @@ return [
             Model\TechnologyConnectionRepository::class => Factory\TechnologyConnectionRepositoryFactory::class,
             Model\SpaceSheepCommand::class => Factory\SpaceSheepCommandFactory::class,
             Model\SpaceSheepRepository::class => Factory\SpaceSheepRepositoryFactory::class,
+            Model\UserCommand::class => Factory\UserCommandFactory::class,
         ],
     ],
     'controllers' => [

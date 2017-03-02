@@ -49,7 +49,7 @@ class PlanetRepository implements EntityRepositoryInterface
      *
      * @return Planet[]
      */
-    public function findAllEntities()
+    public function findAllEntities($criteria='')
     {
         $sql            = new Sql($this->db);
         $select         = $sql->select('planets')
@@ -64,6 +64,9 @@ class PlanetRepository implements EntityRepositoryInterface
                     'planet_system.galaxy'      => 'galaxy'
                 ],
                 Select::JOIN_LEFT);
+        if($criteria) {
+            $select->where($criteria);
+        }
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
@@ -76,7 +79,7 @@ class PlanetRepository implements EntityRepositoryInterface
         return $resultSet;
     }
     
-    public function findEntity($id)
+    public function findEntity($id, $criteria='')
     {
         $sql    = new Sql($this->db);
         $select         = $sql->select('planets')
@@ -92,8 +95,8 @@ class PlanetRepository implements EntityRepositoryInterface
                 ],
                 Select::JOIN_LEFT);
                 
-        $select->where(['planets.id = ?' => $id]);
-
+        $select->where($criteria ? $criteria : ['planets.id = ?' => $id]);
+        
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
@@ -118,4 +121,14 @@ class PlanetRepository implements EntityRepositoryInterface
         return $planet;
     }
 
+    public function findBy($criteria, $orderBy='', $limit='', $offset='')
+    {
+        return $this->findAllEntities($criteria);
+    }
+    
+    public function findOneBy($criteria, $orderBy='')
+    {
+        return $this->findEntity(0, $criteria);
+    }
+    
 }

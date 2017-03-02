@@ -72,6 +72,14 @@ class UserCommand implements EntityCommandInterface
         return new User(
             $user->getName(),
             $user->getDescription(),
+            $user->getPassword(),
+            $user->getFirstName(),
+            $user->getLastName(),
+            $user->getGalaxy(),
+            $user->getPlanetSystem(),
+            $user->getPlanet(),
+            $user->getSputnik(),
+            $user->getStar(),
             $result->getGeneratedValue()
         );
     }
@@ -87,8 +95,16 @@ class UserCommand implements EntityCommandInterface
         
         $update = new Update($user->GetTable());
         $update->set([
-                'name'          => $user->getName(),
-                'description'   => $user->getDescription()
+            'login'         => $user->getName(),
+            'description'   => $user->getDescription(),
+            'password'      => $user->getPassword(),
+            'firstname'     => $user->getFirstName(),
+            'lastname'      => $user->getLastName(),
+            'galaxy'        => $user->getGalaxy()->getId(),
+            'planet_system' => $user->getPlanetSystem()->getId(),
+            'planet'        => $user->getPlanet()->getId(),
+            'sputnik'       => $user->getSputnik()->getId(),
+            'star'          => $user->getStar()->getId()
         ]);
         $update->where(['id = ?' => $user->getId()]);
 

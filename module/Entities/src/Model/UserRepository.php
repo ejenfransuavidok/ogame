@@ -1,6 +1,6 @@
 <?php
 
-namespace Universe\Model;
+namespace Entities\Model;
 
 use InvalidArgumentException;
 use RuntimeException;
@@ -14,8 +14,9 @@ use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\ResultSet;
+use Universe\Model\EntityRepositoryInterface;
 
-class StarTypeRepository implements EntityRepositoryInterface
+class UserRepository implements EntityRepositoryInterface
 {
     /**
      * @var AdapterInterface
@@ -28,31 +29,31 @@ class StarTypeRepository implements EntityRepositoryInterface
     private $hydrator;
 
     /**
-     * @var Settings
+     * @var User
      */
-    private $starTypePrototype;
+    private $userPrototype;
 
     public function __construct(
         AdapterInterface $db,
         HydratorInterface $hydrator,
-        StarType $starTypePrototype
+        User $userPrototype
     ) {
-        $this->db                   = $db;
-        $this->hydrator             = $hydrator;
-        $this->starTypePrototype    = $starTypePrototype;
+        $this->db             = $db;
+        $this->hydrator       = $hydrator;
+        $this->userPrototype  = $userPrototype;
     }
 
     /**
      * Return a set of all blog settings that we can iterate over.
      *
-     * Each entry should be a StarType instance.
+     * Each entry should be a User instance.
      *
-     * @return StarType[]
+     * @return User[]
      */
     public function findAllEntities($criteria='')
     {
         $sql       = new Sql($this->db);
-        $select    = $sql->select('stars_types');
+        $select    = $sql->select('users');
         if($criteria) {
             $select->where($criteria);
         }
@@ -63,7 +64,7 @@ class StarTypeRepository implements EntityRepositoryInterface
             return [];
         }
 
-        $resultSet = new HydratingResultSet($this->hydrator, $this->starTypePrototype);
+        $resultSet = new HydratingResultSet($this->hydrator, $this->userPrototype);
         $resultSet->initialize($result);
         return $resultSet;
     }
@@ -71,30 +72,30 @@ class StarTypeRepository implements EntityRepositoryInterface
     public function findEntity($id, $criteria='')
     {
         $sql       = new Sql($this->db);
-        $select    = $sql->select('stars_types');
+        $select    = $sql->select('users');
         $select->where($criteria ? $criteria : ['id = ?' => $id]);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
-        
+
         if (! $result instanceof ResultInterface || ! $result->isQueryResult()) {
             throw new RuntimeException(sprintf(
-                'Failed retrieving star type with identifier "%s"; unknown database error.',
+                'Failed retrieving user with identifier "%s"; unknown database error.',
                 $id
             ));
         }
 
-        $resultSet = new HydratingResultSet($this->hydrator, $this->starTypePrototype);
+        $resultSet = new HydratingResultSet($this->hydrator, $this->userPrototype);
         $resultSet->initialize($result);
-        $star_type = $resultSet->current();
+        $user = $resultSet->current();
 
-        if (! $star_type) {
+        if (!$user) {
             throw new InvalidArgumentException(sprintf(
-                'Star type with identifier "%s" not found.',
+                'User with identifier "%s" not found.',
                 $id
             ));
         }
 
-        return $star_type;
+        return $user;
     }
     
     public function findBy($criteria, $orderBy='', $limit='', $offset='')

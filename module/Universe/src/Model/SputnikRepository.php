@@ -49,7 +49,7 @@ class SputnikRepository implements EntityRepositoryInterface
      *
      * @return Sputnik[]
      */
-    public function findAllEntities()
+    public function findAllEntities($criteria='')
     {
         $sql            = new Sql($this->db);
         $select         = $sql->select('sputniks')
@@ -75,7 +75,9 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planets.livable'           => 'livable',
                     'planets.planet_system'     => 'planet_system'
                 ]);
-        
+        if($criteria) {
+            $select->where($criteria);
+        }
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
@@ -88,7 +90,7 @@ class SputnikRepository implements EntityRepositoryInterface
         return $resultSet;
     }
     
-    public function findEntity($id)
+    public function findEntity($id, $criteria='')
     {
         $sql    = new Sql($this->db);
         $select         = $sql->select('sputniks')
@@ -115,7 +117,7 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planets.planet_system'     => 'planet_system'
                 ]);
                 
-        $select->where(['sputniks.id = ?' => $id]);
+        $select->where($criteria ? $criteria : ['sputniks.id = ?' => $id]);
 
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
@@ -140,5 +142,15 @@ class SputnikRepository implements EntityRepositoryInterface
 
         return $sputnik;
     }
-
+    
+    public function findBy($criteria, $orderBy='', $limit='', $offset='')
+    {
+        return $this->findAllEntities($criteria);
+    }
+    
+    public function findOneBy($criteria, $orderBy='')
+    {
+        return $this->findEntity(0, $criteria);
+    }
+    
 }

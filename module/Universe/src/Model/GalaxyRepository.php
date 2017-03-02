@@ -49,10 +49,13 @@ class GalaxyRepository implements EntityRepositoryInterface
      *
      * @return Galaxy[]
      */
-    public function findAllEntities()
+    public function findAllEntities($criteria='')
     {
         $sql       = new Sql($this->db);
         $select    = $sql->select('galaxies');
+        if($criteria) {
+            $select->where($criteria);
+        }
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
@@ -65,11 +68,11 @@ class GalaxyRepository implements EntityRepositoryInterface
         return $resultSet;
     }
     
-    public function findEntity($id)
+    public function findEntity($id, $criteria='')
     {
         $sql       = new Sql($this->db);
         $select    = $sql->select('galaxies');
-        $select->where(['id = ?' => $id]);
+        $select->where($criteria ? $criteria : ['id = ?' => $id]);
 
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
@@ -93,6 +96,16 @@ class GalaxyRepository implements EntityRepositoryInterface
         }
 
         return $galaxy;
+    }
+    
+    public function findBy($criteria, $orderBy='', $limit='', $offset='')
+    {
+        return $this->findAllEntities($criteria);
+    }
+    
+    public function findOneBy($criteria, $orderBy='')
+    {
+        return $this->findEntity(0, $criteria);
     }
 
 }

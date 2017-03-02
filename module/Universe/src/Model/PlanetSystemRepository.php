@@ -49,7 +49,7 @@ class PlanetSystemRepository implements EntityRepositoryInterface
      *
      * @return PlanetSystem[]
      */
-    public function findAllEntities()
+    public function findAllEntities($criteria='')
     {
         $sql            = new Sql($this->db);
         $select = $sql->select('planet_system')
@@ -73,6 +73,9 @@ class PlanetSystemRepository implements EntityRepositoryInterface
                     'stars.planet_system'  => 'planet_system'
                 ],
                 Select::JOIN_LEFT);
+        if($criteria) {
+            $select->where($criteria);
+        }
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
@@ -85,7 +88,7 @@ class PlanetSystemRepository implements EntityRepositoryInterface
         return $resultSet;
     }
     
-    public function findEntity($id)
+    public function findEntity($id, $criteria='')
     {
         $sql    = new Sql($this->db);
         $select = $sql->select('planet_system')
@@ -110,7 +113,7 @@ class PlanetSystemRepository implements EntityRepositoryInterface
                 ],
                 Select::JOIN_LEFT);
                 
-        $select->where(['planet_system.id = ?' => $id]);
+        $select->where($criteria ? $criteria : ['planet_system.id = ?' => $id]);
 
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
@@ -134,6 +137,16 @@ class PlanetSystemRepository implements EntityRepositoryInterface
         }
 
         return $planet_system;
+    }
+
+    public function findBy($criteria, $orderBy='', $limit='', $offset='')
+    {
+        return $this->findAllEntities($criteria);
+    }
+    
+    public function findOneBy($criteria, $orderBy='')
+    {
+        return $this->findEntity(0, $criteria);
     }
 
 }

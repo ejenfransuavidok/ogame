@@ -49,7 +49,7 @@ class StarRepository implements EntityRepositoryInterface
      *
      * @return Star[]
      */
-    public function findAllEntities($value='', $field='')
+    public function findAllEntities($criteria='')
     {
         $sql            = new Sql($this->db);
         $select         = $sql->select('stars')
@@ -77,8 +77,8 @@ class StarRepository implements EntityRepositoryInterface
                     'stars_types.part'           => 'part'
                 ],
                 Select::JOIN_LEFT);
-        if ($field && $value) {
-            $select->where(['stars.'.$field.' = ?' => $value]);
+        if ($criteria) {
+            $select->where($criteria);
         }
         
         $statement = $sql->prepareStatementForSqlObject($select);
@@ -93,7 +93,7 @@ class StarRepository implements EntityRepositoryInterface
         return $resultSet;
     }
     
-    public function findEntity($value, $field='id')
+    public function findEntity($id, $criteria='')
     {
         $sql    = new Sql($this->db);
         $select         = $sql->select('stars')
@@ -121,9 +121,7 @@ class StarRepository implements EntityRepositoryInterface
                     'stars_types.part'           => 'part'
                 ],
                 Select::JOIN_LEFT);
-                
-        $select->where(['stars.'.$field.' = ?' => $value]);
-
+        $select->where($criteria ? $criteria : ['stars.id = ?' => $id]);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
@@ -147,5 +145,15 @@ class StarRepository implements EntityRepositoryInterface
 
         return $star;
     }
-
+    
+    public function findBy($criteria, $orderBy='', $limit='', $offset='')
+    {
+        return $this->findAllEntities($criteria);
+    }
+    
+    public function findOneBy($criteria, $orderBy='')
+    {
+        return $this->findEntity(0, $criteria);
+    }
+    
 }
