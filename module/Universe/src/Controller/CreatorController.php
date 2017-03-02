@@ -344,7 +344,7 @@ class CreatorController extends AbstractActionController
        $this->logger->info('> Всего сгенерировано звезд - ' . count($stars));
        $star_types = $this->starTypeRepository->findAllEntities();
        foreach($star_types as $star_type) {
-           $stars = $this->starRepository->findAllEntities($star_type->getId(), 'star_type');
+           $stars = $this->starRepository->findAllEntities('stars.star_type = ' . $star_type->getId());
            $this->logger->info('> Звезд [' . $star_type->get_color_rus() . ', класса ' .$star_type->get_star_class()  . '] - ' . count($stars));
        }
        $planets = $this->planetRepository->findAllEntities();

@@ -22,6 +22,7 @@ return [
             Model\SpaceSheepCommand::class => Factory\SpaceSheepCommandFactory::class,
             Model\SpaceSheepRepository::class => Factory\SpaceSheepRepositoryFactory::class,
             Model\UserCommand::class => Factory\UserCommandFactory::class,
+            Model\UserRepository::class => Factory\UserRepositoryFactory::class,
         ],
     ],
     'controllers' => [
