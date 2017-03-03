@@ -6,7 +6,8 @@ use Interop\Container\ContainerInterface;
 use Entities\Model\SpaceSheep;
 use Entities\Model\SpaceSheepRepository;
 use Entities\Model\Hydrator\SpaceSheepHydrator;
-use Universe\Model\StarReposytory;
+use Entities\Model\UserRepository;
+use Universe\Model\StarRepository;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
@@ -23,9 +24,11 @@ class SpaceSheepRepositoryFactory implements FactoryInterface
             $container->get(AdapterInterface::class),
             new SpaceSheepHydrator(
                 $container->get(GalaxyRepository::class),
-                $container->get(PlanetSystemRepository::class), 
+                $container->get(PlanetSystemRepository::class),
+                $container->get(PlanetRepository::class),
                 $container->get(SputnikRepository::class),
-                $container->get(StarRepository::class)),
+                $container->get(StarRepository::class),
+                $container->get(UserRepository::class)),
             new SpaceSheep(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }

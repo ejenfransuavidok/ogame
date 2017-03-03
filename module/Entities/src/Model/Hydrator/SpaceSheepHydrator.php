@@ -1,11 +1,13 @@
 <?php
-namespace Universe\Model\Hydrator;
+namespace Entities\Model\Hydrator;
 
-use Universe\Model\StarReposytory;
+use Universe\Model\StarRepository;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
+use Universe\Model\SputnikRepository;
 use Entities\Model\UserRepository;
+use Entities\Model\SpaceSheep;
 use Zend\Hydrator\Exception\BadMethodCallException;
 use Zend\Hydrator\HydratorInterface;
 
@@ -55,13 +57,15 @@ class SpaceSheepHydrator implements HydratorInterface
     
     public function __construct(
         GalaxyRepository $galaxyRepository, 
-        PlanetSystemRepository $planetSystemRepository, 
+        PlanetSystemRepository $planetSystemRepository,
+        PlanetRepository $planetRepository,
         SputnikRepository $sputnikRepository,
         StarRepository $starRepository,
         UserRepository $userRepository)
     {
         $this->galaxyRepository = $galaxyRepository;
         $this->planetSystemRepository = $planetSystemRepository;
+        $this->planetRepository = $planetRepository;
         $this->sputnikRepository = $sputnikRepository;
         $this->starRepository = $starRepository;
         $this->userRepository = $userRepository;
@@ -79,7 +83,7 @@ class SpaceSheepHydrator implements HydratorInterface
     {
         if (!$object instanceof SpaceSheep) {
             throw new \BadMethodCallException(sprintf(
-                '%s expects the provided $object:'.get_class($object).' to be a PHP Star object)',
+                '%s expects the provided $object:'.get_class($object).' to be a PHP SpaceSheep object)',
                 __METHOD__
             ));
         }
@@ -92,16 +96,41 @@ class SpaceSheepHydrator implements HydratorInterface
         $sputnik_id = $spaceSheep->getSputnik();
         $star_id = $spaceSheep->getStar();
         $user_id = $spaceSheep->getOwner();
-        $galaxy = $this->galaxyRepository->findEntity($galaxy_id);
-        $planet_system = $this->planetSystemRepository->findEntity($planet_system_id);
-        $planet = $this->planetRepository->findEntity($planet_id);
-        $star = $this->starRepository->findEntity($star_id);
-        $user = $this->userRepository->findEntity($user_id);
+        try {
+            $galaxy = $this->galaxyRepository->findEntity($galaxy_id);
+        }
+        catch (\Exception $e) {
+            $galaxy = null;
+        }
+        try {
+            $planet_system = $this->planetSystemRepository->findEntity($planet_system_id);
+        }
+        catch (\Exception $e) {
+            $planet_system = null;
+        }
+        try {
+            $planet = $this->planetRepository->findEntity($planet_id);
+        }
+        catch (\Exception $e) {
+            $planet = null;
+        }
+        try {
+            $star = $this->starRepository->findEntity($star_id);
+        }
+        catch (\Exception $e) {
+            $star = null;
+        }
+        try {
+            $user = $this->userRepository->findEntity($user_id);
+        }
+        catch (\Exception $e) {
+            $user = null;
+        }
         $spaceSheep->setGalaxy($galaxy);
         $spaceSheep->setPlanetSystem($planet_system);
         $spaceSheep->setPlanet($planet);
         $spaceSheep->setStar($star);
-        $spaceSheep->setUser($user);
+        $spaceSheep->setOwner($user);
         return $spaceSheep;
     }
     

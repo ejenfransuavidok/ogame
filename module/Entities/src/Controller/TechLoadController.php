@@ -259,31 +259,7 @@ class TechLoadController extends AbstractActionController
         }
         die(json_encode(array('result' => 'ERR', 'message' => 'Во время загрузки файла произошла ошибка')));
     }
-    /*
-     return new SpaceSheep(
-            $spaceSheep->getName(),
-            $spaceSheep->getDescription(),
-            $spaceSheep->getSpeed(), 
-            $spaceSheep->getCapacity(), 
-            $spaceSheep->getFuelConsumption(), 
-            $spaceSheep->getFuelTankSize(), 
-            $spaceSheep->getAttakPower(), 
-            $spaceSheep->getRateOfFire(), 
-            $spaceSheep->getTheNumberOfAttakTarget(),
-            $spaceSheep->getSheepSize(),
-            $spaceSheep->getProtection(),
-            $spaceSheep->getNumberOfGuns(),
-            $spaceSheep->getConstructionTime(),
-            $spaceSheep->getFuelRest(),
-            $spaceSheep->getGalaxy(),
-            $spaceSheep->getPlanetSystem(),
-            $spaceSheep->getStar(),
-            $spaceSheep->getPlanet(),
-            $spaceSheep->getSputnik(),
-            $spaceSheep->getOwner(),
-            $result->getGeneratedValue()
-        );
-    */  
+     
     private function sheepsLoadExecute($file)
     {   
         $keys = array(
@@ -314,12 +290,42 @@ class TechLoadController extends AbstractActionController
             if(is_array($entities)) {
                 $this->spaceSheepCommand->truncateTable();
                 foreach($entities as $one) {
-                    $galaxy = $this->galaxyRepository->findEntity(intval($one['galaxy']));
-                    $planetSystem = $this->planetSystemRepository->findEntity(intval($one['planetSystem']));
-                    $star = $this->starRepository->findEntity(intval($one['star']));
-                    $planet = $this->planetRepository->findEntity(intval($one['planet']));
-                    $sputnik = $this->sputnikRepository->findEntity(intval($one['sputnik']));
-                    $owner = $this->userRepository->findEntity(intval($one['owner']));
+                    try {
+                        $galaxy = $this->galaxyRepository->findEntity(intval($one['galaxy']));
+                    }
+                    catch(\Exception $e) {
+                        $galaxy = null;
+                    }
+                    try {
+                        $planetSystem = $this->planetSystemRepository->findEntity(intval($one['planetSystem']));
+                    }
+                    catch(\Exception $e) {
+                        $planetSystem = null;
+                    }
+                    try {
+                        $star = $this->starRepository->findEntity(intval($one['star']));
+                    }
+                    catch(\Exception $e) {
+                        $star = null;
+                    }
+                    try {
+                        $planet = $this->planetRepository->findEntity(intval($one['planet']));
+                    }
+                    catch(\Exception $e) {
+                        $planet = null;
+                    }
+                    try {
+                        $sputnik = $this->sputnikRepository->findEntity(intval($one['sputnik']));
+                    }
+                    catch(\Exception $e) {
+                        $sputnik = null;
+                    }
+                    try {
+                        $owner = $this->userRepository->findEntity(intval($one['owner']));
+                    }
+                    catch(\Exception $e) {
+                        $owner = null;
+                    }
                     $spaceSheep = new SpaceSheep(
                         $one['name'],
                         $one['description'],
@@ -335,12 +341,12 @@ class TechLoadController extends AbstractActionController
                         $one['number_of_guns'],
                         $one['construction_time'],
                         $one['fuel_rest'],
-                        $one['galaxy'],
-                        $one['planetSystem'],
-                        $one['star'],
-                        $one['planet'],
-                        $one['sputnik'],
-                        $one['owner']
+                        $galaxy,
+                        $planetSystem,
+                        $star,
+                        $planet,
+                        $sputnik,
+                        $owner
                         );
                     $spaceSheep = $this->spaceSheepCommand->insertEntity($spaceSheep);
                 }

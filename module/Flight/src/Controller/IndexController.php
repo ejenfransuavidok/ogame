@@ -18,6 +18,9 @@ use Zend\Authentication\Storage\Session as SessionStorage;
 use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
 use Entities\Model\User;
+use Entities\Model\SpaceSheepRepository;
+use Entities\Model\SpaceSheepCommand;
+use Entities\Model\SpaceSheep;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
@@ -26,6 +29,10 @@ use Universe\Model\StarRepository;
 
 
 define('INIT', 'TRUE');
+
+class NoSpaceSheepsInDBase extends \Exception
+{
+}
 
 class IndexController extends AbstractActionController
 {
@@ -79,6 +86,16 @@ class IndexController extends AbstractActionController
      */
     private $starRepository;
     
+    /**
+     * @ var SpaceSheepCommand
+     */
+    private $spaceSheepCommand;
+    
+    /**
+     * @ var SpaceSheepRepository
+     */
+    private $spaceSheepRepository;
+    
     public function __construct(
         AdapterInterface $db, 
         UserRepository $userRepository,
@@ -87,7 +104,9 @@ class IndexController extends AbstractActionController
         PlanetSystemRepository $planetSystemRepository,
         PlanetRepository $planetRepository,
         SputnikRepository $sputnikRepository,
-        StarRepository $starRepository)
+        StarRepository $starRepository,
+        SpaceSheepCommand $spaceSheepCommand,
+        SpaceSheepRepository $spaceSheepRepository)
     {
         $this->dbAdapter = $db;
         $this->userRepository = $userRepository;
@@ -97,6 +116,9 @@ class IndexController extends AbstractActionController
         $this->planetRepository = $planetRepository;
         $this->sputnikRepository = $sputnikRepository;
         $this->starRepository = $starRepository;
+        $this->spaceSheepCommand = $spaceSheepCommand;
+        $this->spaceSheepRepository = $spaceSheepRepository;
+        
         $this->authAdapter = new AuthAdapter(
             $this->dbAdapter,
             'users',
@@ -131,6 +153,67 @@ class IndexController extends AbstractActionController
         return $user;
     }
     
+    /**
+     * назначение юзеру кораблей
+     */
+    private function SetSheepsForUser(User $user)
+    {
+        $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner IS NULL');
+        if(!$sheeps) {
+            throw new NoSpaceSheepsInDBase('no space sheeps into data of base');
+        }
+        else {
+            /**
+             * Удаляем предыдущие
+             */
+            try {
+                $oldsheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner = ' . $user->getId());
+                foreach($oldsheeps as $sheep) {
+                    $this->spaceSheepCommand->deleteEntity($sheep);
+                }
+            }
+            catch (\Exception $e) {
+            /**
+             * кораблей не было
+             */
+            }
+            /**
+             * @ добавляем новые корабли
+             */
+            foreach($sheeps as $sheep) {
+                $new = new SpaceSheep(
+                    $sheep->getName(),
+                    $sheep->getDescription(),
+                    $sheep->getSpeed(),
+                    $sheep->getCapacity(),
+                    $sheep->getFuelConsumption(),
+                    $sheep->getFuelTankSize(),
+                    $sheep->getAttakPower(),
+                    $sheep->getRateOfFire(),
+                    $sheep->getTheNumberOfAttakTarget(),
+                    $sheep->getSheepSize(),
+                    $sheep->getProtection(),
+                    $sheep->getNumberOfGuns(),
+                    $sheep->getConstructionTime(),
+                    $sheep->getFuelRest(),
+                    $sheep->getGalaxy(),
+                    $sheep->getPlanetSystem(),
+                    $sheep->getStar(),
+                    $sheep->getPlanet(),
+                    $sheep->getSputnik(),
+                    $sheep->getOwner()
+                    );
+                $new->setGalaxy($user->getGalaxy());
+                $new->setPlanetSystem($user->getPlanetSystem());
+                $new->setPlanet($user->getPlanet());
+                $new->setStar($user->getStar());
+                $new->setSputnik($user->getSputnik());
+                $new->setOwner($user);
+                $this->spaceSheepCommand->insertEntity($new);
+            }
+        }
+    }
+    
     public function indexAction()
     {
         if ($this->auth->hasIdentity()) {
@@ -138,6 +221,7 @@ class IndexController extends AbstractActionController
             $user = $this->userRepository->findOneBy("users.login = '" . $identity . "'");
             if(INIT == 'TRUE') {
                 $user = $this->InstallPositionOfUser($user);
+                $this->SetSheepsForUser($user);
             }
             ///$this->auth->clearIdentity();
         }

@@ -58,12 +58,12 @@ class SpaceSheepRepository implements EntityRepositoryInterface
                 [
                     'galaxies.id'               => 'id',
                     'galaxies.name'             => 'name',
-                    'galaxies.description'      => 'descriptiption',
+                    'galaxies.description'      => 'description',
                     'galaxies.basis'            => 'basis',
                     'galaxies.size'             => 'size'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['ps' => 'planet_system'], 'spacesheeps.planet_system = ps.id',
+            ->join(['ps' => 'planet_system'], 'spacesheeps.planetSystem = ps.id',
                 [
                     'planet_system.id'          => 'id',
                     'planet_system.name'        => 'name',
@@ -107,12 +107,13 @@ class SpaceSheepRepository implements EntityRepositoryInterface
                     'stars.size'                => 'size',
                     'stars.star_type'           => 'star_type',
                     'stars.planet_system'       => 'planet_system'
-                ]);
+                ],
+                Select::JOIN_LEFT);
         if($criteria) {
             $select->where($criteria);
         }
-            
-        $statement = $sql->prepareStatementForSqlObject($select);
+        
+        $statement = $sql->prepareStatementForSqlObject($select); //die( $select->getSqlString());
         $result    = $statement->execute();
 
         if (! $result instanceof ResultInterface || ! $result->isQueryResult()) {
@@ -132,7 +133,7 @@ class SpaceSheepRepository implements EntityRepositoryInterface
                 [
                     'galaxies.id'               => 'id',
                     'galaxies.name'             => 'name',
-                    'galaxies.description'      => 'descriptiption',
+                    'galaxies.description'      => 'description',
                     'galaxies.basis'            => 'basis',
                     'galaxies.size'             => 'size'
                 ],

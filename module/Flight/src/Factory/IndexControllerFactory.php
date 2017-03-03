@@ -8,6 +8,8 @@ use Zend\Db\Adapter\AdapterInterface;
 use Flight\Controller\IndexController;
 use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
+use Entities\Model\SpaceSheepRepository;
+use Entities\Model\SpaceSheepCommand;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
@@ -32,7 +34,9 @@ class IndexControllerFactory implements FactoryInterface
             $container->get(PlanetSystemRepository::class),
             $container->get(PlanetRepository::class),
             $container->get(SputnikRepository::class),
-            $container->get(StarRepository::class)
+            $container->get(StarRepository::class),
+            $container->get(SpaceSheepCommand::class),
+            $container->get(SpaceSheepRepository::class)
         );
     }
 }
