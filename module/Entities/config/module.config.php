@@ -44,15 +44,25 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes'  => [
-                ],
-            ],
-            'techload' => [
-                'type' => Literal::class,
-                'options' => [
-                    'route'    => '/techload',
-                    'defaults' => [
-                        'controller' => Controller\TechLoadController::class,
-                        'action'     => 'techload',
+                    'techload' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route'    => '/techload',
+                            'defaults' => [
+                                'controller' => Controller\TechLoadController::class,
+                                'action'     => 'techload',
+                            ],
+                        ],
+                    ],
+                    'sheepsload' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route'    => '/sheepsload',
+                            'defaults' => [
+                                'controller' => Controller\TechLoadController::class,
+                                'action'     => 'sheepsload',
+                            ],
+                        ],
                     ],
                 ],
             ],

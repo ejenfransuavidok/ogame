@@ -7,19 +7,23 @@
              ->prependFile($this->basePath('file_upload/js/jquery.iframe-transport.js'))
              ->prependFile($this->basePath('file_upload/js/vendor/jquery.ui.widget.js'))
 ?>
-  <!--
-  <div class="panel-heading">Генерация технологий</div>
-  <div class="panel-body">
-        Basic panel example
-  </div>
-  -->
 <div class="panel panel-default">
     <div class="panel-heading">Генерация технологий</div>
     <div class="panel-body">
         <span class="btn btn-success fileinput-button">
             <i class="glyphicon glyphicon-plus"></i>
             <span>Выбрать файл...</span>
-            <input id="fileupload" type="file" name="files[]" multiple>
+            <input class="fileupload" type="file" name="files[]" data-url='/entities/techload'>
+        </span>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Заливка космических кораблей</div>
+    <div class="panel-body">
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Выбрать файл...</span>
+            <input class="fileupload" type="file" name="files[]" data-url='/entities/sheepsload'>
         </span>
     </div>
 </div>
@@ -40,8 +44,8 @@
 $(function () {
     'use strict';
     var url = '/techload';
-    $('#fileupload').fileupload({
-        url: url,
+    $('.fileupload').fileupload({
+        url: $(this).data('url'),
         acceptFileTypes: /(\.|\/)(xmi)$/i,
         dataType: 'json',
         done: function (e, data) {

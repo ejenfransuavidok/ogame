@@ -8,6 +8,14 @@ use Entities\Model\TechnologyRepository;
 use Entities\Controller\TechLoadController;
 use Entities\Model\TechnologyCommand;
 use Entities\Model\TechnologyConnectionCommand;
+use Entities\Model\SpaceSheepCommand;
+use Entities\Model\UserRepository;
+use Universe\Model\GalaxyRepository;
+use Universe\Model\PlanetSystemRepository;
+use Universe\Model\StarRepository;
+use Universe\Model\PlanetRepository;
+use Universe\Model\SputnikRepository;
+
 
 class TechLoadControllerFactory implements FactoryInterface
 {
@@ -22,7 +30,14 @@ class TechLoadControllerFactory implements FactoryInterface
         return new TechLoadController(
             $container->get(TechnologyRepository::class),
             $container->get(TechnologyCommand::class),
-            $container->get(TechnologyConnectionCommand::class)
+            $container->get(TechnologyConnectionCommand::class),
+            $container->get(SpaceSheepCommand::class),
+            $container->get(GalaxyRepository::class),
+            $container->get(PlanetSystemRepository::class),
+            $container->get(StarRepository::class),
+            $container->get(PlanetRepository::class),
+            $container->get(SputnikRepository::class),
+            $container->get(UserRepository::class)
         );
     }
 }

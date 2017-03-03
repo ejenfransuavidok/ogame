@@ -13,4 +13,10 @@ CREATE TABLE spacesheeps (
     protection INTEGER,
     number_of_guns INTEGER,
     construction_time INTEGER,
+    fuel_rest INTEGER,
+    galaxy INTEGER,
+    planetSystem INTEGER,
+    star INTEGER,
+    planet INTEGER,
+    sputnik INTEGER,
     owner INTEGER);

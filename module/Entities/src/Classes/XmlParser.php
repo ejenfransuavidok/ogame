@@ -8,10 +8,6 @@
 
 namespace Entities\Classes;
 
-class FileNotFound extends \Exception
-{
-}
-
 class ErrorXmlParse extends \Exception
 {
 }

@@ -11,6 +11,7 @@ namespace Entities\Controller;
 
 require_once (dirname(dirname(__FILE__)) . '/Classes/UploadHandler.php');
 require_once (dirname(dirname(__FILE__)) . '/Classes/XmiParser.php');
+require_once (dirname(dirname(__FILE__)) . '/Classes/XmlParser.php');
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -21,8 +22,25 @@ use Entities\Model\TechnologyCommand;
 use Entities\Model\TechnologyConnectionCommand;
 use Entities\Classes\UploadHandler;
 use Entities\Classes\XmiParser;
+use Entities\Classes\XmlParser;
+use Entities\Model\SpaceSheep;
+use Entities\Model\SpaceSheepCommand;
+use Entities\Model\UserRepository;
+use Universe\Model\GalaxyRepository;
+use Universe\Model\PlanetSystemRepository;
+use Universe\Model\StarRepository;
+use Universe\Model\PlanetRepository;
+use Universe\Model\SputnikRepository;
 
 class FailXmiParse extends \Exception
+{
+}
+
+class FailXmlParse extends \Exception
+{
+}
+
+class FormatFailXml extends \Exception
 {
 }
 
@@ -71,15 +89,64 @@ class TechLoadController extends AbstractActionController
      */
     private $dependencies;
     
+    /**
+     * @var SpaceSheepCommand
+     */
+    private $spaceSheepCommand;
+    
+    /**
+     * @var GalaxyRepository
+     */
+    private $galaxyRepository;
+    
+    /**
+     * @var PlanetSystemRepository
+     */
+    private $planetSystemRepository;
+    
+    /**
+     * @var StarRepository
+     */
+    private $starRepository;
+    
+    /**
+     * @var PlanetRepository
+     */
+    private $planetRepository;
+    
+    /**
+     * @var SputnikRepository
+     */
+    private $sputnikRepository;
+    
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
     
     public function __construct(
         TechnologyRepository $technologyRepository, 
         TechnologyCommand $technologyCommand, 
-        TechnologyConnectionCommand $technologyConnectionCommand)
+        TechnologyConnectionCommand $technologyConnectionCommand,
+        SpaceSheepCommand $spaceSheepCommand,
+        GalaxyRepository $galaxyRepository,
+        PlanetSystemRepository $planetSystemRepository,
+        StarRepository $starRepository,
+        PlanetRepository $planetRepository,
+        SputnikRepository $sputnikRepository,
+        UserRepository $userRepository
+        )
     {
         $this->technologyRepository         = $technologyRepository;
         $this->technologyCommand            = $technologyCommand;
         $this->technologyConnectionCommand  = $technologyConnectionCommand;
+        $this->spaceSheepCommand            = $spaceSheepCommand;
+        $this->galaxyRepository             = $galaxyRepository;
+        $this->planetSystemRepository       = $planetSystemRepository;
+        $this->starRepository               = $starRepository;
+        $this->planetRepository             = $planetRepository;
+        $this->sputnikRepository            = $sputnikRepository;
+        $this->userRepository               = $userRepository;
     }
     
     public function appendclasses()
@@ -162,4 +229,123 @@ class TechLoadController extends AbstractActionController
             }
         }
     }
+    
+    public function sheepsloadAction()
+    {
+        ob_start();
+        error_reporting(E_ALL & ~E_WARNING);
+        $upload_handler = new UploadHandler('/\.(xml)$/i');
+        $result = ob_get_contents();
+        ob_end_clean();
+        if ($result) {
+            $files = json_decode($result);            
+            foreach($files->files as $file) {
+                if(!isset($file->error)) {
+                    /// ошибок нет - можно экспортировать в бд
+                    try {
+                        
+                        $this->sheepsLoadExecute($file->path);
+                        
+                        die(json_encode(array('result' => 'OK', 'message' => 'Файл технологий загружен успешно')));
+                    }
+                    catch (\Exception $e) {
+                        die(json_encode(array('result' => 'ERR', 'message' => 'Во время загрузки файла произошла ошибка - ' . $e->getMessage())));
+                    }
+                }
+                else {
+                    die(json_encode(array('result' => 'ERR', 'error' => $file->error, 'message' => 'Во время загрузки файла произошла ошибка - ' . $file->error)));
+                }
+            }
+        }
+        die(json_encode(array('result' => 'ERR', 'message' => 'Во время загрузки файла произошла ошибка')));
+    }
+    /*
+     return new SpaceSheep(
+            $spaceSheep->getName(),
+            $spaceSheep->getDescription(),
+            $spaceSheep->getSpeed(), 
+            $spaceSheep->getCapacity(), 
+            $spaceSheep->getFuelConsumption(), 
+            $spaceSheep->getFuelTankSize(), 
+            $spaceSheep->getAttakPower(), 
+            $spaceSheep->getRateOfFire(), 
+            $spaceSheep->getTheNumberOfAttakTarget(),
+            $spaceSheep->getSheepSize(),
+            $spaceSheep->getProtection(),
+            $spaceSheep->getNumberOfGuns(),
+            $spaceSheep->getConstructionTime(),
+            $spaceSheep->getFuelRest(),
+            $spaceSheep->getGalaxy(),
+            $spaceSheep->getPlanetSystem(),
+            $spaceSheep->getStar(),
+            $spaceSheep->getPlanet(),
+            $spaceSheep->getSputnik(),
+            $spaceSheep->getOwner(),
+            $result->getGeneratedValue()
+        );
+    */  
+    private function sheepsLoadExecute($file)
+    {   
+        $keys = array(
+            'name', 'description', 'speed', 'capacity', 'fuel_consumption', 
+            'fuel_tank_size', 'attak_power', 'rate_of_fire', 'the_number_of_attak_targets', 
+            'sheep_size', 'protection', 'number_of_guns', 'construction_time', 
+            'fuel_rest', 'galaxy', 'planetSystem', 'star', 'planet', 'sputnik', 'owner');
+        $parser = new XmlParser();
+        $result = $parser->parse($file);
+        if(!is_array($result) && count($result) != 20) {
+            throw new FormatFailXml('data is not array or array size != 20');
+        }
+        else {
+            $entities = array();
+            for($i=0; $i<count($result); $i++) {
+                $row = $result [$i];
+                $key = $row[0];
+                if($key != $keys[$i]) {
+                    throw new FormatFailXml("column title must be " . $keys[$i] . ", but " . $col[0] . " given.");
+                }
+                else {
+                    for($j=1; $j<count($row); $j++) {
+                        $value = $row[$j];
+                        $entities [$j-1][$key] = $value;
+                    }
+                }
+            }
+            if(is_array($entities)) {
+                $this->spaceSheepCommand->truncateTable();
+                foreach($entities as $one) {
+                    $galaxy = $this->galaxyRepository->findEntity(intval($one['galaxy']));
+                    $planetSystem = $this->planetSystemRepository->findEntity(intval($one['planetSystem']));
+                    $star = $this->starRepository->findEntity(intval($one['star']));
+                    $planet = $this->planetRepository->findEntity(intval($one['planet']));
+                    $sputnik = $this->sputnikRepository->findEntity(intval($one['sputnik']));
+                    $owner = $this->userRepository->findEntity(intval($one['owner']));
+                    $spaceSheep = new SpaceSheep(
+                        $one['name'],
+                        $one['description'],
+                        $one['speed'],
+                        $one['capacity'],
+                        $one['fuel_consumption'],
+                        $one['fuel_tank_size'],
+                        $one['attak_power'],
+                        $one['rate_of_fire'],
+                        $one['the_number_of_attak_targets'],
+                        $one['sheep_size'],
+                        $one['protection'],
+                        $one['number_of_guns'],
+                        $one['construction_time'],
+                        $one['fuel_rest'],
+                        $one['galaxy'],
+                        $one['planetSystem'],
+                        $one['star'],
+                        $one['planet'],
+                        $one['sputnik'],
+                        $one['owner']
+                        );
+                    $spaceSheep = $this->spaceSheepCommand->insertEntity($spaceSheep);
+                }
+            }
+        }
+    }
+    
 }
