@@ -9,6 +9,8 @@ use Universe\Model\PlanetRepository;
 use Universe\Model\SputnikRepository;
 use Universe\Model\StarRepository;
 use Entities\Model\Hydrator\UserHydrator;
+use Entities\Model\User;
+use Entities\Model\UserRepository;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Hydrator\Reflection as ReflectionHydrator;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -24,7 +26,7 @@ class UserRepositoryFactory implements FactoryInterface
                 $container->get(PlanetSystemRepository::class),
                 $container->get(PlanetRepository::class),
                 $container->get(SputnikRepository::class),
-                $container->get(StarRepository::class),
+                $container->get(StarRepository::class)
             ),
             new User(null,null,null,null,null,null,null,null,null,null,null)
         );

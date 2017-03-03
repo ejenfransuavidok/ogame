@@ -12,4 +12,5 @@ CREATE TABLE spacesheeps (
     sheep_size INTEGER,
     protection INTEGER,
     number_of_guns INTEGER,
-    construction_time INTEGER);
+    construction_time INTEGER,
+    owner INTEGER);

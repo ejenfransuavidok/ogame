@@ -50,11 +50,11 @@ class UserCommand implements EntityCommandInterface
             'password'      => $user->getPassword(),
             'firstname'     => $user->getFirstName(),
             'lastname'      => $user->getLastName(),
-            'galaxy'        => $user->getGalaxy()->getId(),
-            'planet_system' => $user->getPlanetSystem()->getId(),
-            'planet'        => $user->getPlanet()->getId(),
-            'sputnik'       => $user->getSputnik()->getId(),
-            'star'          => $user->getStar()->getId()
+            'galaxy'        => $user->getGalaxy()        ? $user->getGalaxy()->getId()          : null,
+            'planet_system' => $user->getPlanetSystem()  ? $user->getPlanetSystem()->getId()    : null,
+            'planet'        => $user->getPlanet()        ? $user->getPlanet()->getId()          : null,
+            'sputnik'       => $user->getSputnik()       ? $user->getSputnik()->getId()         : null,
+            'star'          => $user->getStar()          ? $user->getStar()->getId()            : null
         ]);
 
         $sql = new Sql($this->db);
@@ -90,7 +90,7 @@ class UserCommand implements EntityCommandInterface
     public function updateEntity(Entity $user)
     {
         if (! $user->getId()) {
-            throw RuntimeException('Cannot update entity; missing identifier');
+            throw new RuntimeException('Cannot update entity; missing identifier');
         }
         
         $update = new Update($user->GetTable());
@@ -100,11 +100,11 @@ class UserCommand implements EntityCommandInterface
             'password'      => $user->getPassword(),
             'firstname'     => $user->getFirstName(),
             'lastname'      => $user->getLastName(),
-            'galaxy'        => $user->getGalaxy()->getId(),
-            'planet_system' => $user->getPlanetSystem()->getId(),
-            'planet'        => $user->getPlanet()->getId(),
-            'sputnik'       => $user->getSputnik()->getId(),
-            'star'          => $user->getStar()->getId()
+            'galaxy'        => $user->getGalaxy()       ? $user->getGalaxy()->getId()       : null,
+            'planet_system' => $user->getPlanetSystem() ? $user->getPlanetSystem()->getId() : null,
+            'planet'        => $user->getPlanet()       ? $user->getPlanet()->getId()       : null,
+            'sputnik'       => $user->getSputnik()      ? $user->getSputnik()->getId()      : null,
+            'star'          => $user->getStar()         ? $user->getStar()->getId()         : null
         ]);
         $update->where(['id = ?' => $user->getId()]);
 
@@ -127,7 +127,7 @@ class UserCommand implements EntityCommandInterface
     public function deleteEntity(Entity $user)
     {
         if (! $user->getId()) {
-            throw RuntimeException('Cannot update entity; missing identifier');
+            throw new RuntimeException('Cannot update entity; missing identifier');
         }
 
         $delete = new Delete($user->getTable());

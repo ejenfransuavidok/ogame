@@ -142,6 +142,14 @@ class SpaceSheep extends Entity
      */
     protected $sputnik;
     
+    /**
+     * 
+     * @ User
+     * @ владелец
+     * 
+     */
+    protected $owner;
+    
     const TABLE_NAME = 'spacesheeps';
     
     public function __construct(
@@ -164,6 +172,7 @@ class SpaceSheep extends Entity
         $star,
         $planet,
         $sputnik,
+        $owner,
         $id=null)
     {
         parent::__construct(self::TABLE_NAME);
@@ -186,6 +195,7 @@ class SpaceSheep extends Entity
         $this->star                         = $star;
         $this->planet                       = $planet;
         $this->sputnik                      = $sputnik;
+        $this->owner                        = $owner;
         $this->id                           = $id;
     }
     
@@ -211,6 +221,7 @@ class SpaceSheep extends Entity
         $this->star                         = !empty($data[$prefix.'star']) ? $data[$prefix.'star'] : null;
         $this->planet                       = !empty($data[$prefix.'planet']) ? $data[$prefix.'planet'] : null;
         $this->sputnik                      = !empty($data[$prefix.'sputnik']) ? $data[$prefix.'sputnik'] : null;
+        $this->owner                        = !empty($data[$prefix.'owner']) ? $data[$prefix.'owner'] : null;
     }
     
     public function getArrayCopy()
@@ -388,4 +399,13 @@ class SpaceSheep extends Entity
         return $this->sputnik;
     }
     
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+    
+    public function getOwner()
+    {
+        return $this->owner;
+    }
 }

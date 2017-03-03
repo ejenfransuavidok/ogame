@@ -6,6 +6,13 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Db\Adapter\AdapterInterface;
 use Flight\Controller\IndexController;
+use Entities\Model\UserRepository;
+use Entities\Model\UserCommand;
+use Universe\Model\GalaxyRepository;
+use Universe\Model\PlanetSystemRepository;
+use Universe\Model\PlanetRepository;
+use Universe\Model\SputnikRepository;
+use Universe\Model\StarRepository;
 
 class IndexControllerFactory implements FactoryInterface
 {
@@ -18,7 +25,14 @@ class IndexControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new IndexController(
-            $container->get(AdapterInterface::class)
+            $container->get(AdapterInterface::class),
+            $container->get(UserRepository::class),
+            $container->get(UserCommand::class),
+            $container->get(GalaxyRepository::class),
+            $container->get(PlanetSystemRepository::class),
+            $container->get(PlanetRepository::class),
+            $container->get(SputnikRepository::class),
+            $container->get(StarRepository::class)
         );
     }
 }

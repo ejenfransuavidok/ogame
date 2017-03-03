@@ -59,11 +59,12 @@ class SpaceSheepCommand implements EntityCommandInterface
             'number_of_guns'                => $spaceSheep->getNumberOfGuns(),
             'construction_time'             => $spaceSheep->getConstructionTime(),
             'fuel_rest'                     => $spaceSheep->getFuelRest(),
-            'galaxy'                        => $spaceSheep->getGalaxy()->getId(),
-            'planetSystem'                  => $spaceSheep->getPlanetSystem()->getId(),
-            'star'                          => $spaceSheep->getStar()->getId(),
-            'planet'                        => $spaceSheep->getPlanet()->getId(),
-            'sputnik'                       => $spaceSheep->getSputnik()->getId()
+            'galaxy'                        => $spaceSheep->getGalaxy()         ? $spaceSheep->getGalaxy()->getId()         : null,
+            'planetSystem'                  => $spaceSheep->getPlanetSystem()   ? $spaceSheep->getPlanetSystem()->getId()   : null,
+            'star'                          => $spaceSheep->getStar()           ? $spaceSheep->getStar()->getId()           : null,
+            'planet'                        => $spaceSheep->getPlanet()         ? $spaceSheep->getPlanet()->getId()         : null,
+            'sputnik'                       => $spaceSheep->getSputnik()        ? $spaceSheep->getSputnik()->getId()        : null,
+            'owner'                         => $spaceSheep->getOwner()          ? $spaceSheep->getOwner()->getId()          : null
         ]);
 
         $sql = new Sql($this->db);
@@ -98,6 +99,7 @@ class SpaceSheepCommand implements EntityCommandInterface
             $spaceSheep->getStar(),
             $spaceSheep->getPlanet(),
             $spaceSheep->getSputnik(),
+            $spaceSheep->getOwner(),
             $result->getGeneratedValue()
         );
     }
@@ -127,11 +129,12 @@ class SpaceSheepCommand implements EntityCommandInterface
             'number_of_guns'                => $spaceSheep->getNumberOfGuns(),
             'construction_time'             => $spaceSheep->getConstructionTime(),
             'fuel_rest'                     => $spaceSheep->getFuelRest(),
-            'galaxy'                        => $spaceSheep->getGalaxy()->getId(),
-            'planetSystem'                  => $spaceSheep->getPlanetSystem()->getId(),
-            'star'                          => $spaceSheep->getStar()->getId(),
-            'planet'                        => $spaceSheep->getPlanet()->getId(),
-            'sputnik'                       => $spaceSheep->getSputnik()->getId()
+            'galaxy'                        => $spaceSheep->getGalaxy()         ? $spaceSheep->getGalaxy()->getId()         : null,
+            'planetSystem'                  => $spaceSheep->getPlanetSystem()   ? $spaceSheep->getPlanetSystem()->getId()   : null,
+            'star'                          => $spaceSheep->getStar()           ? $spaceSheep->getStar()->getId()           : null,
+            'planet'                        => $spaceSheep->getPlanet()         ? $spaceSheep->getPlanet()->getId()         : null,
+            'sputnik'                       => $spaceSheep->getSputnik()        ? $spaceSheep->getSputnik()->getId()        : null,
+            'owner'                         => $spaceSheep->getOwner()          ? $spaceSheep->getOwner()->getId()          : null
         ]);
         $update->where(['id = ?' => $spaceSheep->getId()]);
 

@@ -27,7 +27,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            Controller\IndexController::class => Factory\IndexControllerFactory::class,
             Controller\TechLoadController::class => Factory\TechLoadControllerFactory::class,
         ],
     ],

@@ -65,7 +65,7 @@ class UserHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $user = User(null,null,null,null,null,null,null,null,null,null,null);
+        $user = new User(null,null,null,null,null,null,null,null,null,null,null);
         $user->exchangeArray($data);
         $galaxy_id = $user->getGalaxy();
         try {
