@@ -298,4 +298,37 @@ class IndexController extends AbstractActionController
         }
         die(json_encode(array("result" => $result)));
     }
+    
+    public function calcAction()
+    {
+        $target         = $_REQUEST['target'];
+        $galaxy         = $_REQUEST['galaxy'];
+        $planet_system  = $_REQUEST['planet_system'];
+        $planet         = $_REQUEST['planet'];
+        $star           = $_REQUEST['star'];
+        $sputnik        = $_REQUEST['sputnik'];
+        if ($this->auth->hasIdentity()) {
+            $identity = $this->auth->getIdentity();
+            $user = $this->userRepository->findOneBy("users.login = '" . $identity . "'");
+            if($target == 'planet') {
+                $target = $this->planetRepository->findEntity(intval($planet));
+            }
+            else {
+                $target = $this->sputnikRepository->findEntity(intval($sputnik));
+                $parent_planet = $target->getParentPlanet();
+                $target = $parent_planet;
+            }
+            $html = '';
+            $distance = abs($target->getCoordinate() - $user->getPlanet()->getCoordinate());
+            $html .= ('<p>Дистанция полета ' . $distance . ' ед.</p>');
+            
+            $result = array ('result' => $html);
+            die (json_encode($result));
+        }
+        else {
+            $result = array ('result' => 'Пользователь не авторизован');
+            die (json_encode($result));
+        }
+    }
+    
 }

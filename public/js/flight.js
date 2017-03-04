@@ -100,16 +100,21 @@ var Main = function () {
                     $('#console').html(html + errtext);
                 } else {
                     var html = $('#console').html();
-                    $('#console').html(html + '<p>OK</p>');
+                    $.ajax({
+                        type: 'post',
+                        url: '/flight/calc',
+                        data: 'target=' + target + '&galaxy=' + galaxy + '&planet_system=' + planet_system + '&planet=' + planet + '&star=' + star + '&sputnik=' + sputnik,
+                        dataType: "json",
+                        success: function success(response) {
+                            console.log(response);
+                            var html = $('#console').html();
+                            $('#console').html(html + response.result);
+                        },
+                        error: function error(data) {
+                            console.error(data);
+                        }
+                    });
                 }
-                /*
-                console.log('target = ' + target);
-                console.log('galaxy = ' + galaxy);
-                console.log('planet_system = ' + planet_system);
-                console.log('planet = ' + planet);
-                console.log('star = ' + star);
-                console.log('sputnik = ' + sputnik);
-                */
             });
             /*
             this.timer = setInterval(() => {

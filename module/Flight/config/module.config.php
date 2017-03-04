@@ -52,6 +52,16 @@ return [
                                 'action' => 'update',
                             ],
                         ],
+                    ],
+                    
+                    'calc' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/calc',
+                            'defaults' => [
+                                'action' => 'calc',
+                            ],
+                        ],
                     ], 
                 
                 ],
