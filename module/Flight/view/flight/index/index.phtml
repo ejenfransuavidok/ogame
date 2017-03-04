@@ -1,4 +1,6 @@
 <?= $this->headLink()->prependStylesheet($this->basePath('css/signin.css')); ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/bootstrap-select.css')); ?>
+<?= $this->headScript()->prependFile($this->basePath('js/bootstrap-select.js')); ?>
 <div class="panel panel-default">
     <div class="panel-heading">Тестовые полеты</div>
     <div class="panel-body">
@@ -19,8 +21,136 @@
             </form>
         </div>
         <?php else: ?>
-            <div class="alert alert-success" role="alert">Привет <?= $auth->getIdentity();?></div>
+            <h4>Привет <?= $auth->getIdentity();?>!</h4>
+            <div class="panel panel-default">
+                <div class="panel-heading">Список кораблей <?= $auth->getIdentity();?></div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <thead>
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    Наименование корабля
+                                </th>
+                                <th>
+                                    Логин владельца
+                                </th>
+                                <th>
+                                    Галактика
+                                </th>
+                                <th>
+                                    Планетная система
+                                </th>
+                                <th>
+                                    Звезда
+                                </th>
+                                <th>
+                                    Планета
+                                </th>
+                                <th>
+                                    Спутник
+                                </th>
+                            </thead>
+                            <tbody>
+                                <?php foreach($sheeps as $sheep) :?>
+                                <tr>
+                                    <th>
+                                    </th>
+                                    <td>
+                                        <?= $sheep->getName() ?>
+                                    </td>
+                                    <td>
+                                        <?= $sheep->getOwner() ? $sheep->getOwner()->getName() : '-' ?>
+                                    </td>
+                                    <td>
+                                        <?= $sheep->getGalaxy() ? $sheep->getGalaxy()->getName() : '-' ?>
+                                    </td>
+                                    <td>
+                                        <?= $sheep->getPlanetSystem() ? $sheep->getPlanetSystem()->getName() : '-' ?>
+                                    </td>
+                                    <td>
+                                        <?= $sheep->getStar() ? $sheep->getStar()->getName() : '-' ?>
+                                    </td>
+                                    <td>
+                                        <?= $sheep->getPlanet() ? $sheep->getPlanet()->getName() : '-' ?>
+                                    </td>
+                                    <td>
+                                        <?= $sheep->getSputnik() ? $sheep->getSputnik()->getName() : '-' ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Панель полетов</div>
+                        <div class="panel-body">
+                            
+                            <div class="row">
+                                
+                                <div class="col-md-4">
+                                    <p><label>Выбор галактики</label></p>
+                                    <select class="selectpicker">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><label>Выбор планетной системы</label></p>
+                                    <select class="selectpicker">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><label>Выбор планеты</label></p>
+                                    <select class="selectpicker">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select>
+                                </div>
+                                
+                            </div>
+
+                            </br></br></br>
+
+                            <div class="row">
+                                
+                                <div class="col-md-4">
+                                    <p><label>Выбор звезды</label></p>
+                                    <select class="selectpicker">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><label>Выбор спутника</label></p>
+                                    <select class="selectpicker">
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4"></div>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         <?php endif; ?>
     </div>
     <div class="panel-footer">Тестовые полеты</div>
 </div>
+<style>
+    tr {
+        font-size: 10px;
+    }
+</style>

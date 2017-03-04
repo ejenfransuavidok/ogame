@@ -28,7 +28,7 @@ use Universe\Model\SputnikRepository;
 use Universe\Model\StarRepository;
 
 
-define('INIT', 'TRUE');
+define('INIT', 'FALSE');
 
 class NoSpaceSheepsInDBase extends \Exception
 {
@@ -216,6 +216,7 @@ class IndexController extends AbstractActionController
     
     public function indexAction()
     {
+        $sheeps = array();
         if ($this->auth->hasIdentity()) {
             $identity = $this->auth->getIdentity();
             $user = $this->userRepository->findOneBy("users.login = '" . $identity . "'");
@@ -223,8 +224,10 @@ class IndexController extends AbstractActionController
                 $user = $this->InstallPositionOfUser($user);
                 $this->SetSheepsForUser($user);
             }
+            $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner = ' . $user->getId());
             ///$this->auth->clearIdentity();
         }
-        return new ViewModel(['auth' => $this->auth, 'user' => 'Привет!']);
+        
+        return new ViewModel(['auth' => $this->auth, 'sheeps' => $sheeps]);
     }
 }

@@ -108,6 +108,20 @@ class SpaceSheepRepository implements EntityRepositoryInterface
                     'stars.star_type'           => 'star_type',
                     'stars.planet_system'       => 'planet_system'
                 ],
+                Select::JOIN_LEFT)
+            ->join(['u' => 'users'], 'spacesheeps.owner = u.id',
+                [
+                    'users.id'                  => 'id',
+                    'users.login'               => 'login',
+                    'users.password'            => 'password',
+                    'users.firstname'           => 'firstname',
+                    'users.galaxy'              => 'galaxy',
+                    'users.planet_system'       => 'planet_system',
+                    'users.planet'              => 'planet',
+                    'users.sputnik'             => 'sputnik',
+                    'users.star'                => 'star',
+                    'users.description'         => 'description'
+                ],
                 Select::JOIN_LEFT);
         if($criteria) {
             $select->where($criteria);
@@ -182,7 +196,22 @@ class SpaceSheepRepository implements EntityRepositoryInterface
                     'stars.size'                => 'size',
                     'stars.star_type'           => 'star_type',
                     'stars.planet_system'       => 'planet_system'
-                ]);
+                ],
+                Select::JOIN_LEFT)
+            ->join(['u' => 'users'], 'spacesheeps.owner = u.id',
+                [
+                    'users.id'                  => 'id',
+                    'users.login'               => 'login',
+                    'users.password'            => 'password',
+                    'users.firstname'           => 'firstname',
+                    'users.galaxy'              => 'galaxy',
+                    'users.planet_system'       => 'planet_system',
+                    'users.planet'              => 'planet',
+                    'users.sputnik'             => 'sputnik',
+                    'users.star'                => 'star',
+                    'users.description'         => 'description'
+                ],
+                Select::JOIN_LEFT);
         $select->where($criteria ? $criteria : ['spacesheeps.id = ?' => $id]);
 
         $statement = $sql->prepareStatementForSqlObject($select);

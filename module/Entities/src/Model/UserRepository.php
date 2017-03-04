@@ -183,7 +183,7 @@ class UserRepository implements EntityRepositoryInterface
                     'stars.planet_system'   => 'planet_system'
                 ],
                 Select::JOIN_LEFT);
-        $select->where($criteria ? $criteria : ['id = ?' => $id]);
+        $select->where($criteria ? $criteria : ['users.id = ?' => $id]);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
