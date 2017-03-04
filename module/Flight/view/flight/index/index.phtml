@@ -1,6 +1,12 @@
 <?= $this->headLink()->prependStylesheet($this->basePath('css/signin.css')); ?>
 <?= $this->headLink()->prependStylesheet($this->basePath('css/bootstrap-select.css')); ?>
 <?= $this->headScript()->prependFile($this->basePath('js/bootstrap-select.js')); ?>
+<script>
+    SystemJS.config({
+        baseURL: '<?= $this->basePath('js/') ?>'
+    });
+    SystemJS.import('flight.js');
+</script>
 <div class="panel panel-default">
     <div class="panel-heading">Тестовые полеты</div>
     <div class="panel-body">
@@ -53,9 +59,10 @@
                                 </th>
                             </thead>
                             <tbody>
-                                <?php foreach($sheeps as $sheep) :?>
+                                <?php $i=1; foreach($sheeps as $sheep) :?>
                                 <tr>
                                     <th>
+                                        <?= $i++ ?>
                                     </th>
                                     <td>
                                         <?= $sheep->getName() ?>
@@ -87,65 +94,80 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Панель полетов</div>
                         <div class="panel-body">
-                            
                             <div class="row">
-                                
                                 <div class="col-md-4">
                                     <p><label>Выбор галактики</label></p>
-                                    <select class="selectpicker">
-                                        <option>Mustard</option>
-                                        <option>Ketchup</option>
-                                        <option>Relish</option>
+                                    <select name="galaxy_select" class="selectpicker">
+                                        <?php foreach($galaxies as $galaxy) : ?>
+                                        <option value="<?= $galaxy->getId()?>"><?= $galaxy->getName()?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <p><label>Выбор планетной системы</label></p>
-                                    <select class="selectpicker">
-                                        <option>Mustard</option>
-                                        <option>Ketchup</option>
-                                        <option>Relish</option>
+                                    <select name="planet_system_select" class="selectpicker">
+                                        <?php foreach($planet_systems as $planet_system) : ?>
+                                        <option value="<?= $planet_system->getId()?>"><?= $planet_system->getName()?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <p><label>Выбор планеты</label></p>
-                                    <select class="selectpicker">
-                                        <option>Mustard</option>
-                                        <option>Ketchup</option>
-                                        <option>Relish</option>
+                                    <select name="planet_select" class="selectpicker">
+                                        <?php foreach($planets as $planet) : ?>
+                                        <option value="<?= $planet->getId()?>"><?= $planet->getName()?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
-                                
                             </div>
-
                             </br></br></br>
-
                             <div class="row">
-                                
                                 <div class="col-md-4">
                                     <p><label>Выбор звезды</label></p>
-                                    <select class="selectpicker">
-                                        <option>Mustard</option>
-                                        <option>Ketchup</option>
-                                        <option>Relish</option>
+                                    <select name="star_select" class="selectpicker">
+                                        <?php foreach($stars as $star) : ?>
+                                        <option value="<?= $star->getId()?>"><?= $star->getName()?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <p><label>Выбор спутника</label></p>
-                                    <select class="selectpicker">
-                                        <option>Mustard</option>
-                                        <option>Ketchup</option>
-                                        <option>Relish</option>
+                                    <select name="sputnik_select" class="selectpicker">
+                                        <?php foreach($sputniks as $sputnik) : ?>
+                                        <option value="<?= $sputnik->getId()?>"><?= $sputnik->getName()?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <div class="col-md-4"></div>
-                                
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <p><label>Перелет на планету</label></p>
+                                        <input name="target" value="planet" type="radio" checked="checked">
+                                        <p><label>Перелет на спутник</label></p>
+                                        <input name="target" value="sputnik" type="radio">
+                                    </div>
+                                </div>
                             </div>
-
+                            </br></br></br>
+                            <div class="row">
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-4">
+                                    <button id="flight-calc" type="button" class="btn btn-default navbar-btn">Обсчитать полет</button>
+                                </div>
+                            </div>        
                         </div>
                     </div>
                 </div>
             </div>
         <?php endif; ?>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">Консоль сообщений</div>
+        <div id="console" class="panel-body" style="font-size: 10px;">
+
+        </div>
     </div>
     <div class="panel-footer">Тестовые полеты</div>
 </div>

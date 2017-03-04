@@ -44,6 +44,16 @@ return [
                         ],
                     ],    
                 
+                    'update_selectors' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/update_selectors',
+                            'defaults' => [
+                                'action' => 'update',
+                            ],
+                        ],
+                    ], 
+                
                 ],
             ],
         ],

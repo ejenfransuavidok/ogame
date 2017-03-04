@@ -34,6 +34,10 @@ class NoSpaceSheepsInDBase extends \Exception
 {
 }
 
+class NoSelectExpected extends \Exception
+{
+}
+
 class IndexController extends AbstractActionController
 {
     /**
@@ -225,9 +229,73 @@ class IndexController extends AbstractActionController
                 $this->SetSheepsForUser($user);
             }
             $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner = ' . $user->getId());
+            $galaxies = $this->galaxyRepository->findAllEntities();
             ///$this->auth->clearIdentity();
+            return new ViewModel([
+                'auth' => $this->auth, 
+                'sheeps' => $sheeps, 
+                'galaxies' => $galaxies, 
+                'planet_systems' => null,
+                'planets' => null,
+                'stars' => null,
+                'sputniks' => null]);
         }
         
-        return new ViewModel(['auth' => $this->auth, 'sheeps' => $sheeps]);
+        return new ViewModel(['auth' => $this->auth]);
+    }
+    
+    public function updateAction()
+    {
+        $name = $_REQUEST['name'];
+        $value = $_REQUEST['value'];
+        $result = array();
+        switch($name) {
+            case 'galaxy_select':
+                $result['planet_system_select'] = array();
+                $result['star_select'] = array();
+                $result['planet_select'] = array();
+                $result['sputnik_select'] = array();
+                $planets_systems = $this->planetSystemRepository->findBy('planet_system.galaxy = ' . $value);
+                if(count($planets_systems)) {
+                    foreach($planets_systems as $planet_system) {
+                        $result['planet_system_select'][] = array('id' => $planet_system->getId(), 'name' => $planet_system->getName());
+                    }
+                }
+                break;
+            case 'planet_system_select':
+                $result['star_select'] = array();
+                $result['planet_select'] = array();
+                $result['sputnik_select'] = array();
+                $planets =  $this->planetRepository->findBy('planets.planet_system = ' . $value);
+                $stars = $this->starRepository->findBy('stars.planet_system = ' . $value);
+                if(count($planets)) {
+                    foreach($planets as $planet) {
+                        $result['planet_select'][] = array('id' => $planet->getId(), 'name' => $planet->getName());
+                    }
+                }
+                if(count($stars)) {
+                    foreach($stars as $star) {
+                        $result['star_select'][] = array('id' => $star->getId(), 'name' => $star->getName());
+                    }
+                }
+                break;
+            case 'planet_select':
+                $result['sputnik_select'] = array();
+                $sputniks = $this->sputnikRepository->findBy('sputniks.parent_planet = ' . $value);
+                if(count($sputniks)) {
+                    foreach($sputniks as $sputnik) {
+                        $result['sputnik_select'][] = array('id' => $sputnik->getId(), 'name' => $sputnik->getName());
+                    }
+                }
+                break;
+            case 'star_select':
+                break;
+            case 'sputnik_select':
+                break;
+            default:
+                throw new NoSelectExpected(name + ' value unexpected!');
+                break;
+        }
+        die(json_encode(array("result" => $result)));
     }
 }
