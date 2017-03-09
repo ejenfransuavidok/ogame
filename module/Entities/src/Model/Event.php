@@ -80,4 +80,8 @@ class Event extends Entity
     {
         return get_object_vars($this);
     }
+    
+    public function setUser($user)
+    {
+    }
 }
