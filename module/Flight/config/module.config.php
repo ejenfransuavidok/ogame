@@ -64,6 +64,16 @@ return [
                         ],
                     ],
                     
+                    'check-events' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/check-events',
+                            'defaults' => [
+                                'action' => 'check',
+                            ],
+                        ],
+                    ],
+                    
                     'start' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [

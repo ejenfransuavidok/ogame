@@ -338,7 +338,7 @@ class IndexController extends AbstractActionController
         }
     }
     
-    public function createEvent(&$sheeps, $user, $target, $event_duration, $event_type)
+    public function createEvent(&$sheeps, $user, $target, $target_type, $event_duration, $event_type)
     {
         foreach($sheeps as $sheep) {
             if($sheep->getEvent() && $sheep->getEvent()->getEventType() == $event_type) {
@@ -358,8 +358,8 @@ class IndexController extends AbstractActionController
             time(),
             time() + $event_duration * 60,
             null,
-            $target,
-            null
+            ($target_type == "planet" ? $target : null),
+            ($target_type == "sputnik" ? $target : null)
             );
         $event = $this->eventCommand->insertEntity($event);
         foreach($sheeps as $sheep) {
@@ -388,8 +388,6 @@ class IndexController extends AbstractActionController
             }
             else {
                 $target = $this->sputnikRepository->findEntity(intval($sputnik));
-                $parent_planet = $target->getParentPlanet();
-                $target = $parent_planet;
             }
             $html = '';
             $distance = abs($target->getCoordinate() - $user->getPlanet()->getCoordinate());
@@ -415,7 +413,7 @@ class IndexController extends AbstractActionController
                 $html .= ('<p style="color: red"> > Флот не долетит!</p>');
             }
             if($can){
-                $this->createEvent($sheeps, $user, $target, $float_time, EventTypes::$FLOT_RELOCATION);
+                $this->createEvent($sheeps, $user, $target, $_REQUEST['target'], $float_time, EventTypes::$FLOT_RELOCATION);
             }
             $result = array ('result' => $html);
             die (json_encode($result));
@@ -430,6 +428,79 @@ class IndexController extends AbstractActionController
     {
         $result = array ('result' => '<p>Пользователь не авторизован</p>');
         die (json_encode($result));
+    }
+    
+    public function GetAllCoordinatesByPlanet($planet, &$star, &$planet_system, &$galaxy)
+    {
+        $planet_system = $planet->getCelestialParent();
+        $star = $planet_system->getStar();
+        $galaxy = $planet_system->getGalaxy();
+    }
+    
+    public function GetAllCoordinatesBySputnik($sputnik, &$planet, &$star, &$planet_system, &$galaxy)
+    {
+        $planet = $sputnik->getParentPlanet();
+        $planet_system = $planet->getCelestialParent();
+        $star = $planet_system->getStar();
+        $galaxy = $planet_system->getGalaxy();
+    }
+    
+    public function checkAction()
+    {
+        if ($this->auth->hasIdentity()) {
+            $identity = $this->auth->getIdentity();
+            $user = $this->userRepository->findOneBy("users.login = '" . $identity . "'");
+            $events = $this->eventRepository->findBy("events.user = '" . $user->getId() . "'")->buffer();
+            if($events){
+                foreach($events as $event){
+                    $event_begin = $event->getEventBegin();
+                    $event_end = $event->getEventEnd();
+                    $now = time();
+                    if($now > $event_end) {
+                        // событие окончено
+                        $planet = null;
+                        $star = null;
+                        $planet_system = null;
+                        $galaxy = null;
+                        $event->getTargetPlanet() 
+                            ? $this->GetAllCoordinatesByPlanet($event->getTargetPlanet(), $star, $planet_system, $galaxy)
+                            : $this->GetAllCoordinatesBySputnik($event->getTargetSputnik(), $planet, $star, $planet_system, $galaxy);
+                        $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.event = ' . EventTypes::$FLOT_RELOCATION)->buffer();
+                        if($sheeps){
+                            foreach($sheeps as $sheep){
+                                // корабль в новой локации, обновим координаты
+                                $sheep->setPlanet($event->getTargetPlanet() ? $event->getTargetPlanet() : $planet);
+                                $sheep->setSputnik($event->getTargetSputnik() ? $event->getTargetSputnik() : null);
+                                $sheep->setStar($star);
+                                $sheep->setPlanetSystem($planet_system);
+                                $sheep->setGalaxy($galaxy);
+                                $sheep->setEvent(null);
+                                $this->spaceSheepCommand->updateEntity($sheep);
+                            }
+                        }
+                        // обновим позицию юзера
+                        $user->setPlanet($event->getTargetPlanet() ? $event->getTargetPlanet() : $planet);
+                        $user->setSputnik($event->getTargetSputnik() ? $event->getTargetSputnik() : null);
+                        $user->setStar($star);
+                        $user->setPlanetSystem($planet_system);
+                        $user->setGalaxy($galaxy);
+                        $this->userCommand->updateEntity($user);
+                        // удалим само событие
+                        $this->eventCommand->deleteEntity($event);
+                        die(json_encode(array("message" => "<p>Полет окончен!</p>", "progress" => "100")));
+                    }
+                    else {
+                        // еще не прилетели
+                        $progress = ceil(100 * (1 - ($event_end - $now) / ($event_end - $event_begin)));
+                        die(json_encode(array("message" => "<p style='color: green;'>Флот в полете.</p>", "progress" => $progress)));
+                    }
+                }
+            }
+            else {
+                die(json_encode(array("message" => "<p>Активных полетов нет!</p>", "progress" => "0")));
+            }
+            die(json_encode(array("message" => "<p>Активных полетов нет!</p>", "progress" => "0")));
+        }
     }
     
 }

@@ -134,22 +134,25 @@ var Main = function () {
                     });
                 }
             });
-            /*
-            this.timer = setInterval(() => {
+            this.timer = setInterval(function () {
                 $.ajax({
-            type: 'post',
-            url: '/logger',
-            data: '',
-            dataType: "json",
-            success: function (response) {
-            console.log(response.messages);
-                        $('#console').html (response.messages);
-            },
-            error: function(data) {
-            console.error(data);
-            }
+                    type: 'post',
+                    url: '/flight/check-events',
+                    data: '',
+                    dataType: "json",
+                    success: function success(response) {
+                        console.log(response.messages);
+                        $('#flight-progress').css('width', response.progress + '%');
+                        $('#flight-progress').text(response.progress + '%');
+                        var html = $('#console').html();
+                        $('#console').html(html + response.message);
+                    },
+                    error: function error(data) {
+                        console.error(data);
+                    }
                 });
-            }, 1500);
+            }, 5000);
+            /*
             $(document).on ('click', '#universe-start-generation', function(evt) {
                 evt.preventDefault();
                 $.ajax({
