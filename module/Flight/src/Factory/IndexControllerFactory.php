@@ -15,6 +15,8 @@ use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
 use Universe\Model\SputnikRepository;
 use Universe\Model\StarRepository;
+use Settings\Model\SettingsRepositoryInterface;
+
 
 class IndexControllerFactory implements FactoryInterface
 {
@@ -36,7 +38,8 @@ class IndexControllerFactory implements FactoryInterface
             $container->get(SputnikRepository::class),
             $container->get(StarRepository::class),
             $container->get(SpaceSheepCommand::class),
-            $container->get(SpaceSheepRepository::class)
+            $container->get(SpaceSheepRepository::class),
+            $container->get(SettingsRepositoryInterface::class)
         );
     }
 }

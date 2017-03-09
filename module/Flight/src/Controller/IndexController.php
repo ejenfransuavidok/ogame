@@ -26,7 +26,8 @@ use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
 use Universe\Model\SputnikRepository;
 use Universe\Model\StarRepository;
-
+use Settings\Model\Setting;
+use Settings\Model\SettingsRepositoryInterface;
 
 define('INIT', 'FALSE');
 
@@ -100,6 +101,12 @@ class IndexController extends AbstractActionController
      */
     private $spaceSheepRepository;
     
+    /**
+     * @SettingsRepositoryInterface $settingsRepository
+     */
+    private $settingsRepository;
+    
+    
     public function __construct(
         AdapterInterface $db, 
         UserRepository $userRepository,
@@ -110,7 +117,8 @@ class IndexController extends AbstractActionController
         SputnikRepository $sputnikRepository,
         StarRepository $starRepository,
         SpaceSheepCommand $spaceSheepCommand,
-        SpaceSheepRepository $spaceSheepRepository)
+        SpaceSheepRepository $spaceSheepRepository,
+        SettingsRepositoryInterface $settingsRepository)
     {
         $this->dbAdapter = $db;
         $this->userRepository = $userRepository;
@@ -122,6 +130,7 @@ class IndexController extends AbstractActionController
         $this->starRepository = $starRepository;
         $this->spaceSheepCommand = $spaceSheepCommand;
         $this->spaceSheepRepository = $spaceSheepRepository;
+        $this->settingsRepository = $settingsRepository;
         
         $this->authAdapter = new AuthAdapter(
             $this->dbAdapter,
@@ -299,8 +308,19 @@ class IndexController extends AbstractActionController
         die(json_encode(array("result" => $result)));
     }
     
+    /*
+     * максимальная дистанция флота будет определяться кораблем с наименьшим пробегом
+     */
+    public function calcFlotDistance(&$sheeps)
+    {
+        foreach($sheeps as $sheep) {
+            $sheep->calcDistance($this->FUEL_DISTANCE_CALC);
+        }
+    }
+    
     public function calcAction()
     {
+        $this->FUEL_DISTANCE_CALC = intval($this->settingsRepository->findSettingByKey ('FUEL_DISTANCE_CALC ')->getText());
         $target         = $_REQUEST['target'];
         $galaxy         = $_REQUEST['galaxy'];
         $planet_system  = $_REQUEST['planet_system'];
@@ -310,6 +330,8 @@ class IndexController extends AbstractActionController
         if ($this->auth->hasIdentity()) {
             $identity = $this->auth->getIdentity();
             $user = $this->userRepository->findOneBy("users.login = '" . $identity . "'");
+            $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner = ' . $user->getId())->buffer();
+            $this->calcFlotDistance($sheeps);
             if($target == 'planet') {
                 $target = $this->planetRepository->findEntity(intval($planet));
             }
@@ -321,7 +343,15 @@ class IndexController extends AbstractActionController
             $html = '';
             $distance = abs($target->getCoordinate() - $user->getPlanet()->getCoordinate());
             $html .= ('<p>Дистанция полета ' . $distance . ' ед.</p>');
-            
+            foreach($sheeps as $sheep) {
+                $html .= ('<p>' . $sheep->getName() . ' преодолеет расстояние в ' . $sheep->getDistance() . ' ед.');
+                if($distance > $sheep->getDistance()) {
+                    $html .= ('<p style="color: red"> > Не долетит!</p>');
+                }
+                else {
+                    $html .= ('<p style="color: green"> > Долетит!</p>');
+                }
+            }
             $result = array ('result' => $html);
             die (json_encode($result));
         }
@@ -329,6 +359,11 @@ class IndexController extends AbstractActionController
             $result = array ('result' => 'Пользователь не авторизован');
             die (json_encode($result));
         }
+    }
+    
+    public function startAction()
+    {
+        
     }
     
 }

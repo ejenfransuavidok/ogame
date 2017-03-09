@@ -62,7 +62,17 @@ return [
                                 'action' => 'calc',
                             ],
                         ],
-                    ], 
+                    ],
+                    
+                    'start' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/start',
+                            'defaults' => [
+                                'action' => 'start',
+                            ],
+                        ],
+                    ],
                 
                 ],
             ],

@@ -150,6 +150,22 @@ class SpaceSheep extends Entity
      */
     protected $owner;
     
+    /**
+     * 
+     * @ int
+     * @ дистанция проходимая кораблем на остатке топлива
+     * 
+     */
+    private $distance;
+    
+    /**
+     * 
+     * @ int
+     * @ коэффициент для вычисления пробега
+     * 
+     */
+    private $fuel_factor;
+    
     const TABLE_NAME = 'spacesheeps';
     
     public function __construct(
@@ -197,6 +213,11 @@ class SpaceSheep extends Entity
         $this->sputnik                      = $sputnik;
         $this->owner                        = $owner;
         $this->id                           = $id;
+        
+        /**
+         * no db
+         */
+        $this->fuel_factor                  = 1;
     }
     
     public function exchangeArray(array $data, $prefix = '')
@@ -407,5 +428,32 @@ class SpaceSheep extends Entity
     public function getOwner()
     {
         return $this->owner;
+    }
+    
+    public function setDistance($distance)
+    {
+        $this->distance = $distance;
+    }
+    
+    public function getDistance()
+    {
+        return $this->distance;
+    }
+    
+    public function setFuelFactor($fuel_factor)
+    {
+        $this->fuel_factor = $fuel_factor;
+    }
+    
+    public function getFuelFactor()
+    {
+        return $this->fuel_factor;
+    }
+    
+    public function calcDistance($fuel_factor)
+    {
+        $this->setFuelFactor($fuel_factor);
+        $this->distance = ceil(($this->fuel_factor * $this->fuel_rest) / ($this->fuel_consumption * $this->capacity));
+        return $this->distance;
     }
 }
