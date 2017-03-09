@@ -7,6 +7,7 @@ use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
 use Universe\Model\SputnikRepository;
 use Entities\Model\UserRepository;
+use Entities\Model\EventRepository;
 use Entities\Model\SpaceSheep;
 use Zend\Hydrator\Exception\BadMethodCallException;
 use Zend\Hydrator\HydratorInterface;
@@ -55,13 +56,22 @@ class SpaceSheepHydrator implements HydratorInterface
      */
     private $userRepository;
     
+    /**
+     * 
+     * @ EventRepository
+     * 
+     */
+    private $eventRepository;
+    
+    
     public function __construct(
         GalaxyRepository $galaxyRepository, 
         PlanetSystemRepository $planetSystemRepository,
         PlanetRepository $planetRepository,
         SputnikRepository $sputnikRepository,
         StarRepository $starRepository,
-        UserRepository $userRepository)
+        UserRepository $userRepository,
+        EventRepository $eventRepository)
     {
         $this->galaxyRepository = $galaxyRepository;
         $this->planetSystemRepository = $planetSystemRepository;
@@ -69,6 +79,7 @@ class SpaceSheepHydrator implements HydratorInterface
         $this->sputnikRepository = $sputnikRepository;
         $this->starRepository = $starRepository;
         $this->userRepository = $userRepository;
+        $this->eventRepository = $eventRepository;
     }
     
     /**
@@ -88,7 +99,7 @@ class SpaceSheepHydrator implements HydratorInterface
             ));
         }
         
-        $spaceSheep = new SpaceSheep(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $spaceSheep = new SpaceSheep(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         $spaceSheep->exchangeArray($data);
         $galaxy_id = $spaceSheep->getGalaxy();
         $planet_system_id = $spaceSheep->getPlanetSystem();
@@ -96,6 +107,7 @@ class SpaceSheepHydrator implements HydratorInterface
         $sputnik_id = $spaceSheep->getSputnik();
         $star_id = $spaceSheep->getStar();
         $user_id = $spaceSheep->getOwner();
+        $event_id = $spaceSheep->getEvent();
         try {
             $galaxy = $this->galaxyRepository->findEntity($galaxy_id);
         }
@@ -115,6 +127,12 @@ class SpaceSheepHydrator implements HydratorInterface
             $planet = null;
         }
         try {
+            $sputnik = $this->sputnikRepository->findEntity($sputnik_id);
+        }
+        catch (\Exception $e) {
+            $sputnik = null;
+        }
+        try {
             $star = $this->starRepository->findEntity($star_id);
         }
         catch (\Exception $e) {
@@ -126,11 +144,18 @@ class SpaceSheepHydrator implements HydratorInterface
         catch (\Exception $e) {
             $user = null;
         }
+        try {
+            $event = $this->eventRepository->findEntity($event_id);
+        }
+        catch (\Exception $e) {
+            $event = null;
+        }
         $spaceSheep->setGalaxy($galaxy);
         $spaceSheep->setPlanetSystem($planet_system);
         $spaceSheep->setPlanet($planet);
         $spaceSheep->setStar($star);
         $spaceSheep->setOwner($user);
+        $spaceSheep->setEvent($event);
         return $spaceSheep;
     }
     

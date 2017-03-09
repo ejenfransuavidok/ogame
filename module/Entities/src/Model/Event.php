@@ -38,6 +38,11 @@ class Event extends Entity
     protected $event_end;
     
     /**
+     * @ Star
+     */
+    protected $target_star;
+    
+    /**
      * @ Planet
      */
     protected $target_planet;
@@ -49,7 +54,7 @@ class Event extends Entity
     
     
     
-    public function __construct($name, $description, $user, $event_type, $event_begin, $event_end, $target_planet, $target_sputnik, $id=null)
+    public function __construct($name, $description, $user, $event_type, $event_begin, $event_end, $target_star, $target_planet, $target_sputnik, $id=null)
     {
         parent::__construct(self::TABLE_NAME);
         $this->name             = $name;
@@ -58,6 +63,7 @@ class Event extends Entity
         $this->event_type       = $event_type;
         $this->event_begin      = $event_begin;
         $this->event_end        = $event_end;
+        $this->target_star      = $target_star;
         $this->target_planet    = $target_planet;
         $this->target_sputnik   = $target_sputnik;
         $this->id               = $id;
@@ -72,6 +78,7 @@ class Event extends Entity
         $this->event_type       = !empty($data[$prefix.'event_type']) ? $data[$prefix.'event_type'] : null;
         $this->event_begin      = !empty($data[$prefix.'event_begin']) ? $data[$prefix.'event_begin'] : null;
         $this->event_end        = !empty($data[$prefix.'event_end']) ? $data[$prefix.'event_end'] : null;
+        $this->target_star      = !empty($data[$prefix.'target_star']) ? $data[$prefix.'target_star'] : null;
         $this->target_planet    = !empty($data[$prefix.'target_planet']) ? $data[$prefix.'target_planet'] : null;
         $this->target_sputnik   = !empty($data[$prefix.'target_sputnik']) ? $data[$prefix.'target_sputnik'] : null;
     }
@@ -83,5 +90,72 @@ class Event extends Entity
     
     public function setUser($user)
     {
+        $this->user = $user;
     }
+    
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
+    public function setEventType($event_type)
+    {
+        $this->event_type = $event_type;
+    }
+    
+    public function getEventType()
+    {
+        return $this->event_type;
+    }
+    
+    public function setEventBegin($event_begin)
+    {
+        $this->event_begin = $event_begin;
+    }
+    
+    public function getEventBegin()
+    {
+        return $this->event_begin;
+    }
+    
+    public function setEventEnd($event_end)
+    {
+        $this->event_end = $event_end;
+    }
+    
+    public function getEventEnd()
+    {
+        return $this->event_end;
+    }
+    
+    public function setTargetStar($target_star)
+    {
+        $this->target_star = $target_star;
+    }
+    
+    public function getTargetStar()
+    {
+        return $this->target_star;
+    }
+    
+    public function setTargetPlanet($target_planet)
+    {
+        $this->target_planet = $target_planet;
+    }
+    
+    public function getTargetPlanet()
+    {
+        return $this->target_planet;
+    }
+    
+    public function setTargetSputnik($target_sputnik)
+    {
+        $this->target_sputnik = $target_sputnik;
+    }
+    
+    public function getTargetSputnik()
+    {
+        return $this->target_sputnik;
+    }
+    
 }

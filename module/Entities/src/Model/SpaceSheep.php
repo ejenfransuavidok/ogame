@@ -152,6 +152,13 @@ class SpaceSheep extends Entity
     
     /**
      * 
+     * @ Event
+     * @ событие связанное с кораблем
+     */
+    protected $event;
+    
+    /**
+     * 
      * @ int
      * @ дистанция проходимая кораблем на остатке топлива
      * 
@@ -165,6 +172,14 @@ class SpaceSheep extends Entity
      * 
      */
     private $fuel_factor;
+    
+    /**
+     * 
+     * @ int
+     * @ коэффициент для вычисления времени пробега
+     * 
+     */
+    private $time_factor;
     
     const TABLE_NAME = 'spacesheeps';
     
@@ -189,6 +204,7 @@ class SpaceSheep extends Entity
         $planet,
         $sputnik,
         $owner,
+        $event,
         $id=null)
     {
         parent::__construct(self::TABLE_NAME);
@@ -212,12 +228,14 @@ class SpaceSheep extends Entity
         $this->planet                       = $planet;
         $this->sputnik                      = $sputnik;
         $this->owner                        = $owner;
+        $this->event                        = $event;
         $this->id                           = $id;
         
         /**
          * no db
          */
         $this->fuel_factor                  = 1;
+        $this->time_factor                  = 1;
     }
     
     public function exchangeArray(array $data, $prefix = '')
@@ -243,6 +261,7 @@ class SpaceSheep extends Entity
         $this->planet                       = !empty($data[$prefix.'planet']) ? $data[$prefix.'planet'] : null;
         $this->sputnik                      = !empty($data[$prefix.'sputnik']) ? $data[$prefix.'sputnik'] : null;
         $this->owner                        = !empty($data[$prefix.'owner']) ? $data[$prefix.'owner'] : null;
+        $this->event                        = !empty($data[$prefix.'event']) ? $data[$prefix.'event'] : null;
     }
     
     public function getArrayCopy()
@@ -430,6 +449,16 @@ class SpaceSheep extends Entity
         return $this->owner;
     }
     
+    public function setEvent($event)
+    {
+        $this->event = $event;
+    }
+    
+    public function getEvent()
+    {
+        return $this->event;
+    }
+    
     public function setDistance($distance)
     {
         $this->distance = $distance;
@@ -456,4 +485,20 @@ class SpaceSheep extends Entity
         $this->distance = ceil(($this->fuel_factor * $this->fuel_rest) / ($this->fuel_consumption * $this->capacity));
         return $this->distance;
     }
+    
+    public function setTimeFactor($time_factor)
+    {
+        $this->time_factor = $time_factor;
+    }
+    
+    public function getTimeFactor()
+    {
+        return $this->time_factor;
+    }
+    
+    public function calcTime($time_factor, $distance)
+    {
+        return ceil($time_factor * $distance / $this->speed);
+    }
+    
 }

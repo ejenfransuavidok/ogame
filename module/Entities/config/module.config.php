@@ -23,6 +23,8 @@ return [
             Model\SpaceSheepRepository::class => Factory\SpaceSheepRepositoryFactory::class,
             Model\UserCommand::class => Factory\UserCommandFactory::class,
             Model\UserRepository::class => Factory\UserRepositoryFactory::class,
+            Model\EventCommand::class => Factory\EventCommandFactory::class,
+            Model\EventRepository::class => Factory\EventRepositoryFactory::class,
         ],
     ],
     'controllers' => [

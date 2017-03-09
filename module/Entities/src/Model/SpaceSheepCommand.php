@@ -64,7 +64,8 @@ class SpaceSheepCommand implements EntityCommandInterface
             'star'                          => $spaceSheep->getStar()           ? $spaceSheep->getStar()->getId()           : null,
             'planet'                        => $spaceSheep->getPlanet()         ? $spaceSheep->getPlanet()->getId()         : null,
             'sputnik'                       => $spaceSheep->getSputnik()        ? $spaceSheep->getSputnik()->getId()        : null,
-            'owner'                         => $spaceSheep->getOwner()          ? $spaceSheep->getOwner()->getId()          : null
+            'owner'                         => $spaceSheep->getOwner()          ? $spaceSheep->getOwner()->getId()          : null,
+            'event'                         => $spaceSheep->getEvent()          ? $spaceSheep->getEvent()->getId()          : null
         ]);
 
         $sql = new Sql($this->db);
@@ -100,6 +101,7 @@ class SpaceSheepCommand implements EntityCommandInterface
             $spaceSheep->getPlanet(),
             $spaceSheep->getSputnik(),
             $spaceSheep->getOwner(),
+            $spaceSheep->getEvent(),
             $result->getGeneratedValue()
         );
     }
@@ -134,7 +136,8 @@ class SpaceSheepCommand implements EntityCommandInterface
             'star'                          => $spaceSheep->getStar()           ? $spaceSheep->getStar()->getId()           : null,
             'planet'                        => $spaceSheep->getPlanet()         ? $spaceSheep->getPlanet()->getId()         : null,
             'sputnik'                       => $spaceSheep->getSputnik()        ? $spaceSheep->getSputnik()->getId()        : null,
-            'owner'                         => $spaceSheep->getOwner()          ? $spaceSheep->getOwner()->getId()          : null
+            'owner'                         => $spaceSheep->getOwner()          ? $spaceSheep->getOwner()->getId()          : null,
+            'event'                         => $spaceSheep->getEvent()          ? $spaceSheep->getEvent()->getId()          : null
         ]);
         $update->where(['id = ?' => $spaceSheep->getId()]);
 

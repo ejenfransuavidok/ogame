@@ -346,7 +346,8 @@ class TechLoadController extends AbstractActionController
                         $star,
                         $planet,
                         $sputnik,
-                        $owner
+                        $owner,
+                        null//event
                         );
                     $spaceSheep = $this->spaceSheepCommand->insertEntity($spaceSheep);
                 }

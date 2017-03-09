@@ -9,6 +9,8 @@
 
 namespace Flight\Controller;
 
+require_once (dirname(dirname(dirname(dirname(__FILE__)))) . '/Entities/src/Classes/EventTypes.php');
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Db\Adapter\AdapterInterface;
@@ -21,6 +23,9 @@ use Entities\Model\User;
 use Entities\Model\SpaceSheepRepository;
 use Entities\Model\SpaceSheepCommand;
 use Entities\Model\SpaceSheep;
+use Entities\Model\EventRepository;
+use Entities\Model\EventCommand;
+use Entities\Model\Event;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
@@ -28,6 +33,7 @@ use Universe\Model\SputnikRepository;
 use Universe\Model\StarRepository;
 use Settings\Model\Setting;
 use Settings\Model\SettingsRepositoryInterface;
+use Entity\Classes\EventTypes;
 
 define('INIT', 'FALSE');
 
@@ -106,6 +112,16 @@ class IndexController extends AbstractActionController
      */
     private $settingsRepository;
     
+    /**
+     * @ EventRepository
+     */
+    private $eventRepository;
+    
+    /**
+     * @ EventCommand
+     */
+    private $eventCommand;
+    
     
     public function __construct(
         AdapterInterface $db, 
@@ -118,7 +134,9 @@ class IndexController extends AbstractActionController
         StarRepository $starRepository,
         SpaceSheepCommand $spaceSheepCommand,
         SpaceSheepRepository $spaceSheepRepository,
-        SettingsRepositoryInterface $settingsRepository)
+        SettingsRepositoryInterface $settingsRepository,
+        EventRepository $eventRepository,
+        EventCommand $eventCommand)
     {
         $this->dbAdapter = $db;
         $this->userRepository = $userRepository;
@@ -131,6 +149,8 @@ class IndexController extends AbstractActionController
         $this->spaceSheepCommand = $spaceSheepCommand;
         $this->spaceSheepRepository = $spaceSheepRepository;
         $this->settingsRepository = $settingsRepository;
+        $this->eventRepository = $eventRepository;
+        $this->eventCommand = $eventCommand;
         
         $this->authAdapter = new AuthAdapter(
             $this->dbAdapter,
@@ -311,16 +331,22 @@ class IndexController extends AbstractActionController
     /*
      * максимальная дистанция флота будет определяться кораблем с наименьшим пробегом
      */
-    public function calcFlotDistance(&$sheeps)
+    public function calcFlot(&$sheeps)
     {
         foreach($sheeps as $sheep) {
             $sheep->calcDistance($this->FUEL_DISTANCE_CALC);
         }
     }
     
+    public function createEvent(&$sheeps, $event_type)
+    {
+        
+    }
+    
     public function calcAction()
     {
         $this->FUEL_DISTANCE_CALC = intval($this->settingsRepository->findSettingByKey ('FUEL_DISTANCE_CALC ')->getText());
+        $this->TIME_FACTOR_CALC = intval($this->settingsRepository->findSettingByKey ('TIME_FACTOR_CALC ')->getText());
         $target         = $_REQUEST['target'];
         $galaxy         = $_REQUEST['galaxy'];
         $planet_system  = $_REQUEST['planet_system'];
@@ -331,7 +357,7 @@ class IndexController extends AbstractActionController
             $identity = $this->auth->getIdentity();
             $user = $this->userRepository->findOneBy("users.login = '" . $identity . "'");
             $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner = ' . $user->getId())->buffer();
-            $this->calcFlotDistance($sheeps);
+            $this->calcFlot($sheeps);
             if($target == 'planet') {
                 $target = $this->planetRepository->findEntity(intval($planet));
             }
@@ -343,27 +369,42 @@ class IndexController extends AbstractActionController
             $html = '';
             $distance = abs($target->getCoordinate() - $user->getPlanet()->getCoordinate());
             $html .= ('<p>Дистанция полета ' . $distance . ' ед.</p>');
+            $float_time = 0;
+            $can = true;
             foreach($sheeps as $sheep) {
-                $html .= ('<p>' . $sheep->getName() . ' преодолеет расстояние в ' . $sheep->getDistance() . ' ед.');
+                $html .= ('<p>' . $sheep->getName() . ' преодолеет максимальное расстояние в ' . $sheep->getDistance() . ' ед.');
                 if($distance > $sheep->getDistance()) {
                     $html .= ('<p style="color: red"> > Не долетит!</p>');
+                    $can = false;
                 }
                 else {
-                    $html .= ('<p style="color: green"> > Долетит!</p>');
+                    $time = $sheep->calcTime($this->TIME_FACTOR_CALC, $distance);
+                    $float_time = max($time, $float_time);
+                    $html .= ('<p style="color: green"> > Долетит! Время на перелет составит ' . $time .  ' минут.</p>');
                 }
+            }
+            if($can){
+                $html .= ('<p style="color: green"> > Флот долетит! Время на перелет составит ' . $float_time .  ' минут.</p>');
+            }
+            else{
+                $html .= ('<p style="color: red"> > Флот не долетит!</p>');
+            }
+            if($can){
+                $this->createEvent($sheeps, EventTypes::FLOT_RELOCATION);
             }
             $result = array ('result' => $html);
             die (json_encode($result));
         }
         else {
-            $result = array ('result' => 'Пользователь не авторизован');
+            $result = array ('result' => '<p>Пользователь не авторизован</p>');
             die (json_encode($result));
         }
     }
     
     public function startAction()
     {
-        
+        $result = array ('result' => '<p>Пользователь не авторизован</p>');
+        die (json_encode($result));
     }
     
 }

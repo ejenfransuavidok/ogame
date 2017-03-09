@@ -10,6 +10,8 @@ use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
 use Entities\Model\SpaceSheepRepository;
 use Entities\Model\SpaceSheepCommand;
+use Entities\Model\EventRepository;
+use Entities\Model\EventCommand;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
@@ -39,7 +41,9 @@ class IndexControllerFactory implements FactoryInterface
             $container->get(StarRepository::class),
             $container->get(SpaceSheepCommand::class),
             $container->get(SpaceSheepRepository::class),
-            $container->get(SettingsRepositoryInterface::class)
+            $container->get(SettingsRepositoryInterface::class),
+            $container->get(EventRepository::class),
+            $container->get(EventCommand::class)
         );
     }
 }

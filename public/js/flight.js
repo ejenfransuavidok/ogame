@@ -84,6 +84,24 @@ var Main = function () {
                 });
                 console.log(name + ' - ' + id);
             });
+            $(document).on('click', '#flight-start', function (evt) {
+                evt.preventDefault();
+                var html = $('#console').html();
+                $.ajax({
+                    type: 'post',
+                    url: '/flight/start',
+                    data: '',
+                    dataType: "json",
+                    success: function success(response) {
+                        console.log(response);
+                        var html = $('#console').html();
+                        $('#console').html(html + response.result);
+                    },
+                    error: function error(data) {
+                        console.error(data);
+                    }
+                });
+            });
             $(document).on('click', '#flight-calc', function (evt) {
                 var target = $('input[name=target]:checked').val();
                 var galaxy = $('select[name=galaxy_select]').val();
