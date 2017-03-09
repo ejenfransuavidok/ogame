@@ -465,7 +465,7 @@ class IndexController extends AbstractActionController
                         $event->getTargetPlanet() 
                             ? $this->GetAllCoordinatesByPlanet($event->getTargetPlanet(), $star, $planet_system, $galaxy)
                             : $this->GetAllCoordinatesBySputnik($event->getTargetSputnik(), $planet, $star, $planet_system, $galaxy);
-                        $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.event = ' . EventTypes::$FLOT_RELOCATION)->buffer();
+                        $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.event = ' . $event->getId())->buffer();
                         if($sheeps){
                             foreach($sheeps as $sheep){
                                 // корабль в новой локации, обновим координаты
@@ -487,19 +487,19 @@ class IndexController extends AbstractActionController
                         $this->userCommand->updateEntity($user);
                         // удалим само событие
                         $this->eventCommand->deleteEntity($event);
-                        die(json_encode(array("message" => "<p>Полет окончен!</p>", "progress" => "100")));
+                        die(json_encode(array("message" => "<p>Полет окончен!</p>", "progress" => "100", "end" => true)));
                     }
                     else {
                         // еще не прилетели
                         $progress = ceil(100 * (1 - ($event_end - $now) / ($event_end - $event_begin)));
-                        die(json_encode(array("message" => "<p style='color: green;'>Флот в полете.</p>", "progress" => $progress)));
+                        die(json_encode(array("message" => "<p style='color: green;'>Флот в полете.</p>", "progress" => $progress, "end" => false)));
                     }
                 }
             }
             else {
-                die(json_encode(array("message" => "<p>Активных полетов нет!</p>", "progress" => "0")));
+                die(json_encode(array("message" => "<p>Активных полетов нет!</p>", "progress" => "0", "end" => false)));
             }
-            die(json_encode(array("message" => "<p>Активных полетов нет!</p>", "progress" => "0")));
+            die(json_encode(array("message" => "<p>Активных полетов нет!</p>", "progress" => "0", "end" => false)));
         }
     }
     

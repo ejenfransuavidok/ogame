@@ -146,6 +146,7 @@ var Main = function () {
                         $('#flight-progress').text(response.progress + '%');
                         var html = $('#console').html();
                         $('#console').html(html + response.message);
+                        if (response.end == true) location.reload();
                     },
                     error: function error(data) {
                         console.error(data);
