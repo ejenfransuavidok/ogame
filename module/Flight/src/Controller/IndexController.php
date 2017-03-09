@@ -33,7 +33,7 @@ use Universe\Model\SputnikRepository;
 use Universe\Model\StarRepository;
 use Settings\Model\Setting;
 use Settings\Model\SettingsRepositoryInterface;
-use Entity\Classes\EventTypes;
+use Entities\Classes\EventTypes;
 
 define('INIT', 'FALSE');
 
@@ -338,9 +338,34 @@ class IndexController extends AbstractActionController
         }
     }
     
-    public function createEvent(&$sheeps, $event_type)
+    public function createEvent(&$sheeps, $user, $target, $event_duration, $event_type)
     {
-        
+        foreach($sheeps as $sheep) {
+            if($sheep->getEvent() && $sheep->getEvent()->getEventType() == $event_type) {
+                die(json_encode(
+                    array (
+                        'result' => '<p style="color: red">По крайней мере один из кораблей флота - ' . $sheep->getName() . ' уже выполняет это же действие!</p>'
+                        )
+                    )
+                );
+            }
+        }
+        $event = new Event(
+            'Перелет на ' . $target->getName(),
+            '',
+            $user,
+            $event_type,
+            time(),
+            time() + $event_duration * 60,
+            null,
+            $target,
+            null
+            );
+        $event = $this->eventCommand->insertEntity($event);
+        foreach($sheeps as $sheep) {
+            $sheep->setEvent($event);
+            $this->spaceSheepCommand->updateEntity($sheep);
+        }
     }
     
     public function calcAction()
@@ -390,7 +415,7 @@ class IndexController extends AbstractActionController
                 $html .= ('<p style="color: red"> > Флот не долетит!</p>');
             }
             if($can){
-                $this->createEvent($sheeps, EventTypes::FLOT_RELOCATION);
+                $this->createEvent($sheeps, $user, $target, $float_time, EventTypes::$FLOT_RELOCATION);
             }
             $result = array ('result' => $html);
             die (json_encode($result));

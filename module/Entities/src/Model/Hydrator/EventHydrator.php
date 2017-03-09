@@ -62,9 +62,9 @@ class EventHydrator implements HydratorInterface
         $event = new Event(null,null,null,null,null,null,null,null,null,null);
         $event->exchangeArray($data);
         $user_id = $event->getUser();
-        $star_id = $event->getStar();
-        $planet_id = $event->getPlanet();
-        $sputnik_id = $event->getSputnik();
+        $star_id = $event->getTargetStar();
+        $planet_id = $event->getTargetPlanet();
+        $sputnik_id = $event->getTargetSputnik();
         try {
             $user = $this->userRepository->findEntity($user_id);
         }
@@ -90,9 +90,9 @@ class EventHydrator implements HydratorInterface
             $sputnik = null;
         }
         $event->setUser($user);
-        $event->setStar($star);
-        $event->setPlanet($planet);
-        $event->setPlanet($sputnik);
+        $event->setTargetStar($star);
+        $event->setTargetPlanet($planet);
+        $event->setTargetSputnik($sputnik);
         
         return $event;
     }

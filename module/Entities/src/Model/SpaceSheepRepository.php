@@ -225,6 +225,20 @@ class SpaceSheepRepository implements EntityRepositoryInterface
                     'users.star'                => 'star',
                     'users.description'         => 'description'
                 ],
+                Select::JOIN_LEFT)
+            ->join(['ev' => 'events'], 'spacesheeps.event = ev.id',
+                [
+                    'events.id'                 => 'id',
+                    'events.name'               => 'name',
+                    'events.description'        => 'description',
+                    'events.user'               => 'user',
+                    'events.event_type'         => 'event_type',
+                    'events.event_begin'        => 'event_begin',
+                    'events.event_end'          => 'event_end',
+                    'events.target_star'        => 'target_star',
+                    'events.target_planet'      => 'target_planet',
+                    'events.target_sputnik'     => 'target_sputnik'
+                ],
                 Select::JOIN_LEFT);
         $select->where($criteria ? $criteria : ['spacesheeps.id = ?' => $id]);
 

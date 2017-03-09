@@ -67,7 +67,7 @@ class EventRepository implements EntityRepositoryInterface
                     'users.description'         => 'description'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['st' => 'stars'], 'events.star = st.id',
+            ->join(['st' => 'stars'], 'events.target_star = st.id',
                 [
                     'stars.id'                  => 'id',
                     'stars.name'                => 'name',
@@ -78,7 +78,7 @@ class EventRepository implements EntityRepositoryInterface
                     'stars.planet_system'       => 'planet_system'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['p' => 'planets'], 'events.planet = p.id',
+            ->join(['p' => 'planets'], 'events.target_planet = p.id',
                 [
                     'planets.id'                => 'id',
                     'planets.name'              => 'name',
@@ -90,7 +90,7 @@ class EventRepository implements EntityRepositoryInterface
                     'planets.planet_system'     => 'planet_system'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['sp' => 'sputniks'], 'events.sputnik = sp.id',
+            ->join(['sp' => 'sputniks'], 'events.target_sputnik = sp.id',
                 [
                     'sputniks.id'               => 'id',
                     'sputniks.name'             => 'name',
@@ -133,7 +133,7 @@ class EventRepository implements EntityRepositoryInterface
                     'users.description'         => 'description'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['st' => 'stars'], 'events.star = st.id',
+            ->join(['st' => 'stars'], 'events.target_star = st.id',
                 [
                     'stars.id'                  => 'id',
                     'stars.name'                => 'name',
@@ -144,7 +144,7 @@ class EventRepository implements EntityRepositoryInterface
                     'stars.planet_system'       => 'planet_system'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['p' => 'planets'], 'events.planet = p.id',
+            ->join(['p' => 'planets'], 'events.target_planet = p.id',
                 [
                     'planets.id'                => 'id',
                     'planets.name'              => 'name',
@@ -156,7 +156,7 @@ class EventRepository implements EntityRepositoryInterface
                     'planets.planet_system'     => 'planet_system'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['sp' => 'sputniks'], 'events.sputnik = sp.id',
+            ->join(['sp' => 'sputniks'], 'events.target_sputnik = sp.id',
                 [
                     'sputniks.id'               => 'id',
                     'sputniks.name'             => 'name',
@@ -168,7 +168,7 @@ class EventRepository implements EntityRepositoryInterface
                     'sputniks.planet_system'    => 'planet_system'
                 ],
                 Select::JOIN_LEFT);
-        $select->where($criteria ? $criteria : ['id = ?' => $id]);
+        $select->where($criteria ? $criteria : ['events.id = ?' => $id]);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();
 
