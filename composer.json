@@ -34,7 +34,8 @@
             "Settings\\": "module/Settings/src/",
             "Universe\\": "module/Universe/src/",
             "Entities\\": "module/Entities/src/",
-            "Flight\\": "module/Flight/src/"
+            "Flight\\": "module/Flight/src/",
+            "App\\": "module/App/src/"
         }
     },
     "autoload-dev": {

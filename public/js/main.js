@@ -2,6 +2,10 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _ogUniverse = require('og.universe.js');
+
+var _ogAuth = require('og.auth.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var JQueryStarter = function () {
@@ -45,36 +49,8 @@ var Main = function () {
     _createClass(Main, [{
         key: 'processing',
         value: function processing() {
-            this.timer = setInterval(function () {
-                $.ajax({
-                    type: 'post',
-                    url: '/logger',
-                    data: '',
-                    dataType: "json",
-                    success: function success(response) {
-                        console.log(response.messages);
-                        $('#console').html(response.messages);
-                    },
-                    error: function error(data) {
-                        console.error(data);
-                    }
-                });
-            }, 1500);
-            $(document).on('click', '#universe-start-generation', function (evt) {
-                evt.preventDefault();
-                $.ajax({
-                    type: 'post',
-                    url: '/creator',
-                    data: '',
-                    dataType: "json",
-                    success: function success(response) {
-                        console.log(response.messages);
-                    },
-                    error: function error(data) {
-                        console.error(data);
-                    }
-                });
-            });
+            this.universe = new _ogUniverse.Universe();
+            this.auth = new _ogAuth.Auth();
         }
     }]);
 
