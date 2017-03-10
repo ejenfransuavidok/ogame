@@ -115,7 +115,7 @@ class User extends Entity
         $this->email = $email;
     }
     
-    public function getEmail($email)
+    public function getEmail()
     {
         return $this->email;
     }

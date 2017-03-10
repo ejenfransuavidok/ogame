@@ -99,7 +99,7 @@ class Entity
       */
     public function getId()
     {
-        return $this->id;
+        return $this->id != '' ? $this->id : 0;
     }
     
     /**

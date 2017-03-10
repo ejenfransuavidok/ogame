@@ -150,6 +150,7 @@ $(function(){
 				e.preventDefault();
 				$(this).closest('form').submit();
 			})
+            /*
 			.on('submit', '.game__login-form', function(e){
 				e.preventDefault();
 				var $form = $(this);
@@ -193,7 +194,7 @@ $(function(){
 						}
 					});
 				}
-			})
+			})*/
 		;
 
 	}

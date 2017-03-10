@@ -45,6 +45,28 @@ return [
                         ],
                     ],
                     
+                    'doauth' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/doauth',
+                            'defaults' => [
+                                'controller' => Controller\AuthController::class,
+                                'action' => 'doauth',
+                            ],
+                        ],
+                    ],
+                    
+                    'doregister' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/doregister',
+                            'defaults' => [
+                                'controller' => Controller\AuthController::class,
+                                'action' => 'doregister',
+                            ],
+                        ],
+                    ],
+                    
                 ],
             ],
         ],

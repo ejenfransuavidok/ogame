@@ -72,7 +72,67 @@ class AuthController extends AbstractActionController
         
         $layout->setTemplate('app/layout');
         
-        return new ViewModel([]);
+        $login_form = new ViewModel();
+        $login_form->setTemplate('app/auth/login');
+        
+        $register_form = new ViewModel();
+        $register_form->setTemplate('app/auth/register');
+        
+        $view = new ViewModel([]);
+        $view
+            ->addChild($login_form, 'login')
+            ->addChild($register_form, 'register');
+        
+        return $view;
+    }
+    
+    public function doauthAction()
+    {
+        if(!$this->auth->hasIdentity()){
+            $this->authAdapter
+                 ->setIdentity($_REQUEST['login'])
+                 ->setCredential($_REQUEST['password']);
+            $result = $this->auth->authenticate($this->authAdapter);
+            if(!$this->auth->hasIdentity()){
+                $result = array('message' => 'Логин или пароль неверны', 'result' => 'error');
+            }
+            else {
+                $result = array('message' => 'Авторизация прошла успешно', 'result' => 'ok');
+            }
+        }
+        else{
+            $result = array('message' => 'Вы уже авторизованы на сайте', 'result' => 'error');
+        }
+        $view = new ViewModel(['data' => array('result' => $result)]);
+        $view->setTerminal(true);
+        return $view;
+    }
+    
+    public function doregisterAction()
+    {
+        $result = array();
+        try{
+            $user = $this->userRepository->findOneBy('users.login = ' . $_REQUEST['login']);
+            $result = array('message' => 'Пользователь с таким логином уже авторизован на сайте', 'result' => 'error');
+        }
+        catch(\Exception $e){
+        }
+        if(!$result){
+            try{
+                $user = new User(null,null,null,null,null,null,null,null,null,null,null);
+                $user->setName($_REQUEST['login']);
+                $user->setPassword(md5($_REQUEST['password']));
+                $user->setEmail($_REQUEST['email']);
+                $user = $this->userCommand->insertEntity($user);
+                $result = array('message' => 'Поздравляем! Вы успешно зарегистрированы на нашем сайте!', 'result' => 'ok');
+            }
+            catch(\Exception $e){
+                $result = array('message' => $e->getMessage(), 'result' => 'error');
+            }
+        }
+        $view = new ViewModel(['data' => array('result' => $result)]);
+        $view->setTerminal(true);
+        return $view;
     }
     
 }
