@@ -26,4 +26,5 @@ return [
     'Universe',
     'Entities',
     'Flight',
+    'App',
 ];

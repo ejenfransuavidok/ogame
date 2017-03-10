@@ -23,6 +23,11 @@ class User extends Entity
     protected $password;
     
     /**
+     * @var email
+     */
+    protected $email;
+    
+    /**
      * @var string
      */
     protected $firstname;
@@ -57,12 +62,13 @@ class User extends Entity
      */
     protected $star;
     
-    public function __construct($name, $description, $password, $firstname, $lastname, $galaxy, $planet_system, $planet, $sputnik, $star, $id=null)
+    public function __construct($name, $description, $password, $email, $firstname, $lastname, $galaxy, $planet_system, $planet, $sputnik, $star, $id=null)
     {
         parent::__construct(self::TABLE_NAME);
         $this->name             = $name;
         $this->description      = $description;
         $this->password         = $password;
+        $this->email            = $email;
         $this->firstname        = $firstname;
         $this->lastname         = $lastname;
         $this->galaxy           = $galaxy;
@@ -79,6 +85,7 @@ class User extends Entity
         $this->name             = !empty($data[$prefix.'login']) ? $data[$prefix.'login'] : null;
         $this->description      = !empty($data[$prefix.'description']) ? $data[$prefix.'description'] : null;
         $this->password         = !empty($data[$prefix.'password']) ? $data[$prefix.'password'] : null;
+        $this->email            = !empty($data[$prefix.'email']) ? $data[$prefix.'email'] : null;
         $this->firstname        = !empty($data[$prefix.'firstname']) ? $data[$prefix.'firstname'] : null;
         $this->lastname         = !empty($data[$prefix.'lastname']) ? $data[$prefix.'lastname'] : null;
         $this->galaxy           = !empty($data[$prefix.'galaxy']) ? $data[$prefix.'galaxy'] : null;
@@ -101,6 +108,16 @@ class User extends Entity
     public function getPassword()
     {
         return $this->password;
+    }
+    
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+    
+    public function getEmail($email)
+    {
+        return $this->email;
     }
     
     public function setFirstName($firstname)
