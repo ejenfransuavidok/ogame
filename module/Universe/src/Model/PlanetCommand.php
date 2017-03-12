@@ -43,13 +43,20 @@ class PlanetCommand implements EntityCommandInterface
     {
         $insert = new Insert($planet->GetTable());
         $insert->values([
-            'name'          => $planet->getName(),
-            'description'   => $planet->getDescription(),
-            'coordinate'    => $planet->getCoordinate(),
-            'size'          => $planet->getSize(),
-            'position'      => $planet->getPosition(),
-            'livable'       => $planet->getLivable(),
-            'planet_system' => $planet->getCelestialParent()->getId()
+            'name'                  => $planet->getName(),
+            'description'           => $planet->getDescription(),
+            'coordinate'            => $planet->getCoordinate(),
+            'size'                  => $planet->getSize(),
+            'position'              => $planet->getPosition(),
+            'livable'               => $planet->getLivable(),
+            'planet_system'         => $planet->getCelestialParent()->getId(),
+            'mineral_metall'        => $planet->getMetall(),
+            'mineral_heavygas'      => $planet->getHeavyGas(),
+            'mineral_ore'           => $planet->getOre(),
+            'mineral_hydro'         => $planet->getHydro(),
+            'mineral_titan'         => $planet->getTitan(),
+            'mineral_darkmatter'    => $planet->getDarkmatter(),
+            'mineral_redmatter'     => $planet->getRedmatter()
         ]);
 
         $sql = new Sql($this->db);
@@ -72,6 +79,13 @@ class PlanetCommand implements EntityCommandInterface
             $planet->getPosition(),
             $planet->getLivable(),
             $planet->getCelestialParent(),
+            $planet->getMetall(),
+            $planet->getHeavyGas(),
+            $planet->getOre(),
+            $planet->getHydro(),
+            $planet->getTitan(),
+            $planet->getDarkmatter(),
+            $planet->getRedmatter(),
             $result->getGeneratedValue()
         );
     }
@@ -87,13 +101,20 @@ class PlanetCommand implements EntityCommandInterface
         
         $update = new Update($planet->GetTable());
         $update->set([
-                'name'          => $planet->getName(),
-                'description'   => $planet->getDescription(),
-                'coordinate'    => $planet->getCoordinate(),
-                'size'          => $planet->getSize(),
-                'position'      => $planet->getPosition(),
-                'livable'       => $planet->getLivable(),
-                'planet_system' => $planet->getCelestialParent()->getId()
+                'name'                  => $planet->getName(),
+                'description'           => $planet->getDescription(),
+                'coordinate'            => $planet->getCoordinate(),
+                'size'                  => $planet->getSize(),
+                'position'              => $planet->getPosition(),
+                'livable'               => $planet->getLivable(),
+                'planet_system'         => $planet->getCelestialParent()->getId(),
+                'mineral_metall'        => $planet->getMetall(),
+                'mineral_heavygas'      => $planet->getHeavyGas(),
+                'mineral_ore'           => $planet->getOre(),
+                'mineral_hydro'         => $planet->getHydro(),
+                'mineral_titan'         => $planet->getTitan(),
+                'mineral_darkmatter'    => $planet->getDarkmatter(),
+                'mineral_redmatter'     => $planet->getRedmatter()
         ]);
         $update->where(['id = ?' => $planet->getId()]);
 

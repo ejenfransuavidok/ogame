@@ -73,7 +73,15 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planets.size'              => 'size',
                     'planets.position'          => 'position',
                     'planets.livable'           => 'livable',
-                    'planets.planet_system'     => 'planet_system'
+                    'planets.planet_system'     => 'planet_system',
+                    'planets.mineral_metall'    => 'mineral_metall',
+                    'planets.mineral_heavygas'  => 'mineral_heavygas',
+                    'planets.mineral_ore'       => 'mineral_ore',
+                    'planets.mineral_hydro'     => 'mineral_hydro',
+                    'planets.mineral_titan'     => 'mineral_titan',
+                    'planets.mineral_darkmatter'=> 'mineral_darkmatter',
+                    'planets.mineral_redmatter' => 'mineral_redmatter',
+                    'planets.mineral_anti'      => 'mineral_anti'
                 ]);
         if($criteria) {
             $select->where($criteria);
@@ -114,7 +122,15 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planets.size'              => 'size',
                     'planets.position'          => 'position',
                     'planets.livable'           => 'livable',
-                    'planets.planet_system'     => 'planet_system'
+                    'planets.planet_system'     => 'planet_system',
+                    'planets.mineral_metall'    => 'mineral_metall',
+                    'planets.mineral_heavygas'  => 'mineral_heavygas',
+                    'planets.mineral_ore'       => 'mineral_ore',
+                    'planets.mineral_hydro'     => 'mineral_hydro',
+                    'planets.mineral_titan'     => 'mineral_titan',
+                    'planets.mineral_darkmatter'=> 'mineral_darkmatter',
+                    'planets.mineral_redmatter' => 'mineral_redmatter',
+                    'planets.mineral_anti'      => 'mineral_anti'
                 ]);
                 
         $select->where($criteria ? $criteria : ['sputniks.id = ?' => $id]);

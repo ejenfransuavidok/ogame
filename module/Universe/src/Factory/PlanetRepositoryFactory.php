@@ -18,7 +18,7 @@ class PlanetRepositoryFactory implements FactoryInterface
         return new PlanetRepository(
             $container->get(AdapterInterface::class),
             new PlanetHydrator($container->get(PlanetSystemRepository::class)),
-            new Planet('','','','','','','')
+            new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }
