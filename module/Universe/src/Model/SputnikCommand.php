@@ -43,13 +43,22 @@ class SputnikCommand implements EntityCommandInterface
     {
         $insert = new Insert($sputnik->GetTable());
         $insert->values([
-            'name'          => $sputnik->getName(),
-            'description'   => $sputnik->getDescription(),
-            'size'          => $sputnik->getSize(),
-            'position'      => $sputnik->getPosition(),
-            'distance'      => $sputnik->getDistance(),
-            'parent_planet' => $sputnik->GetParentPlanet()->getId(),
-            'planet_system' => $sputnik->getCelestialParent()->getId()
+            'name'              => $sputnik->getName(),
+            'description'       => $sputnik->getDescription(),
+            'type'              => $sputnik->getType() ? $sputnik->getType()->getId() : null,
+            'size'              => $sputnik->getSize(),
+            'position'          => $sputnik->getPosition(),
+            'distance'          => $sputnik->getDistance(),
+            'parent_planet'     => $sputnik->GetParentPlanet()->getId(),
+            'planet_system'     => $sputnik->getCelestialParent()->getId(),
+            'mineral_metall'    => $sputnik->getMetall(),
+            'mineral_heavygas'  => $sputnik->getHeavyGas(),
+            'mineral_ore'       => $sputnik->getOre(),
+            'mineral_hydro'     => $sputnik->getHydro(),
+            'mineral_titan'     => $sputnik->getTitan(),
+            'mineral_darkmatter'=> $sputnik->getDarkmatter(),
+            'mineral_redmatter' => $sputnik->getRedmatter(),
+            'mineral_anti'      => $sputnik->getAnti()
         ]);
 
         $sql = new Sql($this->db);
@@ -67,11 +76,20 @@ class SputnikCommand implements EntityCommandInterface
         return new Sputnik(
             $sputnik->getName(),
             $sputnik->getDescription(),
+            $sputnik->getType(),
             $sputnik->getSize(),
             $sputnik->getPosition(),
             $sputnik->getDistance(),
             $sputnik->GetParentPlanet(),
             $sputnik->getCelestialParent(),
+            $sputnik->getMetall(),
+            $sputnik->getHeavyGas(),
+            $sputnik->getOre(),
+            $sputnik->getHydro(),
+            $sputnik->getTitan(),
+            $sputnik->getDarkmatter(),
+            $sputnik->getRedmatter(),
+            $sputnik->getAnti(),
             $result->getGeneratedValue()
         );
     }
@@ -87,13 +105,22 @@ class SputnikCommand implements EntityCommandInterface
         
         $update = new Update($sputnik->GetTable());
         $update->set([
-                'name'          => $sputnik->getName(),
-                'description'   => $sputnik->getDescription(),
-                'size'          => $sputnik->getSize(),
-                'position'      => $sputnik->getPosition(),
-                'distance'      => $sputnik->getDistance(),
-                'parent_planet' => $sputnik->GetParentPlanet->getId(),
-                'planet_system' => $sputnik->getCelestialParent()->getId()
+                'name'              => $sputnik->getName(),
+                'description'       => $sputnik->getDescription(),
+                'type'              => $sputnik->getType()->getId(),
+                'size'              => $sputnik->getSize(),
+                'position'          => $sputnik->getPosition(),
+                'distance'          => $sputnik->getDistance(),
+                'parent_planet'     => $sputnik->GetParentPlanet->getId(),
+                'planet_system'     => $sputnik->getCelestialParent()->getId(),
+                'mineral_metall'    => $sputnik->getMetall(),
+                'mineral_heavygas'  => $sputnik->getHeavyGas(),
+                'mineral_ore'       => $sputnik->getOre(),
+                'mineral_hydro'     => $sputnik->getHydro(),
+                'mineral_titan'     => $sputnik->getTitan(),
+                'mineral_darkmatter'=> $sputnik->getDarkmatter(),
+                'mineral_redmatter' => $sputnik->getRedmatter(),
+                'mineral_anti'      => $sputnik->getAnti()
         ]);
         $update->where(['id = ?' => $sputnik->getId()]);
 

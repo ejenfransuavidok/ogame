@@ -7,6 +7,7 @@ use Universe\Model\Sputnik;
 use Universe\Model\SputnikRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
+use Universe\Model\PlanetTypeRepository;
 use Universe\Model\Hydrator\SputnikHydrator;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Hydrator\Reflection as ReflectionHydrator;
@@ -18,8 +19,8 @@ class SputnikRepositoryFactory implements FactoryInterface
     {
         return new SputnikRepository(
             $container->get(AdapterInterface::class),
-            new SputnikHydrator($container->get(PlanetSystemRepository::class), $container->get(PlanetRepository::class)),
-            new Sputnik('','','','','','','')
+            new SputnikHydrator($container->get(PlanetSystemRepository::class), $container->get(PlanetRepository::class), $container->get(PlanetTypeRepository::class)),
+            new Sputnik(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }

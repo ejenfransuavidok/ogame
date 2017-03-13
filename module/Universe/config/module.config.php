@@ -20,6 +20,8 @@ return [
             Model\SputnikCommand::class => Factory\SputnikCommandFactory::class,
             Model\StarTypeCommand::class => Factory\StarTypeCommandFactory::class,
             Model\StarTypeRepository::class => Factory\StarTypeRepositoryFactory::class,
+            Model\PlanetTypeCommand::class => Factory\PlanetTypeCommandFactory::class,
+            Model\PlanetTypeRepository::class => Factory\PlanetTypeRepositoryFactory::class,
             Model\GalaxyRepository::class => Factory\GalaxyRepositoryFactory::class,
             Model\PlanetSystemRepository::class => Factory\PlanetSystemRepositoryFactory::class,
             Model\StarRepository::class => Factory\StarRepositoryFactory::class,

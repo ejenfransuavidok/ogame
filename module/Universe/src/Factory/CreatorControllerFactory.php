@@ -10,6 +10,8 @@ use Universe\Model\PlanetCommand;
 use Universe\Model\SputnikCommand;
 use Universe\Model\StarTypeCommand;
 use Universe\Model\StarTypeRepository;
+use Universe\Model\PlanetTypeCommand;
+use Universe\Model\PlanetTypeRepository;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\StarRepository;
@@ -38,6 +40,8 @@ class CreatorControllerFactory implements FactoryInterface
             $container->get(SputnikCommand::class),
             $container->get(StarTypeCommand::class),
             $container->get(StarTypeRepository::class),
+            $container->get(PlanetTypeCommand::class),
+            $container->get(PlanetTypeRepository::class),
             $container->get(GalaxyRepository::class),
             $container->get(PlanetSystemRepository::class),
             $container->get(StarRepository::class),

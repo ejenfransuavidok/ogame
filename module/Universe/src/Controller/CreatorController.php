@@ -28,6 +28,9 @@ use Universe\Model\PlanetCommand;
 use Universe\Model\SputnikCommand;
 use Universe\Model\StarTypeCommand;
 use Universe\Model\StarTypeRepository;
+use Universe\Model\PlanetType;
+use Universe\Model\PlanetTypeCommand;
+use Universe\Model\PlanetTypeRepository;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\StarRepository;
@@ -37,6 +40,14 @@ use Settings\Model\Setting;
 use Settings\Model\SettingsRepositoryInterface;
 use Zend\Math\Rand;
 
+
+class FailPlanetsTypesParse extends \Exception
+{
+}
+
+class FailPlanetsTypesIsNull extends \Exception
+{
+}
 
 define ('DEBUG', 'WORKING');
 
@@ -156,6 +167,20 @@ class CreatorController extends AbstractActionController
     
     /**
      * 
+     * @PlanetTypeCommand $planetTypeCommand
+     * 
+     */
+    private $planetTypeCommand;
+    
+    /**
+     * 
+     * @PlanetTypeRepository $planetTypeRepository
+     * 
+     */
+    private $planetTypeRepository;
+    
+    /**
+     * 
      * @GalaxyRepository $galaxyRepository
      * 
      */
@@ -203,6 +228,17 @@ class CreatorController extends AbstractActionController
      */
     private $lock;
     
+    /**
+     * PlanetType
+     */
+    private $planets_types_arr = array();
+    
+    /**
+     * 
+     */
+    private $planets_types_probabilities = array();
+    
+    
     public function __construct(
         SettingsRepositoryInterface $settingsRepository, 
         GalaxyCommand $galaxyCommand,
@@ -212,6 +248,8 @@ class CreatorController extends AbstractActionController
         SputnikCommand $sputnikCommand,
         StarTypeCommand $starTypeCommand,
         StarTypeRepository $starTypeRepository,
+        PlanetTypeCommand $planetTypeCommand,
+        PlanetTypeRepository $planetTypeRepository,
         GalaxyRepository $galaxyRepository,
         PlanetSystemRepository $planetSystemRepository,
         StarRepository $starRepository,
@@ -231,7 +269,10 @@ class CreatorController extends AbstractActionController
         $this->planetCommand            = $planetCommand;
         $this->sputnikCommand           = $sputnikCommand;
         $this->starTypeCommand          = $starTypeCommand;
-
+        $this->starTypeRepository       = $starTypeRepository;
+        $this->planetTypeCommand        = $planetTypeCommand;
+        $this->planetTypeRepository     = $planetTypeRepository;
+        
         /**
          * 
          * @отчистка таблиц перед заполнением
@@ -265,6 +306,7 @@ class CreatorController extends AbstractActionController
             $this->sputnikCommand->truncateTable();
         }
         $this->starTypeCommand->truncateTable();
+        $this->planetTypeCommand->truncateTable();
     }
     
     public function CreatorAction()
@@ -617,6 +659,36 @@ class CreatorController extends AbstractActionController
     }
     
     /**
+     * @ 
+     */
+    public function setPlanetsTypesProbabilities()
+    {
+        if(!count($this->planets_types_arr)){
+            throw new FailPlanetsTypesIsNull();
+        }
+        else{
+            foreach($this->planets_types_arr as $planet_type){
+                for($i=0; $i<intval($planet_type->getProbability()); $i++){
+                    $this->planets_types_probabilities[] = $planet_type;
+                }
+            }
+            //print_r($this->planets_types_probabilities); die();
+        }
+    }
+    
+    /**
+     * @ set planet type
+     */
+    public function setPlanetType(&$planet)
+    {
+        $min = 0;
+        $max = count($this->planets_types_probabilities) - 1;
+        $rnd = Rand::getInteger($min, $max);
+        $planet_type = $this->planets_types_probabilities[$rnd];
+        $planet->setType($planet_type);
+    }
+    
+    /**
      * 
      * @param PlanetSystem
      * 
@@ -641,7 +713,7 @@ class CreatorController extends AbstractActionController
              */
             $planet_basis += $this->PLANETS_DISTANCE;
             
-            $planet = new Planet(null,null,null,null,null,null,null);
+            $planet = new Planet(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1);
             
             /**
              * 
@@ -670,6 +742,12 @@ class CreatorController extends AbstractActionController
              * 
              */
             $planet->setCoordinate($planet_basis);
+            
+            
+            /**
+             * @ установка типа планеты
+             */
+            $this->setPlanetType($planet);
             
             /**
              * 
@@ -700,7 +778,7 @@ class CreatorController extends AbstractActionController
             $this->SPUTNIKS_COUNT = $this->GetAverageRandom($this->PLANET_COUNT_SPUTNIKS_MEDIAN, $this->PLANET_COUNT_SPUTNIKS_MEDIAN_DELTA);
             for($i = 0; $i < $this->SPUTNIKS_COUNT; $i++)
             {
-                $sputnik = new Sputnik(null,null,null,null,null,null,null);
+                $sputnik = new Sputnik(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1);
                 
                 /**
                  * 
@@ -738,6 +816,11 @@ class CreatorController extends AbstractActionController
                 $sputnik->setCelestialParent($parent);
                 
                 /**
+                 * @ установка типа спутника
+                 */
+                $this->setPlanetType($sputnik);
+                
+                /**
                  * 
                  * @запись спутника в базу данных
                  * 
@@ -765,6 +848,16 @@ class CreatorController extends AbstractActionController
          * 
          */
         $this->Read_SPECTRAL_STARS_CONFIGURATION();
+        
+        /**
+         * @ считывание параметров планет
+         */
+        $this->readPlanetsTypesConfig();
+        
+        /**
+         * @ готовим массив вероятностей
+         */
+        $this->setPlanetsTypesProbabilities();
         
         /**
          * 
@@ -901,6 +994,44 @@ class CreatorController extends AbstractActionController
             $star_type->set_star_class(trim($items[4]));
             $star_type->set_part(trim($items[5]));
             $this->starTypeCommand->insertEntity($star_type);
+        }
+    }
+    
+    public function readPlanetsTypesConfig()
+    {
+        $this->PLANETS_TYPES = $this->settingsRepository->findSettingByKey ('PLANETS_TYPES')->getText();
+        preg_match_all("/([^\[\]]+)/", $this->PLANETS_TYPES, $matches);
+        if(!$matches[0]){
+            throw new FailPlanetsTypesParse('PLANETS_TYPES parse error');
+        }
+        else{
+            foreach($matches[0] as $string){
+                $params = explode("|", $string);
+                if(count($params) != 3){
+                    throw new FailPlanetsTypesParse('PLANETS_TYPES parse error ' . $string);
+                }
+                else{
+                    $planet_type = new PlanetType(null,null,null,null,null,null,null,null,null,null,null);
+                    $planet_type->setName($params[0]);
+                    $factors = explode(",", $params[1]);
+                    if(count($factors) != 8){
+                        throw new FailPlanetsTypesParse('PLANETS_TYPES parse error ' . $params[1]);
+                    }
+                    else{
+                        $planet_type->setMetall(floatval($factors[0]));
+                        $planet_type->setHeavyGas(floatval($factors[1]));
+                        $planet_type->setOre(floatval($factors[2]));
+                        $planet_type->setHydro(floatval($factors[3]));
+                        $planet_type->setTitan(floatval($factors[4]));
+                        $planet_type->setDarkmatter(floatval($factors[5]));
+                        $planet_type->setRedmatter(floatval($factors[6]));
+                        $planet_type->setAnti(floatval($factors[7]));
+                        $planet_type->setProbability($params[2]);
+                        $planet_type = $this->planetTypeCommand->insertEntity($planet_type);
+                        $this->planets_types_arr [] = $planet_type;
+                    }
+                }
+            }
         }
     }
     

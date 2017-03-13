@@ -20,9 +20,17 @@ class PlanetHydrator implements HydratorInterface
      */
     private $planetSystemRepository;
     
-    public function __construct(PlanetSystemRepository $planetSystemRepository)
+    /**
+     * 
+     * @PlanetTypeRepository
+     * 
+     */
+    private $planetTypeRepository;
+    
+    public function __construct(PlanetSystemRepository $planetSystemRepository, PlanetTypeRepository $planetTypeRepository)
     {
         $this->planetSystemRepository = $planetSystemRepository;
+        $this->planetTypeRepository = $planetTypeRepository;
     }
     
     /**
@@ -41,10 +49,13 @@ class PlanetHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $planet = new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $planet = new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         $planet->exchangeArray($data);
         $planet_system_id = $planet->getCelestialParent();
         $planet_system = $this->planetSystemRepository->findEntity($planet_system_id);
+        $planet_type_id = $planet->getType();
+        $planet_type = $this->planetTypeRepository->findEntity($planet_type_id);
+        $planet->setType($planet_type);
         $planet->setCelestialParent($planet_system);
         return $planet;
     }

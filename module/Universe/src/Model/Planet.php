@@ -68,9 +68,15 @@ class Planet extends CelestialBody
      */
     private $mineral_anti;
     
+    /**
+     * @ PlanetType
+     */
+    private $type;
+    
     public function __construct(
         $name, 
-        $description, 
+        $description,
+        $type,
         $coordinate, 
         $size, 
         $position, 
@@ -89,6 +95,7 @@ class Planet extends CelestialBody
         parent::__construct(self::TABLE_NAME);
         $this->name                 = $name;
         $this->description          = $description;
+        $this->type                 = $type;
         $this->coordinate           = $coordinate;
         $this->size                 = $size;
         $this->position             = $position;
@@ -109,6 +116,7 @@ class Planet extends CelestialBody
     {
         $this->id                   = !empty($data[$prefix.'id']) ? $data[$prefix.'id'] : null;
         $this->name                 = !empty($data[$prefix.'name']) ? $data[$prefix.'name'] : null;
+        $this->type                 = !empty($data[$prefix.'type']) ? $data[$prefix.'type'] : null;
         $this->description          = !empty($data[$prefix.'description']) ? $data[$prefix.'description'] : null;
         $this->coordinate           = !empty($data[$prefix.'coordinate']) ? $data[$prefix.'coordinate'] : null;
         $this->size                 = !empty($data[$prefix.'size']) ? $data[$prefix.'size'] : null;
@@ -248,6 +256,16 @@ class Planet extends CelestialBody
     public function getAnti()
     {
         return $this->mineral_anti;
+    }
+    
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    
+    public function getType()
+    {
+        return $this->type;
     }
     
 }

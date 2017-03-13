@@ -45,6 +45,7 @@ class PlanetCommand implements EntityCommandInterface
         $insert->values([
             'name'                  => $planet->getName(),
             'description'           => $planet->getDescription(),
+            'type'                  => $planet->getType() ? $planet->getType()->getId() : null,
             'coordinate'            => $planet->getCoordinate(),
             'size'                  => $planet->getSize(),
             'position'              => $planet->getPosition(),
@@ -56,7 +57,8 @@ class PlanetCommand implements EntityCommandInterface
             'mineral_hydro'         => $planet->getHydro(),
             'mineral_titan'         => $planet->getTitan(),
             'mineral_darkmatter'    => $planet->getDarkmatter(),
-            'mineral_redmatter'     => $planet->getRedmatter()
+            'mineral_redmatter'     => $planet->getRedmatter(),
+            'mineral_anti'          => $planet->getAnti()
         ]);
 
         $sql = new Sql($this->db);
@@ -74,6 +76,7 @@ class PlanetCommand implements EntityCommandInterface
         return new Planet(
             $planet->getName(),
             $planet->getDescription(),
+            $planet->getType(),
             $planet->getCoordinate(),
             $planet->getSize(),
             $planet->getPosition(),
@@ -86,6 +89,7 @@ class PlanetCommand implements EntityCommandInterface
             $planet->getTitan(),
             $planet->getDarkmatter(),
             $planet->getRedmatter(),
+            $planet->getAnti(),
             $result->getGeneratedValue()
         );
     }
@@ -103,6 +107,7 @@ class PlanetCommand implements EntityCommandInterface
         $update->set([
                 'name'                  => $planet->getName(),
                 'description'           => $planet->getDescription(),
+                'type'                  => $planet->getType(),
                 'coordinate'            => $planet->getCoordinate(),
                 'size'                  => $planet->getSize(),
                 'position'              => $planet->getPosition(),
@@ -114,7 +119,8 @@ class PlanetCommand implements EntityCommandInterface
                 'mineral_hydro'         => $planet->getHydro(),
                 'mineral_titan'         => $planet->getTitan(),
                 'mineral_darkmatter'    => $planet->getDarkmatter(),
-                'mineral_redmatter'     => $planet->getRedmatter()
+                'mineral_redmatter'     => $planet->getRedmatter(),
+                'mineral_anti'          => $planet->getAnti()
         ]);
         $update->where(['id = ?' => $planet->getId()]);
 

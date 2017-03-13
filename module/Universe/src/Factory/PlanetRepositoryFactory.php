@@ -7,6 +7,7 @@ use Universe\Model\Planet;
 use Universe\Model\PlanetRepository;
 use Universe\Model\Hydrator\PlanetHydrator;
 use Universe\Model\PlanetSystemRepository;
+use Universe\Model\PlanetTypeRepository;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Hydrator\Reflection as ReflectionHydrator;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -17,8 +18,8 @@ class PlanetRepositoryFactory implements FactoryInterface
     {
         return new PlanetRepository(
             $container->get(AdapterInterface::class),
-            new PlanetHydrator($container->get(PlanetSystemRepository::class)),
-            new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+            new PlanetHydrator($container->get(PlanetSystemRepository::class), $container->get(PlanetTypeRepository::class)),
+            new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }
