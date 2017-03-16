@@ -58,7 +58,8 @@ class SputnikCommand implements EntityCommandInterface
             'mineral_titan'     => $sputnik->getTitan(),
             'mineral_darkmatter'=> $sputnik->getDarkmatter(),
             'mineral_redmatter' => $sputnik->getRedmatter(),
-            'mineral_anti'      => $sputnik->getAnti()
+            'mineral_anti'      => $sputnik->getAnti(),
+            'owner'             => $sputnik->getOwner() ? $sputnik->getOwner()->getId() : null
         ]);
 
         $sql = new Sql($this->db);
@@ -90,6 +91,7 @@ class SputnikCommand implements EntityCommandInterface
             $sputnik->getDarkmatter(),
             $sputnik->getRedmatter(),
             $sputnik->getAnti(),
+            $sputnik->getOwner(),
             $result->getGeneratedValue()
         );
     }
@@ -120,7 +122,8 @@ class SputnikCommand implements EntityCommandInterface
                 'mineral_titan'     => $sputnik->getTitan(),
                 'mineral_darkmatter'=> $sputnik->getDarkmatter(),
                 'mineral_redmatter' => $sputnik->getRedmatter(),
-                'mineral_anti'      => $sputnik->getAnti()
+                'mineral_anti'      => $sputnik->getAnti(),
+                'owner'             => $sputnik->getOwner() ? $sputnik->getOwner()->getId() : null
         ]);
         $update->where(['id = ?' => $sputnik->getId()]);
 

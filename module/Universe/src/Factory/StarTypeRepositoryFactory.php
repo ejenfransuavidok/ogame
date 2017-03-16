@@ -16,7 +16,7 @@ class StarTypeRepositoryFactory implements FactoryInterface
         return new StarTypeRepository(
             $container->get(AdapterInterface::class),
             new ReflectionHydrator(),
-            new StarType('','','','','','','','')
+            new StarType(null,null,null,null,null,null,null,null)
         );
     }
 }

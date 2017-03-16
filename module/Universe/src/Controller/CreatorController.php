@@ -272,7 +272,7 @@ class CreatorController extends AbstractActionController
         $this->starTypeRepository       = $starTypeRepository;
         $this->planetTypeCommand        = $planetTypeCommand;
         $this->planetTypeRepository     = $planetTypeRepository;
-        
+
         /**
          * 
          * @отчистка таблиц перед заполнением
@@ -518,7 +518,7 @@ class CreatorController extends AbstractActionController
         
         for ($i = 0; $i < $this->PLANET_SYSTEMS_COUNT; $i++)
         {
-            $planet_system = new PlanetSystem(null,null,null,null,null,null);
+            $planet_system = new PlanetSystem(null,null,null,null,null,null,$i+1);
             $planet_system->setRandomName();
             /**
              * 
@@ -713,7 +713,7 @@ class CreatorController extends AbstractActionController
              */
             $planet_basis += $this->PLANETS_DISTANCE;
             
-            $planet = new Planet(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1);
+            $planet = new Planet(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1,null);
             
             /**
              * 
@@ -778,7 +778,7 @@ class CreatorController extends AbstractActionController
             $this->SPUTNIKS_COUNT = $this->GetAverageRandom($this->PLANET_COUNT_SPUTNIKS_MEDIAN, $this->PLANET_COUNT_SPUTNIKS_MEDIAN_DELTA);
             for($i = 0; $i < $this->SPUTNIKS_COUNT; $i++)
             {
-                $sputnik = new Sputnik(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1);
+                $sputnik = new Sputnik(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1,null);
                 
                 /**
                  * 

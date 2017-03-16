@@ -8,6 +8,7 @@ use Universe\Model\SputnikRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\PlanetRepository;
 use Universe\Model\PlanetTypeRepository;
+use Entities\Model\UserRepository;
 use Zend\Hydrator\Exception\BadMethodCallException;
 use Zend\Hydrator\HydratorInterface;
 
@@ -34,12 +35,22 @@ class SputnikHydrator implements HydratorInterface
      */
     private $planetTypeRepository;
     
+    /**
+     * @ UserRepository
+     */
+    private $userRepository;
     
-    public function __construct(PlanetSystemRepository $planetSystemRepository, PlanetRepository $planetRepository, PlanetTypeRepository $planetTypeRepository)
+    
+    public function __construct(
+        PlanetSystemRepository $planetSystemRepository, 
+        PlanetRepository $planetRepository, 
+        PlanetTypeRepository $planetTypeRepository,
+        UserRepository $userRepository)
     {
         $this->planetSystemRepository = $planetSystemRepository;
         $this->planetRepository = $planetRepository;
         $this->planetTypeRepository = $planetTypeRepository;
+        $this->userRepository = $userRepository;
     }
     
     /**
@@ -58,7 +69,7 @@ class SputnikHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $sputnik = new Sputnik(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $sputnik = new Sputnik(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         $sputnik->exchangeArray($data);
         $parent_planet_id = $sputnik->getParentPlanet();
         $parent_planet = $this->planetRepository->findEntity($parent_planet_id);
@@ -69,6 +80,15 @@ class SputnikHydrator implements HydratorInterface
         $planet_type_id = $sputnik->getType();
         $planet_type = $this->planetTypeRepository->findEntity($planet_type_id);
         $sputnik->setType($planet_type);
+        $owner_id = $sputnik->getOwner();
+        $owner = $this->userRepository->findEntity($owner_id);
+        try {
+            $owner = $this->userRepository->findEntity($owner_id);
+        }
+        catch (\Exception $e) {
+            $owner = null;
+        }
+        $sputnik->setOwner($owner);
         return $sputnik;
     }
     

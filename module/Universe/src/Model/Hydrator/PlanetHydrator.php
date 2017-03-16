@@ -7,6 +7,7 @@ use Universe\Model\PlanetSystem;
 use Universe\Model\PlanetType;
 use Universe\Model\PlanetTypeRepository;
 use Universe\Model\PlanetSystemRepository;
+use Entities\Model\UserRepository;
 use Zend\Hydrator\Exception\BadMethodCallException;
 use Zend\Hydrator\HydratorInterface;
 
@@ -27,10 +28,20 @@ class PlanetHydrator implements HydratorInterface
      */
     private $planetTypeRepository;
     
-    public function __construct(PlanetSystemRepository $planetSystemRepository, PlanetTypeRepository $planetTypeRepository)
+    /**
+     * @ UserRepository
+     */
+    private $userRepository;
+    
+    
+    public function __construct(
+        PlanetSystemRepository $planetSystemRepository, 
+        PlanetTypeRepository $planetTypeRepository,
+        UserRepository $userRepository)
     {
         $this->planetSystemRepository = $planetSystemRepository;
         $this->planetTypeRepository = $planetTypeRepository;
+        $this->userRepository = $userRepository;
     }
     
     /**
@@ -49,7 +60,7 @@ class PlanetHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $planet = new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $planet = new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         $planet->exchangeArray($data);
         $planet_system_id = $planet->getCelestialParent();
         $planet_system = $this->planetSystemRepository->findEntity($planet_system_id);
@@ -57,6 +68,14 @@ class PlanetHydrator implements HydratorInterface
         $planet_type = $this->planetTypeRepository->findEntity($planet_type_id);
         $planet->setType($planet_type);
         $planet->setCelestialParent($planet_system);
+        $owner_id = $planet->getOwner();
+        try {
+            $owner = $this->userRepository->findEntity($owner_id);
+        }
+        catch (\Exception $e) {
+            $owner = null;
+        }
+        $planet->setOwner($owner);
         return $planet;
     }
     

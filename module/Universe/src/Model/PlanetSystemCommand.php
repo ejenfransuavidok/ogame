@@ -48,7 +48,8 @@ class PlanetSystemCommand implements EntityCommandInterface
             'basis'         => $planet_system->getBasis(),
             'size'          => $planet_system->getSize(),
             'star'          => $planet_system->getStar()->getId(),
-            'galaxy'        => $planet_system->getGalaxy()->getId()
+            'galaxy'        => $planet_system->getGalaxy()->getId(),
+            'index'         => $planet_system->getIndex()
         ]);
 
         $sql = new Sql($this->db);
@@ -70,6 +71,7 @@ class PlanetSystemCommand implements EntityCommandInterface
             $planet_system->getSize(),
             $planet_system->getStar(),
             $planet_system->getGalaxy(),
+            $planet_system->getIndex(),
             $result->getGeneratedValue()
         );
     }
@@ -89,7 +91,8 @@ class PlanetSystemCommand implements EntityCommandInterface
                 'basis'         => $planet_system->getBasis(),
                 'size'          => $planet_system->getSize(),
                 'star'          => $planet_system->getStar()->getId(),
-                'galaxy'        => $planet_system->getGalaxy()->getId()
+                'galaxy'        => $planet_system->getGalaxy()->getId(),
+                'index'         => $planet_system->getIndex()
         ]);
         $update->where(['id = ?' => $planet_system->getId()]);
 

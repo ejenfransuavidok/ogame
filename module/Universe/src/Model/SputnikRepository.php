@@ -61,7 +61,8 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planet_system.basis'       => 'basis',
                     'planet_system.size'        => 'size',
                     'planet_system.star'        => 'star',
-                    'planet_system.galaxy'      => 'galaxy'
+                    'planet_system.galaxy'      => 'galaxy',
+                    'planet_system.index'       => 'index'
                 ],
                 Select::JOIN_LEFT)
             ->join(['p' => 'planets'], 'sputniks.parent_planet = p.id',
@@ -82,7 +83,8 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planets.mineral_titan'     => 'mineral_titan',
                     'planets.mineral_darkmatter'=> 'mineral_darkmatter',
                     'planets.mineral_redmatter' => 'mineral_redmatter',
-                    'planets.mineral_anti'      => 'mineral_anti'
+                    'planets.mineral_anti'      => 'mineral_anti',
+                    'planets.owner'             => 'owner'
                 ]);
         if($criteria) {
             $select->where($criteria);
@@ -111,7 +113,8 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planet_system.basis'       => 'basis',
                     'planet_system.size'        => 'size',
                     'planet_system.star'        => 'star',
-                    'planet_system.galaxy'      => 'galaxy'
+                    'planet_system.galaxy'      => 'galaxy',
+                    'planet_system.index'       => 'index'
                 ],
                 Select::JOIN_LEFT)
             ->join(['p' => 'planets'], 'sputniks.parent_planet = p.id',
@@ -132,7 +135,8 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planets.mineral_titan'     => 'mineral_titan',
                     'planets.mineral_darkmatter'=> 'mineral_darkmatter',
                     'planets.mineral_redmatter' => 'mineral_redmatter',
-                    'planets.mineral_anti'      => 'mineral_anti'
+                    'planets.mineral_anti'      => 'mineral_anti',
+                    'planets.owner'             => 'owner'
                 ]);
                 
         $select->where($criteria ? $criteria : ['sputniks.id = ?' => $id]);

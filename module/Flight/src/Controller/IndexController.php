@@ -257,7 +257,7 @@ class IndexController extends AbstractActionController
                 $user = $this->InstallPositionOfUser($user);
                 $this->SetSheepsForUser($user);
             }
-            $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner = ' . $user->getId());
+            $sheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner = ' . $user->getId())->buffer();
             $galaxies = $this->galaxyRepository->findAllEntities();
             ///$this->auth->clearIdentity();
             return new ViewModel([

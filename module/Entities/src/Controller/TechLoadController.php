@@ -31,7 +31,9 @@ use Universe\Model\PlanetSystemRepository;
 use Universe\Model\StarRepository;
 use Universe\Model\PlanetRepository;
 use Universe\Model\SputnikRepository;
-
+use Entities\Model\Building;
+use Entities\Model\BuildingCommand;
+use Entities\Model\BuildingRepository;
 class FailXmiParse extends \Exception
 {
 }
@@ -124,6 +126,12 @@ class TechLoadController extends AbstractActionController
      */
     private $userRepository;
     
+    /**
+     * @ var BuildingCommand
+     */
+    private $buildingCommand;
+    
+    
     public function __construct(
         TechnologyRepository $technologyRepository, 
         TechnologyCommand $technologyCommand, 
@@ -134,7 +142,8 @@ class TechLoadController extends AbstractActionController
         StarRepository $starRepository,
         PlanetRepository $planetRepository,
         SputnikRepository $sputnikRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        BuildingCommand $buildingCommand
         )
     {
         $this->technologyRepository         = $technologyRepository;
@@ -147,6 +156,7 @@ class TechLoadController extends AbstractActionController
         $this->planetRepository             = $planetRepository;
         $this->sputnikRepository            = $sputnikRepository;
         $this->userRepository               = $userRepository;
+        $this->buildingCommand              = $buildingCommand;
     }
     
     public function appendclasses()
@@ -246,7 +256,35 @@ class TechLoadController extends AbstractActionController
                         
                         $this->sheepsLoadExecute($file->path);
                         
-                        die(json_encode(array('result' => 'OK', 'message' => 'Файл технологий загружен успешно')));
+                        die(json_encode(array('result' => 'OK', 'message' => 'Файл космических кораблей загружен успешно')));
+                    }
+                    catch (\Exception $e) {
+                        die(json_encode(array('result' => 'ERR', 'message' => 'Во время загрузки файла произошла ошибка - ' . $e->getMessage())));
+                    }
+                }
+                else {
+                    die(json_encode(array('result' => 'ERR', 'error' => $file->error, 'message' => 'Во время загрузки файла произошла ошибка - ' . $file->error)));
+                }
+            }
+        }
+        die(json_encode(array('result' => 'ERR', 'message' => 'Во время загрузки файла произошла ошибка')));
+    }
+    
+    public function buildingsloadAction()
+    {
+        ob_start();
+        error_reporting(E_ALL & ~E_WARNING);
+        $upload_handler = new UploadHandler('/\.(xml)$/i');
+        $result = ob_get_contents();
+        ob_end_clean();
+        if ($result) {
+            $files = json_decode($result);            
+            foreach($files->files as $file) {
+                if(!isset($file->error)) {
+                    /// ошибок нет - можно экспортировать в бд
+                    try {
+                        $this->buildingsLoadExecute($file->path);
+                        die(json_encode(array('result' => 'OK', 'message' => 'Файл ресурсных сооружений загружен успешно')));
                     }
                     catch (\Exception $e) {
                         die(json_encode(array('result' => 'ERR', 'message' => 'Во время загрузки файла произошла ошибка - ' . $e->getMessage())));
@@ -260,6 +298,76 @@ class TechLoadController extends AbstractActionController
         die(json_encode(array('result' => 'ERR', 'message' => 'Во время загрузки файла произошла ошибка')));
     }
      
+    private function buildingsLoadExecute($file)
+    {
+        $keys = array(
+            'name', 'consume_metall', 'consume_heavygas', 'consume_ore', 'consume_hydro',
+            'consume_titan', 'consume_darkmatter', 'consume_redmatter', 'consume_anti',
+            'consume_electricity', 'produce_metall', 'produce_heavygas', 'produce_ore',
+            'produce_hydro', 'produce_titan', 'produce_darkmatter', 'produce_redmatter',
+            'produce_anti', 'produce_electricity', 'factor');
+        $parser = new XmlParser();
+        $result = $parser->parse($file);
+        if(!is_array($result) && count($result) != 20) {
+            throw new FormatFailXml('data is not array or array size != 20');
+        }
+        else {
+            $entities = array();
+            for($i=0; $i<count($result); $i++) {
+                $row = $result [$i];
+                $key = $row[0];
+                if($key != $keys[$i]) {
+                    throw new FormatFailXml("column title must be " . $keys[$i] . ", but " . $col[0] . " given.");
+                }
+                else {
+                    for($j=1; $j<count($row); $j++) {
+                        $value = $row[$j];
+                        $entities [$j-1][$key] = $value;
+                    }
+                }
+            }
+            if(is_array($entities)) {
+                $this->buildingCommand->truncateTable();
+                foreach($entities as $one) {
+                    $level = 1;
+                    $owner = $this->userRepository->findEntity(1);
+                    $planet = $this->planetRepository->findEntity(1);
+                    $building = new Building(
+                        $one['name'],
+                        null,
+                        $planet,
+                        null,
+                        $owner,
+                        $level,
+                        Building::$BUILDING_RESOURCE,
+                        time(),
+                        $one['factor'],
+                        $one['produce_metall'],
+                        $one['produce_heavygas'],
+                        $one['produce_ore'],
+                        $one['produce_hydro'],
+                        $one['produce_titan'],
+                        $one['produce_darkmatter'],
+                        $one['produce_redmatter'],
+                        $one['produce_anti'],
+                        $one['produce_electricity'],
+                        $one['consume_metall'],
+                        $one['consume_heavygas'],
+                        $one['consume_ore'],
+                        $one['consume_hydro'],
+                        $one['consume_titan'],
+                        $one['consume_darkmatter'],
+                        $one['consume_redmatter'],
+                        $one['consume_anti'],
+                        $one['consume_electricity'],
+                        $one['factor']
+                    );
+                    $building = $this->buildingCommand->insertEntity($building);
+                }
+            }
+        }
+    }
+    
     private function sheepsLoadExecute($file)
     {   
         $keys = array(

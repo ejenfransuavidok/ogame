@@ -1,0 +1,136 @@
+<?= $this->headLink()->prependStylesheet($this->basePath('css/signin.css')); ?>
+<?= $this->headLink()->prependStylesheet($this->basePath('css/bootstrap-select.css')); ?>
+<?= $this->headScript()->prependFile($this->basePath('js/bootstrap-select.js')); ?>
+<?= $this->headScript()->prependFile($this->basePath('js/notify.js')); ?>
+<script>
+    SystemJS.config({
+        baseURL: '<?= $this->basePath('js/') ?>'
+    });
+    SystemJS.import('flight.js');
+</script>
+<div class="panel panel-default">
+    <div class="panel-heading">Мои здания</div>
+    <div class="panel-body">
+        <?php if(!$auth->hasIdentity()) : ?>
+        <div class="container">
+            <form class="form-signin" action="/flight/authorize" method="post" >
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input name="login" type="text" id="inputEmail" class="form-control" placeholder="User name" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                  </label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            </form>
+        </div>
+        <?php else: ?>
+        <h4>Привет <?= $auth->getIdentity();?>!</h4>
+        <div class="panel panel-default">
+            <div class="panel-heading">Список зданий <?= $auth->getIdentity();?></div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Здание
+                        </th>
+                        <th>
+                            Владелец
+                        </th>
+                        <th>
+                            Планета
+                        </th>
+                        <th>
+                            Металл
+                        </th>
+                        <th>
+                            Т.газ
+                        </th>
+                        <th>
+                            Руда
+                        </th>
+                        <th>
+                            В-род
+                        </th>
+                        <th>
+                            Титан
+                        </th>
+                        <th>
+                            Т.мат
+                        </th>
+                        <th>
+                            К.мат
+                        </th>
+                        <th>
+                            А.мат
+                        </th>
+                        <th>
+                            Эл
+                        </th>
+                    </thead>
+                    <tbody>
+                    <?php $i=1; foreach($buildings as $building) :?>
+                        <tr>
+                            <th>
+                                <?= $i++ ?>
+                            </th>
+                            <td>
+                                <?= $building->getName() ?>
+                            </td>
+                            <td>
+                                <?= $building->getOwner()->getName() ?>
+                            </td>
+                            <td>
+                                <?=   '|G:' . $building->getPlanet()->getCelestialParent()->getGalaxy()->getId() . '|'
+                                    . '|S:' . $building->getPlanet()->getCelestialParent()->getIndex() . '|'
+                                    . '|P:' . $building->getPlanet()->getPosition() . '|'
+                                ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="metall">
+                                <?= $building->getProduceMetall() ? $building->getProduceMetall() : 0 ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="heavygas">
+                                <?= $building->getProduceHeavygas() ? $building->getProduceHeavygas() : 0 ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="ore">
+                                <?= $building->getProduceOre() ? $building->getProduceOre() : 0 ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="hydro">
+                                <?= $building->getProduceHydro() ? $building->getProduceHydro() : 0 ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="titan">
+                                <?= $building->getProduceTitan() ? $building->getProduceTitan() : 0 ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="darkmatter">
+                                <?= $building->getProduceDarkmatter() ? $building->getProduceDarkmatter() : 0 ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="redmatter">
+                                <?= $building->getProduceRedmatter() ? $building->getProduceRedmatter() : 0 ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="anti">
+                                <?= $building->getProduceAnti() ? $building->getProduceAnti() : 0 ?>
+                            </td>
+                            <td data-building_id="<?= $building->getId() ?>" data-type="electricity">
+                                <?= $building->getProduceElectricity() ? $building->getProduceElectricity() : 0 ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <?php endif; ?>
+    </div>
+    <div class="panel-footer">Мои здания</div>
+</div>
+<style>
+    tr {
+        font-size: 10px;
+    }
+</style>

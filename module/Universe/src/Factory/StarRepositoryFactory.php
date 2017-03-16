@@ -19,7 +19,7 @@ class StarRepositoryFactory implements FactoryInterface
         return new StarRepository(
             $container->get(AdapterInterface::class),
             new StarHydrator($container->get(StarTypeRepository::class), $container->get(PlanetSystemRepository::class)),
-            new Star('','','','','','')
+            new Star(null,null,null,null,null,null)
         );
     }
 }

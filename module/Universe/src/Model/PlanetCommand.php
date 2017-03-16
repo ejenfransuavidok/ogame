@@ -58,7 +58,8 @@ class PlanetCommand implements EntityCommandInterface
             'mineral_titan'         => $planet->getTitan(),
             'mineral_darkmatter'    => $planet->getDarkmatter(),
             'mineral_redmatter'     => $planet->getRedmatter(),
-            'mineral_anti'          => $planet->getAnti()
+            'mineral_anti'          => $planet->getAnti(),
+            'owner'                 => $planet->getOwner() ? $planet->getOwner()->getId() : null
         ]);
 
         $sql = new Sql($this->db);
@@ -90,6 +91,7 @@ class PlanetCommand implements EntityCommandInterface
             $planet->getDarkmatter(),
             $planet->getRedmatter(),
             $planet->getAnti(),
+            $planet->getOwner(),
             $result->getGeneratedValue()
         );
     }
@@ -107,7 +109,7 @@ class PlanetCommand implements EntityCommandInterface
         $update->set([
                 'name'                  => $planet->getName(),
                 'description'           => $planet->getDescription(),
-                'type'                  => $planet->getType(),
+                'type'                  => $planet->getType() ? $planet->getType()->getId() : null,
                 'coordinate'            => $planet->getCoordinate(),
                 'size'                  => $planet->getSize(),
                 'position'              => $planet->getPosition(),
@@ -120,9 +122,10 @@ class PlanetCommand implements EntityCommandInterface
                 'mineral_titan'         => $planet->getTitan(),
                 'mineral_darkmatter'    => $planet->getDarkmatter(),
                 'mineral_redmatter'     => $planet->getRedmatter(),
-                'mineral_anti'          => $planet->getAnti()
+                'mineral_anti'          => $planet->getAnti(),
+                'owner'                 => $planet->getOwner() ? $planet->getOwner()->getId() : null
         ]);
-        $update->where(['id = ?' => $planet->getId()]);
+        $update->where(['planets.id = ?' => $planet->getId()]);
 
         $sql = new Sql($this->db);
         $statement = $sql->prepareStatementForSqlObject($update);

@@ -61,7 +61,8 @@ class StarRepository implements EntityRepositoryInterface
                     'planet_system.basis'       => 'basis',
                     'planet_system.size'        => 'size',
                     'planet_system.star'        => 'star',
-                    'planet_system.galaxy'      => 'galaxy'
+                    'planet_system.galaxy'      => 'galaxy',
+                    'planet_system.index'       => 'index'
                 ],
                 Select::JOIN_LEFT)
             ->join(['st' => 'stars_types'], 'stars.star_type = st.id',
@@ -105,7 +106,8 @@ class StarRepository implements EntityRepositoryInterface
                     'planet_system.basis'       => 'basis',
                     'planet_system.size'        => 'size',
                     'planet_system.star'        => 'star',
-                    'planet_system.galaxy'      => 'galaxy'
+                    'planet_system.galaxy'      => 'galaxy',
+                    'planet_system.index'       => 'index'
                 ],
                 Select::JOIN_LEFT)
             ->join(['st' => 'stars_types'], 'stars.star_type = st.id',

@@ -53,62 +53,7 @@ class UserRepository implements EntityRepositoryInterface
     public function findAllEntities($criteria='')
     {
         $sql       = new Sql($this->db);
-        $select    = $sql->select('users')
-            ->join(['gx' => 'galaxies'], 'users.galaxy = gx.id',
-                [
-                    'galaxies.id'                 => 'id',
-                    'galaxies.name'               => 'name',
-                    'galaxies.description'        => 'description',
-                    'galaxies.basis'              => 'basis',
-                    'galaxies.size'               => 'size'
-                ],
-                Select::JOIN_LEFT)
-            ->join(['ps' => 'planet_system'], 'users.planet_system = ps.id',
-                [
-                    'planet_system.id'            => 'id',
-                    'planet_system.name'          => 'name',
-                    'planet_system.description'   => 'description',
-                    'planet_system.basis'         => 'basis',
-                    'planet_system.size'          => 'size',
-                    'planet_system.star'          => 'star',
-                    'planet_system.galaxy'        => 'galaxy'
-                ],
-                Select::JOIN_LEFT)
-            ->join(['p' => 'planets'], 'users.planet = p.id',
-                [
-                    'planets.id'            => 'id',
-                    'planets.name'          => 'name',
-                    'planets.description'   => 'description',
-                    'planets.coordinate'    => 'coordinate',
-                    'planets.size'          => 'size',
-                    'planets.position'      => 'position',
-                    'planets.livable'       => 'livable',
-                    'planets.planet_system' => 'planet_system'
-                ],
-                Select::JOIN_LEFT)
-            ->join(['sp' => 'sputniks'], 'users.sputnik = sp.id',
-                [
-                    'sputniks.id'           => 'id',
-                    'sputniks.name'         => 'name',
-                    'sputniks.description'  => 'description',
-                    'sputniks.size'         => 'size',
-                    'sputniks.position'     => 'position',
-                    'sputniks.distance'     => 'distance',
-                    'sputniks.parent_planet'=> 'parent_planet',
-                    'sputniks.planet_system'=> 'planet_system'
-                ],
-                Select::JOIN_LEFT)
-            ->join(['st' => 'stars'], 'users.star = st.id',
-                [
-                    'stars.id'              => 'id',
-                    'stars.name'            => 'name',
-                    'stars.description'     => 'description',
-                    'stars.coordinate'      => 'coordinate',
-                    'stars.size'            => 'size',
-                    'stars.star_type'       => 'star_type',
-                    'stars.planet_system'   => 'planet_system'
-                ],
-                Select::JOIN_LEFT);
+        $select    = $sql->select('users');
         if($criteria) {
             $select->where($criteria);
         }
@@ -127,62 +72,7 @@ class UserRepository implements EntityRepositoryInterface
     public function findEntity($id, $criteria='')
     {
         $sql       = new Sql($this->db);
-        $select    = $sql->select('users')
-            ->join(['gx' => 'galaxies'], 'users.galaxy = gx.id',
-                [
-                    'galaxies.id'                 => 'id',
-                    'galaxies.name'               => 'name',
-                    'galaxies.description'        => 'description',
-                    'galaxies.basis'              => 'basis',
-                    'galaxies.size'               => 'size'
-                ],
-                Select::JOIN_LEFT)
-            ->join(['ps' => 'planet_system'], 'users.planet_system = ps.id',
-                [
-                    'planet_system.id'            => 'id',
-                    'planet_system.name'          => 'name',
-                    'planet_system.description'   => 'description',
-                    'planet_system.basis'         => 'basis',
-                    'planet_system.size'          => 'size',
-                    'planet_system.star'          => 'star',
-                    'planet_system.galaxy'        => 'galaxy'
-                ],
-                Select::JOIN_LEFT)
-            ->join(['p' => 'planets'], 'users.planet = p.id',
-                [
-                    'planets.id'            => 'id',
-                    'planets.name'          => 'name',
-                    'planets.description'   => 'description',
-                    'planets.coordinate'    => 'coordinate',
-                    'planets.size'          => 'size',
-                    'planets.position'      => 'position',
-                    'planets.livable'       => 'livable',
-                    'planets.planet_system' => 'planet_system'
-                ],
-                Select::JOIN_LEFT)
-            ->join(['sp' => 'sputniks'], 'users.sputnik = sp.id',
-                [
-                    'sputniks.id'           => 'id',
-                    'sputniks.name'         => 'name',
-                    'sputniks.description'  => 'description',
-                    'sputniks.size'         => 'size',
-                    'sputniks.position'     => 'position',
-                    'sputniks.distance'     => 'distance',
-                    'sputniks.parent_planet'=> 'parent_planet',
-                    'sputniks.planet_system'=> 'planet_system'
-                ],
-                Select::JOIN_LEFT)
-            ->join(['st' => 'stars'], 'users.star = st.id',
-                [
-                    'stars.id'              => 'id',
-                    'stars.name'            => 'name',
-                    'stars.description'     => 'description',
-                    'stars.coordinate'      => 'coordinate',
-                    'stars.size'            => 'size',
-                    'stars.star_type'       => 'star_type',
-                    'stars.planet_system'   => 'planet_system'
-                ],
-                Select::JOIN_LEFT);
+        $select    = $sql->select('users');
         $select->where($criteria ? $criteria : ['users.id = ?' => $id]);
         $statement = $sql->prepareStatementForSqlObject($select);
         $result    = $statement->execute();

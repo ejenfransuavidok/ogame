@@ -18,7 +18,7 @@ class PlanetSystemRepositoryFactory implements FactoryInterface
         return new PlanetSystemRepository(
             $container->get(AdapterInterface::class),
             new PlanetSystemHydrator($container->get(StarTypeRepository::class)),
-            new PlanetSystem('','','','','','')
+            new PlanetSystem(null,null,null,null,null,null,null)
         );
     }
 }

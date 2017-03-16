@@ -35,7 +35,12 @@ class PlanetSystem extends CelestialContainer
      */
     private $galaxy;
     
-    public function __construct($name, $description, $basis, $size, $star, $galaxy, $id=null)
+    /**
+     * @ int
+     */
+    protected $index;
+    
+    public function __construct($name, $description, $basis, $size, $star, $galaxy, $index, $id=null)
     {
         parent::__construct(self::TABLE_NAME);
         $this->name         = $name;
@@ -44,6 +49,7 @@ class PlanetSystem extends CelestialContainer
         $this->size         = $size;
         $this->star         = $star;
         $this->galaxy       = $galaxy;
+        $this->index        = $index;
         $this->id           = $id;
     }
     
@@ -56,6 +62,7 @@ class PlanetSystem extends CelestialContainer
         $this->size         = !empty($data[$prefix.'size']) ? $data[$prefix.'size'] : null;
         $this->star         = !empty($data[$prefix.'star']) ? $data[$prefix.'star'] : null;
         $this->galaxy       = !empty($data[$prefix.'galaxy']) ? $data[$prefix.'galaxy'] : null;
+        $this->index        = !empty($data[$prefix.'index']) ? $data[$prefix.'index'] : null;
     }
     
     public function getArrayCopy()
@@ -102,4 +109,21 @@ class PlanetSystem extends CelestialContainer
     {
         return $this->galaxy;
     }
+    
+    /**
+     * @ param int
+     */
+    public function setIndex($index)
+    {
+        $this->index = $index;
+    }
+    
+    /**
+     * @ int
+     */
+    public function getIndex()
+    {
+        return $this->index;
+    }
+    
 }

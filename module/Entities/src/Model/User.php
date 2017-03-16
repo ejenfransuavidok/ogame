@@ -62,37 +62,108 @@ class User extends Entity
      */
     protected $star;
     
-    public function __construct($name, $description, $password, $email, $firstname, $lastname, $galaxy, $planet_system, $planet, $sputnik, $star, $id=null)
+    /* sources */
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_metall;
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_heavygas;
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_ore;
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_hydro;
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_titan;
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_darkmatter;
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_redmatter;
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_anti;
+    
+    /**
+     * @ int
+     */
+    protected $amount_of_electricity;
+    
+    public function __construct(
+        $name, 
+        $description, 
+        $password, 
+        $email, 
+        $firstname, 
+        $lastname, 
+        $amount_of_metall,
+        $amount_of_heavygas,
+        $amount_of_ore,
+        $amount_of_hydro,
+        $amount_of_titan,
+        $amount_of_darkmatter,
+        $amount_of_redmatter,
+        $amount_of_anti,
+        $amount_of_electricity,
+        $id=null)
     {
         parent::__construct(self::TABLE_NAME);
-        $this->name             = $name;
-        $this->description      = $description;
-        $this->password         = $password;
-        $this->email            = $email;
-        $this->firstname        = $firstname;
-        $this->lastname         = $lastname;
-        $this->galaxy           = $galaxy;
-        $this->planet_system    = $planet_system;
-        $this->planet           = $planet;
-        $this->sputnik          = $sputnik;
-        $this->star             = $star;
-        $this->id               = $id;
+        $this->name                  = $name;
+        $this->description           = $description;
+        $this->password              = $password;
+        $this->email                 = $email;
+        $this->firstname             = $firstname;
+        $this->lastname              = $lastname;
+        $this->amount_of_metall      = $amount_of_metall;
+        $this->amount_of_heavygas    = $amount_of_heavygas;
+        $this->amount_of_ore         = $amount_of_ore;
+        $this->amount_of_hydro       = $amount_of_hydro;
+        $this->amount_of_titan       = $amount_of_titan;
+        $this->amount_of_darkmatter  = $amount_of_darkmatter;
+        $this->amount_of_redmatter   = $amount_of_redmatter;
+        $this->amount_of_anti        = $amount_of_anti;
+        $this->amount_of_electricity = $amount_of_electricity;
+        $this->id                    = $id;
     }
     
     public function exchangeArray(array $data, $prefix = '')
     {
-        $this->id               = !empty($data[$prefix.'id']) ? $data[$prefix.'id'] : null;
-        $this->name             = !empty($data[$prefix.'login']) ? $data[$prefix.'login'] : null;
-        $this->description      = !empty($data[$prefix.'description']) ? $data[$prefix.'description'] : null;
-        $this->password         = !empty($data[$prefix.'password']) ? $data[$prefix.'password'] : null;
-        $this->email            = !empty($data[$prefix.'email']) ? $data[$prefix.'email'] : null;
-        $this->firstname        = !empty($data[$prefix.'firstname']) ? $data[$prefix.'firstname'] : null;
-        $this->lastname         = !empty($data[$prefix.'lastname']) ? $data[$prefix.'lastname'] : null;
-        $this->galaxy           = !empty($data[$prefix.'galaxy']) ? $data[$prefix.'galaxy'] : null;
-        $this->planet_system    = !empty($data[$prefix.'planet_system']) ? $data[$prefix.'planet_system'] : null;
-        $this->planet           = !empty($data[$prefix.'planet']) ? $data[$prefix.'planet'] : null;
-        $this->sputnik          = !empty($data[$prefix.'sputnik']) ? $data[$prefix.'sputnik'] : null;
-        $this->star             = !empty($data[$prefix.'star']) ? $data[$prefix.'star'] : null;
+        $this->id                    = !empty($data[$prefix.'id']) ? $data[$prefix.'id'] : null;
+        $this->name                  = !empty($data[$prefix.'login']) ? $data[$prefix.'login'] : null;
+        $this->description           = !empty($data[$prefix.'description']) ? $data[$prefix.'description'] : null;
+        $this->password              = !empty($data[$prefix.'password']) ? $data[$prefix.'password'] : null;
+        $this->email                 = !empty($data[$prefix.'email']) ? $data[$prefix.'email'] : null;
+        $this->firstname             = !empty($data[$prefix.'firstname']) ? $data[$prefix.'firstname'] : null;
+        $this->lastname              = !empty($data[$prefix.'lastname']) ? $data[$prefix.'lastname'] : null;
+        $this->amount_of_metall      = !empty($data[$prefix.'amount_of_metall']) ? $data[$prefix.'amount_of_metall'] : null;
+        $this->amount_of_heavygas    = !empty($data[$prefix.'amount_of_heavygas']) ? $data[$prefix.'amount_of_heavygas'] : null;
+        $this->amount_of_ore         = !empty($data[$prefix.'amount_of_ore']) ? $data[$prefix.'amount_of_ore'] : null;
+        $this->amount_of_hydro       = !empty($data[$prefix.'amount_of_hydro']) ? $data[$prefix.'amount_of_hydro'] : null;
+        $this->amount_of_titan       = !empty($data[$prefix.'amount_of_titan']) ? $data[$prefix.'amount_of_titan'] : null;
+        $this->amount_of_darkmatter  = !empty($data[$prefix.'amount_of_darkmatter']) ? $data[$prefix.'amount_of_darkmatter'] : null;
+        $this->amount_of_redmatter   = !empty($data[$prefix.'amount_of_redmatter']) ? $data[$prefix.'amount_of_redmatter'] : null;
+        $this->amount_of_anti        = !empty($data[$prefix.'amount_of_anti']) ? $data[$prefix.'amount_of_anti'] : null;
+        $this->amount_of_electricity = !empty($data[$prefix.'amount_of_electricity']) ? $data[$prefix.'amount_of_electricity'] : null;
     }
     
     public function getArrayCopy()
@@ -140,53 +211,94 @@ class User extends Entity
         return $this->lastname;
     }
     
-    public function setGalaxy($galaxy)
+    public function setAmountOfMetall($amount_of_metall)
     {
-        $this->galaxy = $galaxy;
+        $this->amount_of_metall = $amount_of_metall;
     }
     
-    public function getGalaxy()
+    public function getAmountOfMetall()
     {
-        return $this->galaxy;
+        return $this->amount_of_metall;
     }
     
-    public function setPlanetSystem($planet_system)
+    public function setAmountOfHeavygas($amount_of_heavygas)
     {
-        $this->planet_system = $planet_system;
+        $this->amount_of_heavygas = $amount_of_heavygas;
     }
     
-    public function getPlanetSystem()
+    public function getAmountOfHeavygas()
     {
-        return $this->planet_system;
+        return $this->amount_of_heavygas;
     }
     
-    public function setPlanet($planet)
+    public function setAmountOfOre($amount_of_ore)
     {
-        $this->planet = $planet;
+        $this->amount_of_ore = $amount_of_ore;
     }
     
-    public function getPlanet()
+    public function getAmountOfOre()
     {
-        return $this->planet;
+        return $this->amount_of_ore;
     }
     
-    public function setSputnik($sputnik)
+    public function setAmountOfHydro($amount_of_hydro)
     {
-        $this->sputnik = $sputnik;
+        $this->amount_of_hydro = $amount_of_hydro;
     }
     
-    public function getSputnik()
+    public function getAmountOfHydro()
     {
-        return $this->sputnik;
+        return $this->amount_of_hydro;
     }
     
-    public function setStar($star)
+    public function setAmountOfTitan($amount_of_titan)
     {
-        $this->star = $star;
+        $this->amount_of_titan = $amount_of_titan;
     }
     
-    public function getStar()
+    public function getAmountOfTitan()
     {
-        return $this->star;
+        return $this->amount_of_titan;
     }
+    
+    public function setAmountOfDarkmatter($amount_of_darkmatter)
+    {
+        $this->amount_of_darkmatter = $amount_of_darkmatter;
+    }
+    
+    public function getAmountOfDarkmatter()
+    {
+        return $this->amount_of_darkmatter;
+    }
+    
+    public function setAmountOfRedmatter($amount_of_redmatter)
+    {
+        $this->amount_of_redmatter = $amount_of_redmatter;
+    }
+    
+    public function getAmountOfRedmatter()
+    {
+        return $this->amount_of_redmatter;
+    }
+
+    public function setAmountOfAnti($amount_of_anti)
+    {
+        $this->amount_of_anti = $amount_of_anti;
+    }
+    
+    public function getAmountOfAnti()
+    {
+        return $this->amount_of_anti;
+    }
+    
+    public function setAmountOfElectricity($amount_of_electricity)
+    {
+        $this->amount_of_electricity = $amount_of_electricity;
+    }
+    
+    public function getAmountOfElectricity()
+    {
+        return $this->amount_of_electricity;
+    }
+    
 }

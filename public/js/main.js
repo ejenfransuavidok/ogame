@@ -6,6 +6,8 @@ var _ogUniverse = require('og.universe.js');
 
 var _ogAuth = require('og.auth.js');
 
+var _ogBuildings = require('og.buildings.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var JQueryStarter = function () {
@@ -51,6 +53,7 @@ var Main = function () {
         value: function processing() {
             this.universe = new _ogUniverse.Universe();
             this.auth = new _ogAuth.Auth();
+            this.buildings = new _ogBuildings.Buildings();
         }
     }]);
 

@@ -105,6 +105,10 @@ return [
                 'label' => 'Тестовые полеты',
                 'route' => 'flight',
             ],
+            [
+                'label' => 'Мои здания',
+                'route' => 'flight/buildings',
+            ],
         ],
     ],
 ];

@@ -21,6 +21,8 @@ return [
             Model\TechnologyConnectionRepository::class => Factory\TechnologyConnectionRepositoryFactory::class,
             Model\SpaceSheepCommand::class => Factory\SpaceSheepCommandFactory::class,
             Model\SpaceSheepRepository::class => Factory\SpaceSheepRepositoryFactory::class,
+            Model\BuildingCommand::class => Factory\BuildingCommandFactory::class,
+            Model\BuildingRepository::class => Factory\BuildingRepositoryFactory::class,
             Model\UserCommand::class => Factory\UserCommandFactory::class,
             Model\UserRepository::class => Factory\UserRepositoryFactory::class,
             Model\EventCommand::class => Factory\EventCommandFactory::class,
@@ -63,6 +65,16 @@ return [
                             'defaults' => [
                                 'controller' => Controller\TechLoadController::class,
                                 'action'     => 'sheepsload',
+                            ],
+                        ],
+                    ],
+                    'buildingsload' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route'    => '/buildingsload',
+                            'defaults' => [
+                                'controller' => Controller\TechLoadController::class,
+                                'action'     => 'buildingsload',
                             ],
                         ],
                     ],

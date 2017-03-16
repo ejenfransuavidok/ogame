@@ -73,13 +73,18 @@ class Planet extends CelestialBody
      */
     private $type;
     
+    /**
+     * @ User
+     */
+    private $owner;
+    
     public function __construct(
         $name, 
         $description,
         $type,
         $coordinate, 
         $size, 
-        $position, 
+        $position,
         $livable, 
         $planet_system, 
         $mineral_metall,
@@ -90,6 +95,7 @@ class Planet extends CelestialBody
         $mineral_darkmatter,
         $mineral_redmatter,
         $mineral_anti,
+        $owner,
         $id=null)
     {
         parent::__construct(self::TABLE_NAME);
@@ -109,6 +115,7 @@ class Planet extends CelestialBody
         $this->mineral_darkmatter   = $mineral_darkmatter;
         $this->mineral_redmatter    = $mineral_redmatter;
         $this->mineral_anti         = $mineral_anti;
+        $this->owner                = $owner;
         $this->id                   = $id;
     }
     
@@ -131,6 +138,7 @@ class Planet extends CelestialBody
         $this->mineral_darkmatter   = !empty($data[$prefix.'mineral_darkmatter']) ? $data[$prefix.'mineral_darkmatter'] : null;
         $this->mineral_redmatter    = !empty($data[$prefix.'mineral_redmatter']) ? $data[$prefix.'mineral_redmatter'] : null;
         $this->mineral_anti         = !empty($data[$prefix.'mineral_anti']) ? $data[$prefix.'mineral_anti'] : null;
+        $this->owner                = !empty($data[$prefix.'owner']) ? $data[$prefix.'owner'] : null;
     }
     
     public function getArrayCopy()
@@ -266,6 +274,16 @@ class Planet extends CelestialBody
     public function getType()
     {
         return $this->type;
+    }
+    
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+    
+    public function getOwner()
+    {
+        return $this->owner;
     }
     
 }

@@ -21,14 +21,8 @@ class UserRepositoryFactory implements FactoryInterface
     {
         return new UserRepository(
             $container->get(AdapterInterface::class),
-            new UserHydrator(
-                $container->get(GalaxyRepository::class), 
-                $container->get(PlanetSystemRepository::class),
-                $container->get(PlanetRepository::class),
-                $container->get(SputnikRepository::class),
-                $container->get(StarRepository::class)
-            ),
-            new User(null,null,null,null,null,null,null,null,null,null,null)
+            new UserHydrator(),
+            new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }

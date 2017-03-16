@@ -142,4 +142,5 @@ class Entity
     {
         $this->name = Rand::getString(32, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
     }
+    
 }

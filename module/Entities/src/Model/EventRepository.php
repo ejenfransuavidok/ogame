@@ -60,11 +60,6 @@ class EventRepository implements EntityRepositoryInterface
                     'users.password'            => 'password',
                     'users.email'               => 'email',
                     'users.firstname'           => 'firstname',
-                    'users.galaxy'              => 'galaxy',
-                    'users.planet_system'       => 'planet_system',
-                    'users.planet'              => 'planet',
-                    'users.sputnik'             => 'sputnik',
-                    'users.star'                => 'star',
                     'users.description'         => 'description'
                 ],
                 Select::JOIN_LEFT)
@@ -127,11 +122,6 @@ class EventRepository implements EntityRepositoryInterface
                     'users.password'            => 'password',
                     'users.email'               => 'email',
                     'users.firstname'           => 'firstname',
-                    'users.galaxy'              => 'galaxy',
-                    'users.planet_system'       => 'planet_system',
-                    'users.planet'              => 'planet',
-                    'users.sputnik'             => 'sputnik',
-                    'users.star'                => 'star',
                     'users.description'         => 'description'
                 ],
                 Select::JOIN_LEFT)

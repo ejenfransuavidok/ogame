@@ -6,6 +6,7 @@ use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
 use Flight\Controller\IndexController;
+use Flight\Controller\BuildingController;
 
 return [
 
@@ -18,6 +19,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => Factory\IndexControllerFactory::class,
+            Controller\BuildingController::class => Factory\BuildingControllerFactory::class,
         ],
     ],
     'router' => [
@@ -80,6 +82,28 @@ return [
                             'route'    => '/start',
                             'defaults' => [
                                 'action' => 'start',
+                            ],
+                        ],
+                    ],
+                    
+                    'buildings' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'         => '/buildings',
+                            'defaults'      => [
+                                'action'        => 'index',
+                                'controller'    => Controller\BuildingController::class,
+                            ],
+                        ],
+                    ],
+                    
+                    'update' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'         => '/update',
+                            'defaults'      => [
+                                'action'        => 'update',
+                                'controller'    => Controller\BuildingController::class,
                             ],
                         ],
                     ],

@@ -38,15 +38,15 @@ class PlanetSystemHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $planet_system = new PlanetSystem('','','','','','');
+        $planet_system = new PlanetSystem(null,null,null,null,null,null,null);
         $planet_system->exchangeArray($data);
-        $star = new Star('','','','','','');
+        $star = new Star(null,null,null,null,null,null);
         $star->exchangeArray($data, 'stars.');
         $star->setCelestialParent($planet_system);
         $star_type = $this->starTypeRepository->findEntity($star->getStarType());
         $star->setStarType($star_type);
         $planet_system->setStar($star);
-        $galaxy = new Galaxy('', '', '', '');
+        $galaxy = new Galaxy(null,null,null,null);
         $galaxy->exchangeArray($data, 'galaxies.');
         $planet_system->setGalaxy($galaxy);
         return $planet_system;

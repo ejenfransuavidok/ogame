@@ -45,17 +45,21 @@ class UserCommand implements EntityCommandInterface
     {
         $insert = new Insert($user->GetTable());
         $insert->values([
-            'login'         => $user->getName(),
-            'description'   => $user->getDescription(),
-            'password'      => $user->getPassword(),
-            'email'         => $user->getEmail(),
-            'firstname'     => $user->getFirstName(),
-            'lastname'      => $user->getLastName(),
-            'galaxy'        => $user->getGalaxy()        ? $user->getGalaxy()->getId()          : null,
-            'planet_system' => $user->getPlanetSystem()  ? $user->getPlanetSystem()->getId()    : null,
-            'planet'        => $user->getPlanet()        ? $user->getPlanet()->getId()          : null,
-            'sputnik'       => $user->getSputnik()       ? $user->getSputnik()->getId()         : null,
-            'star'          => $user->getStar()          ? $user->getStar()->getId()            : null
+            'login'                 => $user->getName(),
+            'description'           => $user->getDescription(),
+            'password'              => $user->getPassword(),
+            'email'                 => $user->getEmail(),
+            'firstname'             => $user->getFirstName(),
+            'lastname'              => $user->getLastName(),
+            'amount_of_metall'      => $user->getAmountOfMetall(),
+            'amount_of_heavygas'    => $user->getAmountOfHeavygas(),
+            'amount_of_ore'         => $user->getAmountOfOre(),
+            'amount_of_hydro'       => $user->getAmountOfHydro(),
+            'amount_of_titan'       => $user->getAmountOfTitan(),
+            'amount_of_darkmatter'  => $user->getAmountOfDarkmatter(),
+            'amount_of_redmatter'   => $user->getAmountOfRedmatter(),
+            'amount_of_anti'        => $user->getAmountOfAnti(),
+            'amount_of_electricity' => $user->getAmountOfElectricity()
         ]);
 
         $sql = new Sql($this->db);
@@ -77,11 +81,15 @@ class UserCommand implements EntityCommandInterface
             $user->getEmail(),
             $user->getFirstName(),
             $user->getLastName(),
-            $user->getGalaxy(),
-            $user->getPlanetSystem(),
-            $user->getPlanet(),
-            $user->getSputnik(),
-            $user->getStar(),
+            $user->getAmountOfMetall(),
+            $user->getAmountOfHeavygas(),
+            $user->getAmountOfOre(),
+            $user->getAmountOfHydro(),
+            $user->getAmountOfTitan(),
+            $user->getAmountOfDarkmatter(),
+            $user->getAmountOfRedmatter(),
+            $user->getAmountOfAnti(),
+            $user->getAmountOfElectricity(),
             $result->getGeneratedValue()
         );
     }
@@ -97,17 +105,21 @@ class UserCommand implements EntityCommandInterface
         
         $update = new Update($user->GetTable());
         $update->set([
-            'login'         => $user->getName(),
-            'description'   => $user->getDescription(),
-            'password'      => $user->getPassword(),
-            'email'         => $user->getEmail(),
-            'firstname'     => $user->getFirstName(),
-            'lastname'      => $user->getLastName(),
-            'galaxy'        => $user->getGalaxy()       ? $user->getGalaxy()->getId()       : null,
-            'planet_system' => $user->getPlanetSystem() ? $user->getPlanetSystem()->getId() : null,
-            'planet'        => $user->getPlanet()       ? $user->getPlanet()->getId()       : null,
-            'sputnik'       => $user->getSputnik()      ? $user->getSputnik()->getId()      : null,
-            'star'          => $user->getStar()         ? $user->getStar()->getId()         : null
+            'login'                 => $user->getName(),
+            'description'           => $user->getDescription(),
+            'password'              => $user->getPassword(),
+            'email'                 => $user->getEmail(),
+            'firstname'             => $user->getFirstName(),
+            'lastname'              => $user->getLastName(),
+            'amount_of_metall'      => $user->getAmountOfMetall(),
+            'amount_of_heavygas'    => $user->getAmountOfHeavygas(),
+            'amount_of_ore'         => $user->getAmountOfOre(),
+            'amount_of_hydro'       => $user->getAmountOfHydro(),
+            'amount_of_titan'       => $user->getAmountOfTitan(),
+            'amount_of_darkmatter'  => $user->getAmountOfDarkmatter(),
+            'amount_of_redmatter'   => $user->getAmountOfRedmatter(),
+            'amount_of_anti'        => $user->getAmountOfAnti(),
+            'amount_of_electricity' => $user->getAmountOfElectricity()
         ]);
         $update->where(['id = ?' => $user->getId()]);
 

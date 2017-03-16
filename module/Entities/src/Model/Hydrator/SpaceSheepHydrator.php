@@ -153,6 +153,7 @@ class SpaceSheepHydrator implements HydratorInterface
         $spaceSheep->setGalaxy($galaxy);
         $spaceSheep->setPlanetSystem($planet_system);
         $spaceSheep->setPlanet($planet);
+        $spaceSheep->setSputnik($sputnik);
         $spaceSheep->setStar($star);
         $spaceSheep->setOwner($user);
         $spaceSheep->setEvent($event);

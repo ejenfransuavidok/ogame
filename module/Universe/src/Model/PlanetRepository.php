@@ -61,7 +61,8 @@ class PlanetRepository implements EntityRepositoryInterface
                     'planet_system.basis'       => 'basis',
                     'planet_system.size'        => 'size',
                     'planet_system.star'        => 'star',
-                    'planet_system.galaxy'      => 'galaxy'
+                    'planet_system.galaxy'      => 'galaxy',
+                    'planet_system.index'       => 'index'
                 ],
                 Select::JOIN_LEFT);
         if($criteria) {
@@ -91,7 +92,8 @@ class PlanetRepository implements EntityRepositoryInterface
                     'planet_system.basis'       => 'basis',
                     'planet_system.size'        => 'size',
                     'planet_system.star'        => 'star',
-                    'planet_system.galaxy'      => 'galaxy'
+                    'planet_system.galaxy'      => 'galaxy',
+                    'planet_system.index'       => 'index'
                 ],
                 Select::JOIN_LEFT);
                 
