@@ -51,8 +51,8 @@ class PlanetRepository implements EntityRepositoryInterface
      */
     public function findAllEntities($criteria='')
     {
-        $sql            = new Sql($this->db);
-        $select         = $sql->select('planets')
+        $sql = new Sql($this->db);
+        $select = $sql->select('planets')
             ->join(['ps' => 'planet_system'], 'planets.planet_system = ps.id',
                 [
                     'planet_system.id'          => 'id',
@@ -82,8 +82,8 @@ class PlanetRepository implements EntityRepositoryInterface
     
     public function findEntity($id, $criteria='')
     {
-        $sql    = new Sql($this->db);
-        $select         = $sql->select('planets')
+        $sql = new Sql($this->db);
+        $select = $sql->select('planets')
             ->join(['ps' => 'planet_system'], 'planets.planet_system = ps.id',
                 [
                     'planet_system.id'          => 'id',

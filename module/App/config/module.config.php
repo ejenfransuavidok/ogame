@@ -34,6 +34,20 @@ return [
                 'may_terminate' => true,
                 'child_routes'  => [
                     
+                    'planet' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/planet/:planetid',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action' => 'index',
+                            ],
+                            'constraints' => [
+                                'planetid' => '\d+',
+                            ],
+                        ],
+                    ],
+                    
                     'auth' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [

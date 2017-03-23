@@ -68,22 +68,27 @@ class AuthController extends AbstractActionController
     
     public function authAction()
     {
-        $layout = $this->layout();
-        
-        $layout->setTemplate('app/layout');
-        
-        $login_form = new ViewModel();
-        $login_form->setTemplate('app/auth/login');
-        
-        $register_form = new ViewModel();
-        $register_form->setTemplate('app/auth/register');
-        
-        $view = new ViewModel([]);
-        $view
-            ->addChild($login_form, 'login')
-            ->addChild($register_form, 'register');
-        
-        return $view;
+        if(!$this->auth->hasIdentity()){
+            $layout = $this->layout();
+            
+            $layout->setTemplate('app/layout');
+            
+            $login_form = new ViewModel();
+            $login_form->setTemplate('app/auth/login');
+            
+            $register_form = new ViewModel();
+            $register_form->setTemplate('app/auth/register');
+            
+            $view = new ViewModel([]);
+            $view
+                ->addChild($login_form, 'login')
+                ->addChild($register_form, 'register');
+            
+            return $view;
+        }
+        else {
+            return $this->redirect()->toRoute('app', ['action' => 'index']);
+        }
     }
     
     public function doauthAction()
@@ -97,7 +102,7 @@ class AuthController extends AbstractActionController
                 $result = array('message' => 'Логин или пароль неверны', 'result' => 'error');
             }
             else {
-                $result = array('message' => 'Авторизация прошла успешно', 'result' => 'ok');
+                $result = array('message' => 'Авторизация прошла успешно', 'result' => 'ok', 'redirect' => $this->url()->fromRoute('app', ['action' => 'index']));
             }
         }
         else{
@@ -133,6 +138,21 @@ class AuthController extends AbstractActionController
         $view = new ViewModel(['data' => array('result' => $result)]);
         $view->setTerminal(true);
         return $view;
+    }
+    
+    public function isAuthorized()
+    {
+        return $this->auth->hasIdentity();
+    }
+    
+    public function getUser()
+    {
+        if($this->isAuthorized()){
+            return $this->userRepository->findOneBy('users.login = "' . $this->auth->getIdentity() . '"');
+        }
+        else{
+            return null;
+        }
     }
     
 }

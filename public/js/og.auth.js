@@ -49,6 +49,7 @@ var Auth = exports.Auth = function () {
                                         $.notify(data.result.message, 'error');
                                     } else {
                                         $.notify(data.result.message, 'message');
+                                        if (typeof data.result.redirect != 'undefined') window.location.href = data.result.redirect;
                                     }
                                 } else {
                                     $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');
