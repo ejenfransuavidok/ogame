@@ -145,6 +145,7 @@ class BuildingType extends Entity
         $consume_redmatter,
         $consume_anti,
         $consume_electricity,
+        $picture,
         $id=null)
     {
         parent::__construct(self::TABLE_NAME);
@@ -170,6 +171,7 @@ class BuildingType extends Entity
         $this->consume_redmatter    = $consume_redmatter;
         $this->consume_anti         = $consume_anti;
         $this->consume_electricity  = $consume_electricity;
+        $this->picture              = $picture;
         $this->id                   = $id;
     }
     
@@ -198,6 +200,7 @@ class BuildingType extends Entity
         $this->consume_redmatter    = !empty($data[$prefix.'consume_redmatter']) ? $data[$prefix.'consume_redmatter'] : null;
         $this->consume_anti         = !empty($data[$prefix.'consume_anti']) ? $data[$prefix.'consume_anti'] : null;
         $this->consume_electricity  = !empty($data[$prefix.'consume_electricity']) ? $data[$prefix.'consume_electricity'] : null;
+        $this->picture              = !empty($data[$prefix.'picture']) ? $data[$prefix.'picture'] : null;
     }
     
     public function getArrayCopy()
@@ -405,6 +408,16 @@ class BuildingType extends Entity
     public function getConsumeElectricity()
     {
         return $this->consume_electricity;
+    }
+    
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+    }
+    
+    public function getPicture()
+    {
+        return $this->picture;
     }
     
 }

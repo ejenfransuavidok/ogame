@@ -10,6 +10,7 @@ use App\Controller\AuthController;
 use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
 use Universe\Model\PlanetRepository;
+use Entities\Model\BuildingTypeRepository;
 
 class IndexControllerFactory implements FactoryInterface
 {
@@ -28,7 +29,8 @@ class IndexControllerFactory implements FactoryInterface
                 $container->get(UserRepository::class),
                 $container->get(UserCommand::class)
             ),
-            $container->get(PlanetRepository::class)
+            $container->get(PlanetRepository::class),
+            $container->get(BuildingTypeRepository::class)
         );
     }
 }

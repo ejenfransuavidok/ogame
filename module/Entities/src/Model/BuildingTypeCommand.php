@@ -66,7 +66,8 @@ class BuildingTypeCommand implements EntityCommandInterface
             'consume_darkmatter'   => $buildingType->getConsumeDarkmatter(),
             'consume_redmatter'    => $buildingType->getConsumeRedmatter(),
             'consume_anti'         => $buildingType->getConsumeAnti(),
-            'consume_electricity'  => $buildingType->getConsumeElectricity()
+            'consume_electricity'  => $buildingType->getConsumeElectricity(),
+            'picture'              => $buildingType->getPicture()
         ]);
 
         $sql = new Sql($this->db);
@@ -104,6 +105,7 @@ class BuildingTypeCommand implements EntityCommandInterface
             $buildingType->getConsumeAnti(),
             $buildingType->getConsumeRedmatter(),
             $buildingType->getConsumeElectricity(),
+            $buildingType->getPicture(),
             $result->getGeneratedValue()
         );
     }
@@ -140,7 +142,8 @@ class BuildingTypeCommand implements EntityCommandInterface
             'consume_darkmatter'   => $buildingType->getConsumeDarkmatter(),
             'consume_redmatter'    => $buildingType->getConsumeRedmatter(),
             'consume_anti'         => $buildingType->getConsumeAnti(),
-            'consume_electricity'  => $buildingType->getConsumeElectricity()
+            'consume_electricity'  => $buildingType->getConsumeElectricity(),
+            'picture'              => $buildingType->getPicture()
         ]);
         $update->where(['id = ?' => $buildingType->getId()]);
 

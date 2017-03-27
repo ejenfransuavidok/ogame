@@ -13,13 +13,25 @@
 						<div class="popup__content-image"></div>
 						<div class="tabs">
 							<div class="tabs__menu">
-								<div class="tabs__item is-active">ВОЕННЫЕ</div>
+								<div class="tabs__item is-active">РЕСУРСНЫЕ</div>
+                                <!--
 								<div class="tabs__item">ГРАЖДАНСКИЕ</div>
 								<div class="tabs__item">СТАНКОСТРОИТЕЛЬНЫЕ</div>
 								<div class="tabs__item">АЭРОКОСМИЧЕСКИЕ</div>
-							</div>
+                                -->
+                            </div>
 							<div class="tabs__content js-scroll-hor">
 								<div class="build__list">
+                                    <?php foreach($source_buildings as $building) : ?>
+                                    <div class="build__item">
+										<div class="keep__item clr_red">
+											<?= $building->getPicture() ?>
+											<div class="keep__item-text"><span><?= $building->getName() ?></span></div>
+											<div class="keep__item-lvl"><span>lv. 3</span></div>
+										</div>
+									</div>
+                                    <?php endforeach; ?>
+                                    <!--
 									<div class="build__item">
 										<div class="keep__item clr_red">
 											<div class="keep__item-preview">
@@ -159,6 +171,7 @@
 										</div>
 									</div>
 								</div>
+                                -->
 							</div>
 						</div>
 						<div class="popup__pp">

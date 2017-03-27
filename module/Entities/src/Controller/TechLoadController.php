@@ -338,7 +338,7 @@ class TechLoadController extends AbstractActionController
             'consume_anti'              =>  'Потребление антивещества',
             'consume_electricity'       =>  'Потребление электричества',
             'factor'                    =>  'Фактор',
-            'image'                     =>  'Картинка');
+            'picture'                   =>  'Картинка');
         $parser = new XmlParser();
         $result = $parser->parse($file);
         if(!is_array($result) && count($result) != 21){
@@ -395,7 +395,8 @@ class TechLoadController extends AbstractActionController
                             $one['consume_darkmatter'],
                             $one['consume_redmatter'],
                             $one['consume_anti'],
-                            $one['consume_electricity']);
+                            $one['consume_electricity'],
+                            $one['picture']);
                         /**
                          * 3. сохраним в БД
                          */
