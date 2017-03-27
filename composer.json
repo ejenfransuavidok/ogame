@@ -35,7 +35,8 @@
             "Universe\\": "module/Universe/src/",
             "Entities\\": "module/Entities/src/",
             "Flight\\": "module/Flight/src/",
-            "App\\": "module/App/src/"
+            "App\\": "module/App/src/",
+            "Cron\\": "module/Cron/src/"
         }
     },
     "autoload-dev": {

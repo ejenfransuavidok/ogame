@@ -22,7 +22,7 @@ class UserRepositoryFactory implements FactoryInterface
         return new UserRepository(
             $container->get(AdapterInterface::class),
             new UserHydrator(),
-            new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+            new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }

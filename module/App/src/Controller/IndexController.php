@@ -32,7 +32,7 @@ class IndexController extends AbstractActionController
     private $planetRepository;
     
     public function __construct(
-        AdapterInterface $db, 
+        AdapterInterface $db,
         AuthController $authController,
         PlanetRepository $planetRepository
         )
@@ -58,7 +58,8 @@ class IndexController extends AbstractActionController
             
             $header = new ViewModel([
                 'planets' => $this->planetRepository->findBy('planets.owner = ' . $this->user->getId() . ' AND planets.id != ' . $planet->getId())->buffer(),
-                'planet'  => $planet
+                'planet'  => $planet,
+                'user'    => $this->user
             ]);
             $header->setTemplate('include/header');
             
@@ -75,11 +76,6 @@ class IndexController extends AbstractActionController
         else{
             return $this->redirect()->toRoute('app/auth', ['action' => 'auth']);
         }
-    }
-    
-    public function getMyPlanets()
-    {
-        
     }
     
 }

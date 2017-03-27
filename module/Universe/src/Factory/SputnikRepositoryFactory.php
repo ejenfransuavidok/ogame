@@ -25,7 +25,7 @@ class SputnikRepositoryFactory implements FactoryInterface
                 $container->get(PlanetRepository::class), 
                 $container->get(PlanetTypeRepository::class),
                 $container->get(UserRepository::class)),
-            new Sputnik(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+            new Sputnik(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }

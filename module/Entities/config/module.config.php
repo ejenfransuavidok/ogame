@@ -21,6 +21,8 @@ return [
             Model\TechnologyConnectionRepository::class => Factory\TechnologyConnectionRepositoryFactory::class,
             Model\SpaceSheepCommand::class => Factory\SpaceSheepCommandFactory::class,
             Model\SpaceSheepRepository::class => Factory\SpaceSheepRepositoryFactory::class,
+            Model\BuildingTypeCommand::class => Factory\BuildingTypeCommandFactory::class,
+            Model\BuildingTypeRepository::class => Factory\BuildingTypeRepositoryFactory::class,
             Model\BuildingCommand::class => Factory\BuildingCommandFactory::class,
             Model\BuildingRepository::class => Factory\BuildingRepositoryFactory::class,
             Model\UserCommand::class => Factory\UserCommandFactory::class,

@@ -34,6 +34,9 @@ use Universe\Model\SputnikRepository;
 use Entities\Model\Building;
 use Entities\Model\BuildingCommand;
 use Entities\Model\BuildingRepository;
+use Entities\Model\BuildingType;
+use Entities\Model\BuildingTypeCommand;
+use Entities\Model\BuildingTypeRepository;
 class FailXmiParse extends \Exception
 {
 }
@@ -131,6 +134,15 @@ class TechLoadController extends AbstractActionController
      */
     private $buildingCommand;
     
+    /**
+     * @ var BuildingTypeCommand
+     */
+    private $buildingTypeCommand;
+    
+    /**
+     * @ var BuildingTypeRepository
+     */
+    private $buildingTypeRepository;
     
     public function __construct(
         TechnologyRepository $technologyRepository, 
@@ -143,7 +155,9 @@ class TechLoadController extends AbstractActionController
         PlanetRepository $planetRepository,
         SputnikRepository $sputnikRepository,
         UserRepository $userRepository,
-        BuildingCommand $buildingCommand
+        BuildingCommand $buildingCommand,
+        BuildingTypeCommand $buildingTypeCommand,
+        BuildingTypeRepository $buildingTypeRepository
         )
     {
         $this->technologyRepository         = $technologyRepository;
@@ -157,6 +171,8 @@ class TechLoadController extends AbstractActionController
         $this->sputnikRepository            = $sputnikRepository;
         $this->userRepository               = $userRepository;
         $this->buildingCommand              = $buildingCommand;
+        $this->buildingTypeCommand          = $buildingTypeCommand;
+        $this->buildingTypeRepository       = $buildingTypeRepository;
     }
     
     public function appendclasses()
@@ -283,8 +299,8 @@ class TechLoadController extends AbstractActionController
                 if(!isset($file->error)) {
                     /// ошибок нет - можно экспортировать в бд
                     try {
-                        $this->buildingsLoadExecute($file->path);
-                        die(json_encode(array('result' => 'OK', 'message' => 'Файл ресурсных сооружений загружен успешно')));
+                        $imported_counter = $this->buildingsLoadExecute($file->path);
+                        die(json_encode(array('result' => 'OK', 'message' => 'Файл ресурсных сооружений загружен успешно, импортировано ' . $imported_counter . ' записей', 'imported' => $imported_counter)));
                     }
                     catch (\Exception $e) {
                         die(json_encode(array('result' => 'ERR', 'message' => 'Во время загрузки файла произошла ошибка - ' . $e->getMessage())));
@@ -300,72 +316,96 @@ class TechLoadController extends AbstractActionController
      
     private function buildingsLoadExecute($file)
     {
+        $imported_counter = 0;
         $keys = array(
-            'name', 'consume_metall', 'consume_heavygas', 'consume_ore', 'consume_hydro',
-            'consume_titan', 'consume_darkmatter', 'consume_redmatter', 'consume_anti',
-            'consume_electricity', 'produce_metall', 'produce_heavygas', 'produce_ore',
-            'produce_hydro', 'produce_titan', 'produce_darkmatter', 'produce_redmatter',
-            'produce_anti', 'produce_electricity', 'factor');
+            'name'                      =>  'Наименование здания',
+            'produce_metall'            =>  'Производство металла',
+            'produce_heavygas'          =>  'Производство тяжёлого газа',
+            'produce_ore'               =>  'Производство обогощённой руды',
+            'produce_hydro'             =>  'Производство водорода',
+            'produce_titan'             =>  'Производство титана',
+            'produce_darkmatter'        =>  'Производство тёмной материи',
+            'produce_redmatter'         =>  'Производство красной материи',
+            'produce_anti'              =>  'Производство антивещества',
+            'produce_electricity'       =>  'Производство электричества',
+            'consume_metall'            =>  'Потребление металла',
+            'consume_heavygas'          =>  'Потребление тяжёлого газа',
+            'consume_ore'               =>  'Потребление обогощённой руды',
+            'consume_hydro'             =>  'Потребление водорода',
+            'consume_titan'             =>  'Потребление титана',
+            'consume_darkmatter'        =>  'Потребление тёмной материи',
+            'consume_redmatter'         =>  'Потребление красной материи',
+            'consume_anti'              =>  'Потребление антивещества',
+            'consume_electricity'       =>  'Потребление электричества',
+            'factor'                    =>  'Фактор',
+            'image'                     =>  'Картинка');
         $parser = new XmlParser();
         $result = $parser->parse($file);
-        if(!is_array($result) && count($result) != 20) {
+        if(!is_array($result) && count($result) != 21){
             throw new FormatFailXml('data is not array or array size != 20');
         }
-        else {
+        else{
             $entities = array();
-            for($i=0; $i<count($result); $i++) {
+            for($i=0; $i<count($result); $i++){
                 $row = $result [$i];
-                $key = $row[0];
-                if($key != $keys[$i]) {
-                    throw new FormatFailXml("column title must be " . $keys[$i] . ", but " . $col[0] . " given.");
+                $val = $row[0];
+                if(!in_array($val, $keys)){
+                    throw new FormatFailXml("column title must be " . $val . ", but didn't find.");
                 }
                 else {
+                    $key = array_search($val, $keys);
                     for($j=1; $j<count($row); $j++) {
                         $value = $row[$j];
                         $entities [$j-1][$key] = $value;
                     }
                 }
             }
-            if(is_array($entities)) {
-                $this->buildingCommand->truncateTable();
-                foreach($entities as $one) {
-                    $level = 1;
-                    $owner = $this->userRepository->findEntity(1);
-                    $planet = $this->planetRepository->findEntity(1);
-                    $building = new Building(
-                        $one['name'],
-                        null,
-                        $planet,
-                        null,
-                        $owner,
-                        $level,
-                        Building::$BUILDING_RESOURCE,
-                        time(),
-                        $one['factor'],
-                        $one['produce_metall'],
-                        $one['produce_heavygas'],
-                        $one['produce_ore'],
-                        $one['produce_hydro'],
-                        $one['produce_titan'],
-                        $one['produce_darkmatter'],
-                        $one['produce_redmatter'],
-                        $one['produce_anti'],
-                        $one['produce_electricity'],
-                        $one['consume_metall'],
-                        $one['consume_heavygas'],
-                        $one['consume_ore'],
-                        $one['consume_hydro'],
-                        $one['consume_titan'],
-                        $one['consume_darkmatter'],
-                        $one['consume_redmatter'],
-                        $one['consume_anti'],
-                        $one['consume_electricity'],
-                        $one['factor']
-                    );
-                    $building = $this->buildingCommand->insertEntity($building);
+            if(is_array($entities)){
+                foreach($entities as $one){
+                    /**
+                     * 1. есть ли такое сооружение в БД
+                     */
+                    $buildingType = $this->buildingTypeRepository->findBy('building_types.name = "' . $one['name'] . '"');
+                    if(count($buildingType)){
+                        continue;
+                    }
+                    else{
+                        /**
+                         * 2. такого прототипа здания нет, создадим
+                         */
+                        $buildingType = new BuildingType(
+                            $one['name'], 
+                            null,
+                            Building::$BUILDING_RESOURCE,
+                            $one['factor'],
+                            $one['produce_metall'],
+                            $one['produce_heavygas'],
+                            $one['produce_ore'],
+                            $one['produce_hydro'],
+                            $one['produce_titan'],
+                            $one['produce_darkmatter'],
+                            $one['produce_redmatter'],
+                            $one['produce_anti'],
+                            $one['produce_electricity'],
+                            $one['consume_metall'],
+                            $one['consume_heavygas'],
+                            $one['consume_ore'],
+                            $one['consume_hydro'],
+                            $one['consume_titan'],
+                            $one['consume_darkmatter'],
+                            $one['consume_redmatter'],
+                            $one['consume_anti'],
+                            $one['consume_electricity']);
+                        /**
+                         * 3. сохраним в БД
+                         */
+                        $buildingType = $this->buildingTypeCommand->insertEntity($buildingType);
+                        $imported_counter++;
+                    }
                 }
             }
         }
+        return $imported_counter;
     }
     
     private function sheepsLoadExecute($file)

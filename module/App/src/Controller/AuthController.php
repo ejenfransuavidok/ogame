@@ -124,7 +124,7 @@ class AuthController extends AbstractActionController
         }
         if(!$result){
             try{
-                $user = new User(null,null,null,null,null,null,null,null,null,null,null);
+                $user = new User(null,null,null,null,null,null,null,null,null,null,null,null);
                 $user->setName($_REQUEST['login']);
                 $user->setPassword(md5($_REQUEST['password']));
                 $user->setEmail($_REQUEST['email']);

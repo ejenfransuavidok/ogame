@@ -59,6 +59,7 @@ class PlanetCommand implements EntityCommandInterface
             'mineral_darkmatter'    => $planet->getDarkmatter(),
             'mineral_redmatter'     => $planet->getRedmatter(),
             'mineral_anti'          => $planet->getAnti(),
+            'electricity'           => $planet->getElectricity(),
             'owner'                 => $planet->getOwner() ? $planet->getOwner()->getId() : null
         ]);
 
@@ -91,6 +92,7 @@ class PlanetCommand implements EntityCommandInterface
             $planet->getDarkmatter(),
             $planet->getRedmatter(),
             $planet->getAnti(),
+            $planet->getElectricity(),
             $planet->getOwner(),
             $result->getGeneratedValue()
         );
@@ -123,6 +125,7 @@ class PlanetCommand implements EntityCommandInterface
                 'mineral_darkmatter'    => $planet->getDarkmatter(),
                 'mineral_redmatter'     => $planet->getRedmatter(),
                 'mineral_anti'          => $planet->getAnti(),
+                'electricity'           => $planet->getElectricity(),
                 'owner'                 => $planet->getOwner() ? $planet->getOwner()->getId() : null
         ]);
         $update->where(['planets.id = ?' => $planet->getId()]);

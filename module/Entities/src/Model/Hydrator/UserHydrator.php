@@ -23,7 +23,7 @@ class UserHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         $user->exchangeArray($data);
         return $user;
     }

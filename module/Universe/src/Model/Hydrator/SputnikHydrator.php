@@ -69,7 +69,7 @@ class SputnikHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $sputnik = new Sputnik(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $sputnik = new Sputnik(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         $sputnik->exchangeArray($data);
         $parent_planet_id = $sputnik->getParentPlanet();
         $parent_planet = $this->planetRepository->findEntity($parent_planet_id);

@@ -27,13 +27,13 @@
         <div class="wrapper">
             <?= $this->content ?>
         </div>
-    <?= $this->headLink() ?>
-    <?= $this->inlineScript() ?>
-    <script>
-        SystemJS.config({
-            baseURL: '<?= $this->basePath('/js/') ?>'
-        });
-        SystemJS.import('main.js');
-    </script>
+        <?= $this->headLink() ?>
+        <?= $this->inlineScript() ?>
+        <script>
+            SystemJS.config({
+                baseURL: '<?= $this->basePath('/js/') ?>'
+            });
+            SystemJS.import('main.js');
+        </script>
     </body>
 </html>

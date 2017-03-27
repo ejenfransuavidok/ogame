@@ -109,6 +109,11 @@ class User extends Entity
      */
     protected $amount_of_electricity;
     
+    /**
+     * @ int
+     */
+    protected $money;
+    
     public function __construct(
         $name, 
         $description, 
@@ -125,6 +130,7 @@ class User extends Entity
         $amount_of_redmatter,
         $amount_of_anti,
         $amount_of_electricity,
+        $money,
         $id=null)
     {
         parent::__construct(self::TABLE_NAME);
@@ -143,6 +149,7 @@ class User extends Entity
         $this->amount_of_redmatter   = $amount_of_redmatter;
         $this->amount_of_anti        = $amount_of_anti;
         $this->amount_of_electricity = $amount_of_electricity;
+        $this->money                 = $money;
         $this->id                    = $id;
     }
     
@@ -164,6 +171,7 @@ class User extends Entity
         $this->amount_of_redmatter   = !empty($data[$prefix.'amount_of_redmatter']) ? $data[$prefix.'amount_of_redmatter'] : null;
         $this->amount_of_anti        = !empty($data[$prefix.'amount_of_anti']) ? $data[$prefix.'amount_of_anti'] : null;
         $this->amount_of_electricity = !empty($data[$prefix.'amount_of_electricity']) ? $data[$prefix.'amount_of_electricity'] : null;
+        $this->money                 = !empty($data[$prefix.'money']) ? $data[$prefix.'money'] : null;
     }
     
     public function getArrayCopy()
@@ -299,6 +307,16 @@ class User extends Entity
     public function getAmountOfElectricity()
     {
         return $this->amount_of_electricity;
+    }
+    
+    public function setMoney($money)
+    {
+        $this->money = $money;
+    }
+    
+    public function getMoney()
+    {
+        return $this->money == '' ? 0 : $this->money;
     }
     
 }

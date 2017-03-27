@@ -146,8 +146,8 @@ class BuildingController extends AbstractActionController
             $identity = $this->auth->getIdentity();
             $user = $this->userRepository->findOneBy("users.login = '" . $identity . "'");
             $buildings = $this->buildingRepository->findBy('buildings.owner = ' . $user->getId())->buffer();
+            $now = time();
             foreach($buildings as $building) {
-                $now = time();
                 $update = $building->getUpdate();
                 if($now > $update) {
                     $K = intval(ceil(($now - $update) / Building::$DELTA_REFRESH));
@@ -184,7 +184,10 @@ class BuildingController extends AbstractActionController
                     $result[$building->getId()]['anti']         = $building->getProduceAnti()       ?   $anti           : 0;
                 }
                 else {
-                    $result['result'] = 'TIME';
+                    $result['result']   = 'TIME';
+                    $result['time']     = $update;
+                    $result['now']      = time();
+                    $result['building'] = $building->getName();
                 }
             }
         }

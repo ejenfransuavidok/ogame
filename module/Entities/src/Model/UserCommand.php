@@ -59,7 +59,8 @@ class UserCommand implements EntityCommandInterface
             'amount_of_darkmatter'  => $user->getAmountOfDarkmatter(),
             'amount_of_redmatter'   => $user->getAmountOfRedmatter(),
             'amount_of_anti'        => $user->getAmountOfAnti(),
-            'amount_of_electricity' => $user->getAmountOfElectricity()
+            'amount_of_electricity' => $user->getAmountOfElectricity(),
+            'money'                 => $user->getMoney()
         ]);
 
         $sql = new Sql($this->db);
@@ -90,6 +91,7 @@ class UserCommand implements EntityCommandInterface
             $user->getAmountOfRedmatter(),
             $user->getAmountOfAnti(),
             $user->getAmountOfElectricity(),
+            $user->getMoney(),
             $result->getGeneratedValue()
         );
     }
@@ -119,7 +121,8 @@ class UserCommand implements EntityCommandInterface
             'amount_of_darkmatter'  => $user->getAmountOfDarkmatter(),
             'amount_of_redmatter'   => $user->getAmountOfRedmatter(),
             'amount_of_anti'        => $user->getAmountOfAnti(),
-            'amount_of_electricity' => $user->getAmountOfElectricity()
+            'amount_of_electricity' => $user->getAmountOfElectricity(),
+            'money'                 => $user->getMoney()
         ]);
         $update->where(['id = ?' => $user->getId()]);
 

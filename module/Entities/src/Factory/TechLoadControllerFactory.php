@@ -11,6 +11,8 @@ use Entities\Model\TechnologyConnectionCommand;
 use Entities\Model\SpaceSheepCommand;
 use Entities\Model\UserRepository;
 use Entities\Model\BuildingCommand;
+use Entities\Model\BuildingTypeCommand;
+use Entities\Model\BuildingTypeRepository;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
 use Universe\Model\StarRepository;
@@ -39,7 +41,9 @@ class TechLoadControllerFactory implements FactoryInterface
             $container->get(PlanetRepository::class),
             $container->get(SputnikRepository::class),
             $container->get(UserRepository::class),
-            $container->get(BuildingCommand::class)
+            $container->get(BuildingCommand::class),
+            $container->get(BuildingTypeCommand::class),
+            $container->get(BuildingTypeRepository::class)
         );
     }
 }

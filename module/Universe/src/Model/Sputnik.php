@@ -76,6 +76,11 @@ class Sputnik extends CelestialBody
     private $mineral_anti;
     
     /**
+     * @ electricity
+     */
+    private $electricity;
+    
+    /**
      * @ PlanetType
      */
     private $type;
@@ -102,6 +107,7 @@ class Sputnik extends CelestialBody
         $mineral_darkmatter,
         $mineral_redmatter,
         $mineral_anti,
+        $electricity,
         $owner,
         $id=null)
     {
@@ -122,6 +128,7 @@ class Sputnik extends CelestialBody
         $this->mineral_darkmatter   = $mineral_darkmatter;
         $this->mineral_redmatter    = $mineral_redmatter;
         $this->mineral_anti         = $mineral_anti;
+        $this->electricity          = $electricity;
         $this->owner                = $owner;
         $this->id                   = $id;
     }
@@ -145,6 +152,7 @@ class Sputnik extends CelestialBody
         $this->mineral_darkmatter   = !empty($data[$prefix.'mineral_darkmatter']) ? $data[$prefix.'mineral_darkmatter'] : null;
         $this->mineral_redmatter    = !empty($data[$prefix.'mineral_redmatter']) ? $data[$prefix.'mineral_redmatter'] : null;
         $this->mineral_anti         = !empty($data[$prefix.'mineral_anti']) ? $data[$prefix.'mineral_anti'] : null;
+        $this->electricity          = !empty($data[$prefix.'electricity']) ? $data[$prefix.'electricity'] : null;
         $this->owner                = !empty($data[$prefix.'owner']) ? $data[$prefix.'owner'] : null;
     }
     
@@ -291,6 +299,16 @@ class Sputnik extends CelestialBody
     public function getAnti()
     {
         return $this->mineral_anti;
+    }
+    
+    public function setElectricity($electricity)
+    {
+        $this->electricity = $electricity;
+    }
+    
+    public function getElectricity()
+    {
+        return $this->electricity;
     }
     
     public function setType($type)

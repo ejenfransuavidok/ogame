@@ -84,6 +84,7 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planets.mineral_darkmatter'=> 'mineral_darkmatter',
                     'planets.mineral_redmatter' => 'mineral_redmatter',
                     'planets.mineral_anti'      => 'mineral_anti',
+                    'planets.electricity'       => 'electricity',
                     'planets.owner'             => 'owner'
                 ]);
         if($criteria) {
@@ -136,6 +137,7 @@ class SputnikRepository implements EntityRepositoryInterface
                     'planets.mineral_darkmatter'=> 'mineral_darkmatter',
                     'planets.mineral_redmatter' => 'mineral_redmatter',
                     'planets.mineral_anti'      => 'mineral_anti',
+                    'planets.electricity'       => 'electricity',
                     'planets.owner'             => 'owner'
                 ]);
                 

@@ -713,7 +713,7 @@ class CreatorController extends AbstractActionController
              */
             $planet_basis += $this->PLANETS_DISTANCE;
             
-            $planet = new Planet(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1,null);
+            $planet = new Planet(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1,1,null);
             
             /**
              * 
@@ -778,7 +778,7 @@ class CreatorController extends AbstractActionController
             $this->SPUTNIKS_COUNT = $this->GetAverageRandom($this->PLANET_COUNT_SPUTNIKS_MEDIAN, $this->PLANET_COUNT_SPUTNIKS_MEDIAN_DELTA);
             for($i = 0; $i < $this->SPUTNIKS_COUNT; $i++)
             {
-                $sputnik = new Sputnik(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1,null);
+                $sputnik = new Sputnik(null,null,null,null,null,null,null,null,1,1,1,1,1,1,1,1,1,null);
                 
                 /**
                  * 

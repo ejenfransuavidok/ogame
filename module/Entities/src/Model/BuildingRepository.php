@@ -73,7 +73,8 @@ class BuildingRepository implements EntityRepositoryInterface
                     'users.amount_of_darkmatter'    => 'amount_of_darkmatter',
                     'users.amount_of_redmatter'     => 'amount_of_redmatter',
                     'users.amount_of_anti'          => 'amount_of_anti',
-                    'users.amount_of_electricity'   => 'amount_of_electricity'
+                    'users.amount_of_electricity'   => 'amount_of_electricity',
+                    'users.money'                   => 'money'
                 ],
                 Select::JOIN_LEFT)
             ->join(['pl' => 'planets'], 'buildings.planet = pl.id',
@@ -95,6 +96,7 @@ class BuildingRepository implements EntityRepositoryInterface
                     'planets.mineral_darkmatter'=> 'mineral_darkmatter',
                     'planets.mineral_redmatter' => 'mineral_redmatter',
                     'planets.mineral_anti'      => 'mineral_anti',
+                    'planets.electricity'       => 'electricity',
                     'planets.owner'             => 'owner'
                 ],
                 Select::JOIN_LEFT)
@@ -117,6 +119,7 @@ class BuildingRepository implements EntityRepositoryInterface
                     'sputniks.mineral_darkmatter'=> 'mineral_darkmatter',
                     'sputniks.mineral_redmatter' => 'mineral_redmatter',
                     'sputniks.mineral_anti'      => 'mineral_anti',
+                    'sputniks.electricity'       => 'electricity',
                     'sputniks.owner'             => 'owner'
                 ],
                 Select::JOIN_LEFT);
@@ -156,7 +159,8 @@ class BuildingRepository implements EntityRepositoryInterface
                     'users.amount_of_darkmatter'    => 'amount_of_darkmatter',
                     'users.amount_of_redmatter'     => 'amount_of_redmatter',
                     'users.amount_of_anti'          => 'amount_of_anti',
-                    'users.amount_of_electricity'   => 'amount_of_electricity'
+                    'users.amount_of_electricity'   => 'amount_of_electricity',
+                    'users.money'                   => 'money'
                 ],
                 Select::JOIN_LEFT)
             ->join(['pl' => 'planets'], 'buildings.planet = pl.id',
@@ -178,6 +182,7 @@ class BuildingRepository implements EntityRepositoryInterface
                     'planets.mineral_darkmatter'=> 'mineral_darkmatter',
                     'planets.mineral_redmatter' => 'mineral_redmatter',
                     'planets.mineral_anti'      => 'mineral_anti',
+                    'planets.electricity'       => 'electricity',
                     'planets.owner'             => 'owner'
                 ],
                 Select::JOIN_LEFT)
@@ -200,6 +205,7 @@ class BuildingRepository implements EntityRepositoryInterface
                     'sputniks.mineral_darkmatter'=> 'mineral_darkmatter',
                     'sputniks.mineral_redmatter' => 'mineral_redmatter',
                     'sputniks.mineral_anti'      => 'mineral_anti',
+                    'sputniks.electricity'       => 'electricity',
                     'sputniks.owner'             => 'owner'
                 ],
                 Select::JOIN_LEFT);
