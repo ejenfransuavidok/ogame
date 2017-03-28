@@ -338,10 +338,11 @@ class TechLoadController extends AbstractActionController
             'consume_anti'              =>  'Потребление антивещества',
             'consume_electricity'       =>  'Потребление электричества',
             'factor'                    =>  'Фактор',
-            'picture'                   =>  'Картинка');
+            'picture'                   =>  'Картинка',
+            'description'               =>  'Описание');
         $parser = new XmlParser();
         $result = $parser->parse($file);
-        if(!is_array($result) && count($result) != 21){
+        if(!is_array($result) && count($result) != 22){
             throw new FormatFailXml('data is not array or array size != 20');
         }
         else{
@@ -375,7 +376,7 @@ class TechLoadController extends AbstractActionController
                          */
                         $buildingType = new BuildingType(
                             $one['name'], 
-                            null,
+                            $one['description'],
                             Building::$BUILDING_RESOURCE,
                             $one['factor'],
                             $one['produce_metall'],

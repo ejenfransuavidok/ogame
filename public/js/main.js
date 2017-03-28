@@ -10,6 +10,8 @@ var _ogBuildings = require('og.buildings.js');
 
 var _ogSources_updater = require('og.sources_updater.js');
 
+var _ogPopup_building = require('og.popup_building.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var JQueryStarter = function () {
@@ -55,8 +57,9 @@ var Main = function () {
         value: function processing() {
             this.universe = new _ogUniverse.Universe();
             this.auth = new _ogAuth.Auth();
-            this.buildings = new _ogBuildings.Buildings();
+            //this.buildings = new Buildings();
             this.source_updater = new _ogSources_updater.SrcUpdater();
+            this.popup_building_handler = new _ogPopup_building.PopupBuilding();
         }
     }]);
 
