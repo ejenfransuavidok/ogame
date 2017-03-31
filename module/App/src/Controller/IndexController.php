@@ -156,6 +156,15 @@ class IndexController extends AbstractActionController
             $view->setVariable('end', $end);
             $view->setVariable('now', $now);
             $view->addChild($planetkeep, 'planetkeep');
+            /**
+             * @ обновим также строительное окно
+             */
+            $planet = $this->planetRepository->findEntity($planetid);
+            $popup_building = new ViewModel(['source_buildings' => $this->buildingTypeRepository->findAllEntities()->buffer()]);
+            $popup_building->setTemplate('include/popups/popup_building');
+            $popup_building->setVariable('buildingRepository', $this->buildingRepository);
+            $popup_building->setVariable('planet', $planet);
+            $view->addChild($popup_building, 'popup_building');
         }
         else{
             $view->setVariable('result', 'ERR');

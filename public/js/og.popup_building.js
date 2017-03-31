@@ -106,6 +106,8 @@ var PopupBuilding = exports.PopupBuilding = function () {
                             if (status == 200) {
                                 if (data.result == 'YES') {
                                     $('[data-entity=game__planet-keep-keep]').html(data.content);
+                                    $('.popup_building').remove();
+                                    $(data.popup_building).insertAfter('.game');
                                     _this4.start_continue_timer(data.event_id, data.begin, data.end, data.now);
                                     _this4.install_reject_button_handler(data.event_id);
                                 } else {

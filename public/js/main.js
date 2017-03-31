@@ -16,6 +16,8 @@ var _ogDb_eventer = require('og.db_eventer.js');
 
 var _ogFleet_ = require('og.fleet_1.js');
 
+var _ogPopups = require('og.popups.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var JQueryStarter = function () {
@@ -59,6 +61,7 @@ var Main = function () {
     _createClass(Main, [{
         key: 'processing',
         value: function processing() {
+            this.popups = new _ogPopups.Popups();
             this.universe = new _ogUniverse.Universe();
             this.auth = new _ogAuth.Auth();
             //this.buildings = new Buildings();

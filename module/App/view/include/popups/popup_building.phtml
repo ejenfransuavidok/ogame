@@ -1,69 +1,97 @@
 <div class="popup popup_building">
-			<div class="popup__inner">
-				<div class="popup__layout">
-					<div class="popup__close"></div>
-					<div class="popup__title">Строительство</div>
-					<div class="popup__head"><a href="#" class="popup__head-item"><i class="ico"><img src="/img/ico/simp-ico-fleet.svg" alt="" class="svg"></i> <span>Флот</span></a><a href="#" class="popup__head-item"><i class="ico"><img src="/img/ico/simp-ico-defense.svg" alt="" class="svg"></i> <span>Оборона</span></a>
-						<a href="#" class="popup__head-item"><i class="ico"><img src="/img/ico/simp-ico-resources.svg" alt="" class="svg"></i> <span>Ресурсы</span></a><a href="#" class="popup__head-item is-active"><i class="ico"><img src="/img/ico/simp-ico-factories.svg" alt="" class="svg"></i> <span>Заводы</span></a>
-                        <a href="#" class="popup__head-item"><i class="ico"><img src="/img/ico/simp-ico-technology.svg" alt="" class="svg"></i> <span>Наука</span></a>
-					</div>
-					<div class="popup__content">
-						<div class="popup__content-image"></div>
-						<div class="tabs">
-							<div class="tabs__menu">
-								<div class="tabs__item is-active">РЕСУРСНЫЕ</div>
-                                <!--
+    <div class="popup__inner">
+        <div class="popup__layout">
+            <div class="popup__close"></div>
+            <div class="popup__title">Строительство</div>
+            <div class="popup__head">
+                <a href="#" class="popup__head-item" data-building_tab="fleet">
+                    <i class="ico">
+                        <img src="/img/ico/simp-ico-fleet.svg" alt="" class="svg">
+                    </i>
+                    <span>Флот</span>
+                </a>
+                <a href="#" class="popup__head-item" data-building_tab="defence">
+                    <i class="ico">
+                        <img src="/img/ico/simp-ico-defense.svg" alt="" class="svg">
+                    </i>
+                    <span>Оборона</span>
+                </a>
+                <a href="#" class="popup__head-item" data-building_tab="resource">
+                    <i class="ico">
+                        <img src="/img/ico/simp-ico-resources.svg" alt="" class="svg">
+                    </i> 
+                    <span>Ресурсы</span>
+                </a>
+                <a href="#" class="popup__head-item is-active" data-building_tab="industrial">
+                    <i class="ico">
+                        <img src="/img/ico/simp-ico-factories.svg" alt="" class="svg">
+                    </i> 
+                    <span>Заводы</span>
+                </a>
+                <a href="#" class="popup__head-item" data-building_tab="science">
+                    <i class="ico">
+                        <img src="/img/ico/simp-ico-technology.svg" alt="" class="svg">
+                    </i> 
+                    <span>Наука</span>
+                </a>
+            </div>
+            <div class="popup__content">
+                <div class="popup__content-image"></div>
+                <div class="tabs">
+                    <div class="tabs__menu">
+                        <div class="tabs__item is-active">РЕСУРСНЫЕ</div>
+                        <!--
 								<div class="tabs__item">ГРАЖДАНСКИЕ</div>
 								<div class="tabs__item">СТАНКОСТРОИТЕЛЬНЫЕ</div>
 								<div class="tabs__item">АЭРОКОСМИЧЕСКИЕ</div>
-                                -->
-                            </div>
-							<div class="tabs__content js-scroll-hor">
-								<div class="build__list">
-                                    <?php foreach($source_buildings as $building) : ?>
-                                    <div class="build__item" 
-                                        data-entity="srcbuilding" 
-                                        data-identifier="<?= $building->getId() ?>"
-                                        data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
-                                        data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>">
-										<div class="keep__item clr_red">
-											<?= $building->getPicture() ?>
-											<div class="keep__item-text"><span data-entity="keep__item-text"><?= $building->getName() ?></span></div>
-											<div class="keep__item-lvl"><span>lv. <?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?></span></div>
-										</div>
-                                        <div style="display:none;" data-entity="building-description"><?= $building->getDescription() ?></div>
-                                    </div>
-                                    <?php endforeach; ?>
+                        -->
+                    </div>
+                    <div class="tabs__content js-scroll-hor">
+                        <div class="build__list">
+                            <?php foreach($source_buildings as $building) : ?>
+                            <div class="build__item" 
+                                data-entity="srcbuilding" 
+                                data-identifier="<?= $building->getId() ?>"
+                                data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
+                                data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>">
+                                <div class="keep__item clr_red">
+                                    <?= $building->getPicture() ?>
+                                    <div class="keep__item-text"><span data-entity="keep__item-text"><?= $building->getName() ?></span></div>
+                                    <div class="keep__item-lvl"><span>lv. <?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?></span></div>
                                 </div>
+                                <div style="display:none;" data-entity="building-description"><?= $building->getDescription() ?></div>
                             </div>
-						</div>
-						<div class="popup__pp" data-entity="popup_building-popup__pp" data-building_id="">
-							<div class="popup__pp-layout">
-								<div class="popup__pp-close"></div>
-								<div class="popup__pp-preview">
-									<div class="popup__pp-control">
-										<div class="btn btn_big btn_border">Древо технологий</div>
-									</div>
-								</div>
-								<div class="popup__pp-content">
-									<div class="popup__pp-content__title" 
-                                         data-entity="popup_building-popup__pp-layout-popup__pp-content-title">
-                                        Ракетостроительный<br>завод&nbsp;<span class="btn btn_lvl">lv.1</span>
-                                    </div>
-									<div class="popup__pp-content__text">Время исследования : <span data-entity="popup_building-popup__pp-layout-popup__pp-building-period" class="clr_white">40m 0c</span></div>
-									<div class="popup__pp-content__text"
-                                         data-entity="popup_building-popup__pp-layout-popup__pp-content-description">
-                                         Будет освоено производство межконтинентальных ракет баллистических и оперативно - тактических ракет для комплексов "Ярс-М", "Булава" и "Искандер"
-                                    </div>
-									<div class="popup__pp-control">
-										<div class="btn btn_big btn_dark">Описание</div>
-										<div data-entity="popup_building-popup__pp-popup__pp-control-build-button" class="btn btn_big btn_red">Строить</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="popup__overlay"></div>
-		</div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="popup__pp" data-entity="popup_building-popup__pp" data-building_id="">
+                    <div class="popup__pp-layout">
+                        <div class="popup__pp-close"></div>
+                        <div class="popup__pp-preview">
+                            <div class="popup__pp-control">
+                                <div class="btn btn_big btn_border">Древо технологий</div>
+                            </div>
+                        </div>
+                        <div class="popup__pp-content">
+                            <div class="popup__pp-content__title" 
+                                data-entity="popup_building-popup__pp-layout-popup__pp-content-title">
+                                Ракетостроительный<br>завод&nbsp;<span class="btn btn_lvl">lv.1</span>
+                            </div>
+                            <div class="popup__pp-content__text">Время исследования : <span data-entity="popup_building-popup__pp-layout-popup__pp-building-period" class="clr_white">40m 0c</span></div>
+                            <div class="popup__pp-content__text"
+                                data-entity="popup_building-popup__pp-layout-popup__pp-content-description">
+                                Будет освоено производство межконтинентальных ракет баллистических и оперативно - тактических ракет для комплексов "Ярс-М", "Булава" и "Искандер"
+                            </div>
+                            <div class="popup__pp-control">
+                                <div class="btn btn_big btn_dark">Описание</div>
+                                <div data-entity="popup_building-popup__pp-popup__pp-control-build-button" class="btn btn_big btn_red">Строить</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popup__overlay"></div>
+</div>
