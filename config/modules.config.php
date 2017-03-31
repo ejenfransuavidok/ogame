@@ -27,5 +27,6 @@ return [
     'Entities',
     'Flight',
     'App',
-    'Cron'
+    'Cron',
+    'Eventer'
 ];

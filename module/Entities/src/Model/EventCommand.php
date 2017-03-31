@@ -45,15 +45,17 @@ class EventCommand implements EntityCommandInterface
     {
         $insert = new Insert($event->GetTable());
         $insert->values([
-            'name'            => $event->getName(),
-            'description'     => $event->getDescription(),
-            'user'            => $event->getUser() ? $event->getUser()->getId() : null,
-            'event_type'      => $event->getEventType(),
-            'event_begin'     => $event->getEventBegin(),
-            'event_end'       => $event->getEventEnd(),
-            'target_star'     => $event->getTargetStar() ? $event->getTargetStar()->getId() : null,
-            'target_planet'   => $event->getTargetPlanet() ? $event->getTargetPlanet()->getId() : null,
-            'target_sputnik'  => $event->getTargetSputnik() ? $event->getTargetSputnik()->getId() : null
+            'name'                  => $event->getName(),
+            'description'           => $event->getDescription(),
+            'user'                  => $event->getUser() ? $event->getUser()->getId() : null,
+            'event_type'            => $event->getEventType(),
+            'event_begin'           => $event->getEventBegin(),
+            'event_end'             => $event->getEventEnd(),
+            'target_star'           => $event->getTargetStar() ? $event->getTargetStar()->getId() : null,
+            'target_planet'         => $event->getTargetPlanet() ? $event->getTargetPlanet()->getId() : null,
+            'target_sputnik'        => $event->getTargetSputnik() ? $event->getTargetSputnik()->getId() : null,
+            'targetBuildingType'    => $event->getTargetBuildingType() ? $event->getTargetBuildingType()->getId() : null,
+            'targetLevel'           => $event->getTargetLevel()
         ]);
 
         $sql = new Sql($this->db);
@@ -78,6 +80,8 @@ class EventCommand implements EntityCommandInterface
             $event->getTargetStar(),
             $event->getTargetPlanet(),
             $event->getTargetSputnik(),
+            $event->getTargetBuildingType(),
+            $event->getTargetLevel(),
             $result->getGeneratedValue()
         );
     }
@@ -93,15 +97,17 @@ class EventCommand implements EntityCommandInterface
         
         $update = new Update($event->GetTable());
         $update->set([
-            'name'          => $event->getName(),
-            'description'   => $event->getDescription(),
-            'user'          => $event->getUser() ? $event->getUser()->getId() : null,
-            'event_type'    => $event->getEventType(),
-            'event_begin'   => $event->getEventBegin(),
-            'event_end'     => $event->getEventEnd(),
-            'star'          => $event->getTargetStar() ? $event->getTargetStar()->getId() : null,
-            'planet'        => $event->getTargetPlanet() ? $event->getTargetPlanet()->getId() : null,
-            'sputnik'       => $event->getTargetSputnik() ? $event->getTargetSputnik()->getId() : null
+            'name'                  => $event->getName(),
+            'description'           => $event->getDescription(),
+            'user'                  => $event->getUser() ? $event->getUser()->getId() : null,
+            'event_type'            => $event->getEventType(),
+            'event_begin'           => $event->getEventBegin(),
+            'event_end'             => $event->getEventEnd(),
+            'star'                  => $event->getTargetStar() ? $event->getTargetStar()->getId() : null,
+            'planet'                => $event->getTargetPlanet() ? $event->getTargetPlanet()->getId() : null,
+            'sputnik'               => $event->getTargetSputnik() ? $event->getTargetSputnik()->getId() : null,
+            'targetBuildingType'    => $event->getTargetBuildingType() ? $event->getTargetBuildingType()->getId() : null,
+            'targetLevel'           => $event->getTargetLevel()
         ]);
         $update->where(['id = ?' => $event->getId()]);
 

@@ -1,0 +1,10 @@
+<?= $this->json(
+    array(
+        'result'    => $this->result, 
+        'auth'      => $this->auth, 
+        'message'   => $this->message, 
+        'event_id'  => $event_id, 
+        'content'   => $planetkeep,
+        'begin'     => $begin,
+        'end'       => $end,
+        'now'       => $now)) ?>

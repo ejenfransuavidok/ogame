@@ -201,7 +201,7 @@ class Planet extends CelestialBody
     
     public function getMetall()
     {
-        return $this->mineral_metall;
+        return $this->mineral_metall != null ? $this->mineral_metall : 0;
     }
     
     public function setHeavyGas($heavygas)
@@ -211,7 +211,7 @@ class Planet extends CelestialBody
     
     public function getHeavyGas()
     {
-        return $this->mineral_heavygas;
+        return $this->mineral_heavygas != null ? $this->mineral_heavygas : 0;
     }
     
     public function setOre($ore)
@@ -221,7 +221,7 @@ class Planet extends CelestialBody
     
     public function getOre()
     {
-        return $this->mineral_ore;
+        return $this->mineral_ore != null ? $this->mineral_ore : 0;
     }
     
     public function setHydro($hydro)
@@ -231,7 +231,7 @@ class Planet extends CelestialBody
     
     public function getHydro()
     {
-        return $this->mineral_hydro;
+        return $this->mineral_hydro != null ? $this->mineral_hydro : 0;
     }
     
     public function setTitan($titan)
@@ -241,7 +241,7 @@ class Planet extends CelestialBody
     
     public function getTitan()
     {
-        return $this->mineral_titan;
+        return $this->mineral_titan != null ? $this->mineral_titan : 0;
     }
     
     public function setDarkmatter($darkmatter)
@@ -251,7 +251,7 @@ class Planet extends CelestialBody
     
     public function getDarkmatter()
     {
-        return $this->mineral_darkmatter;
+        return $this->mineral_darkmatter != null ? $this->mineral_darkmatter : 0;
     }
  
     public function setRedmatter($redmatter)
@@ -261,7 +261,7 @@ class Planet extends CelestialBody
     
     public function getRedmatter()
     {
-        return $this->mineral_redmatter;
+        return $this->mineral_redmatter != null ? $this->mineral_redmatter : 0;
     }
     
     public function setAnti($anti)
@@ -271,7 +271,7 @@ class Planet extends CelestialBody
     
     public function getAnti()
     {
-        return $this->mineral_anti;
+        return $this->mineral_anti != null ? $this->mineral_anti : 0;
     }
     
     public function setElectricity($electricity)
@@ -281,7 +281,7 @@ class Planet extends CelestialBody
     
     public function getElectricity()
     {
-        return $this->electricity;
+        return $this->electricity != null ? $this->electricity : 0;
     }
     
     public function setType($type)

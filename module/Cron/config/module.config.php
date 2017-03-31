@@ -17,6 +17,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
+            Controller\IndexController::class => Factory\IndexControllerFactory::class,
             Controller\ResourcesController::class => Factory\ResourcesControllerFactory::class,
             Controller\UpdaterController::class => Factory\UpdaterControllerFactory::class,
         ],
@@ -47,10 +48,24 @@ return [
                     'updater' => [
                         'type' => Literal::class,
                         'options' => [
-                            'route'    => '/updater',
+                            'route'    => '/updater'
                         ],
+                        
                         'may_terminate' => false,
+                        
                         'child_routes'  => [
+                            
+                            'index' => [
+                                'type' => \Zend\Router\Http\Segment::class,
+                                'options' => [
+                                    'route' => '/index',
+                                    'defaults' => [
+                                        'controller' => Controller\IndexController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
+                            
                             'srcupdater' => [
                                 'type' => \Zend\Router\Http\Segment::class,
                                 'options' => [

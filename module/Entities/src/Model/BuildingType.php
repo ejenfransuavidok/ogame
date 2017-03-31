@@ -12,6 +12,10 @@ namespace Entities\Model;
 use RuntimeException;
 use Zend\Math\Rand;
 use Universe\Model\Entity;
+use Entities\Model\BuildingRepository;
+use Universe\Model\Planet;
+use Universe\Model\Sputnik;
+use App\Classes\TimeUtils;
 
 class BuildingType extends Entity
 {
@@ -235,7 +239,7 @@ class BuildingType extends Entity
     
     public function getProduceMetall()
     {
-        return $this->produce_metall;
+        return $this->produce_metall != null ? $this->produce_metall : 0;
     }
     
     public function setProduceHeavygas($produce_heavygas)
@@ -245,7 +249,7 @@ class BuildingType extends Entity
     
     public function getProduceHeavygas()
     {
-        return $this->produce_heavygas;
+        return $this->produce_heavygas != null ? $this->produce_heavygas : 0;
     }
     
     public function setProduceOre($produce_ore)
@@ -255,7 +259,7 @@ class BuildingType extends Entity
     
     public function getProduceOre()
     {
-        return $this->produce_ore;
+        return $this->produce_ore != null ? $this->produce_ore : 0;
     }
     
     public function setProduceHydro($produce_hydro)
@@ -265,7 +269,7 @@ class BuildingType extends Entity
     
     public function getProduceHydro()
     {
-        return $this->produce_hydro;
+        return $this->produce_hydro != null ? $this->produce_hydro : 0;
     }
     
     public function setProduceTitan($produce_titan)
@@ -275,7 +279,7 @@ class BuildingType extends Entity
     
     public function getProduceTitan()
     {
-        return $this->produce_titan;
+        return $this->produce_titan != null ? $this->produce_titan : 0;
     }
     
     public function setProduceDarkmatter($produce_darkmatter)
@@ -285,7 +289,7 @@ class BuildingType extends Entity
     
     public function getProduceDarkmatter()
     {
-        return $this->produce_darkmatter;
+        return $this->produce_darkmatter != null ? $this->produce_darkmatter : 0;
     }
     
     public function setProduceRedmatter($produce_redmatter)
@@ -295,7 +299,7 @@ class BuildingType extends Entity
     
     public function getProduceRedmatter()
     {
-        return $this->produce_redmatter;
+        return $this->produce_redmatter != null ? $this->produce_redmatter : 0;
     }
     
     public function setProduceAnti($produce_anti)
@@ -305,7 +309,7 @@ class BuildingType extends Entity
     
     public function getProduceAnti()
     {
-        return $this->produce_anti;
+        return $this->produce_anti != null ? $this->produce_anti : 0;
     }
     
     public function setProduceElectricity($produce_electricity)
@@ -315,7 +319,7 @@ class BuildingType extends Entity
     
     public function getProduceElectricity()
     {
-        return $this->produce_electricity;
+        return $this->produce_electricity != null ? $this->produce_electricity : 0;
     }
     
     /*consume*/
@@ -327,7 +331,7 @@ class BuildingType extends Entity
     
     public function getConsumeMetall()
     {
-        return $this->consume_metall;
+        return $this->consume_metall != null ? $this->consume_metall : 0;
     }
     
     public function setConsumeHeavygas($consume_heavygas)
@@ -337,7 +341,7 @@ class BuildingType extends Entity
     
     public function getConsumeHeavygas()
     {
-        return $this->consume_heavygas;
+        return $this->consume_heavygas != null ? $this->consume_heavygas : 0;
     }
     
     public function setConsumeOre($consume_ore)
@@ -347,7 +351,7 @@ class BuildingType extends Entity
     
     public function getConsumeOre()
     {
-        return $this->consume_ore;
+        return $this->consume_ore != null ? $this->consume_ore : 0;
     }
     
     public function setConsumeHydro($consume_hydro)
@@ -357,7 +361,7 @@ class BuildingType extends Entity
     
     public function getConsumeHydro()
     {
-        return $this->consume_hydro;
+        return $this->consume_hydro != null ? $this->consume_hydro : 0;
     }
     
     public function setConsumeTitan($consume_titan)
@@ -367,7 +371,7 @@ class BuildingType extends Entity
     
     public function getConsumeTitan()
     {
-        return $this->consume_titan;
+        return $this->consume_titan != null ? $this->consume_titan : 0;
     }
     
     public function setConsumeDarkmatter($consume_darkmatter)
@@ -377,7 +381,7 @@ class BuildingType extends Entity
     
     public function getConsumeDarkmatter()
     {
-        return $this->consume_darkmatter;
+        return $this->consume_darkmatter != null ? $this->consume_darkmatter : 0;
     }
     
     public function setConsumeRedmatter($consume_redmatter)
@@ -387,7 +391,7 @@ class BuildingType extends Entity
     
     public function getConsumeRedmatter()
     {
-        return $this->consume_redmatter;
+        return $this->consume_redmatter != null ? $this->consume_redmatter : 0;
     }
     
     public function setConsumeAnti($consume_anti)
@@ -397,7 +401,7 @@ class BuildingType extends Entity
     
     public function getConsumeAnti()
     {
-        return $this->consume_anti;
+        return $this->consume_anti != null ? $this->consume_anti : 0;
     }
     
     public function setConsumeElectricity($consume_electricity)
@@ -407,9 +411,9 @@ class BuildingType extends Entity
     
     public function getConsumeElectricity()
     {
-        return $this->consume_electricity;
+        return $this->consume_electricity != null ? $this->consume_electricity : 0;
     }
-    
+
     public function setPicture($picture)
     {
         $this->picture = $picture;
@@ -418,6 +422,61 @@ class BuildingType extends Entity
     public function getPicture()
     {
         return $this->picture;
+    }
+    
+    public function getConsumeAll()
+    {
+        $metall         = $this->getConsumeMetall();
+        $heavygas       = $this->getConsumeHeavygas();
+        $ore            = $this->getConsumeOre();
+        $hydro          = $this->getConsumeHydro();
+        $titan          = $this->getConsumeTitan();
+        $darkmatter     = $this->getConsumeDarkmatter();
+        $redmatter      = $this->getConsumeRedmatter();
+        $anti           = $this->getConsumeAnti();
+        return ($metall + $heavygas + $ore + $hydro + $titan + $darkmatter + $redmatter + $anti);
+    }
+    
+    public function getCurrentBuilding($currentPlanet, $currentSputnik, $buildingRepository)
+    {
+        if($currentPlanet)
+            $criteria = 'buildings.planet = ' . $currentPlanet->getId() . ' AND buildings.name = "' . $this->name . '"';
+        else
+            $criteria = 'buildings.sputnik = ' . $currentPlanet->getId() . ' AND buildings.name = "' . $this->name . '"';
+        try{
+            if($building = $buildingRepository->findOneBy($criteria)){
+                return $building;
+            }
+            else{
+                return false;
+            }
+        }
+        catch(\Exception $e){
+            return false;
+        }
+    }
+    
+    public function getCurrentLevel($currentPlanet, $currentSputnik, $buildingRepository)
+    {
+        if($building = $this->getCurrentBuilding($currentPlanet, $currentSputnik, $buildingRepository)){
+            return $building->getLevel();
+        }
+        else{
+            return 0;
+        }
+    }
+    
+    public function getBuildingPeriod($currentPlanet, $currentSputnik, $buildingRepository)
+    {
+        $level = $this->getCurrentLevel($currentPlanet, $currentSputnik, $buildingRepository) + 1;
+        if($building = $this->getCurrentBuilding($currentPlanet, $currentSputnik, $buildingRepository)){
+            $K = $this->factor * $level;
+            $time = intval(ceil($K * $this->getConsumeAll() / 30));
+            return TimeUtils::time2Interval($time);
+        }
+        else{
+            return 0;
+        }
     }
     
 }

@@ -130,6 +130,33 @@ class EventRepository implements EntityRepositoryInterface
                     'sputniks.electricity'       => 'electricity',
                     'sputniks.owner'             => 'owner'
                 ],
+                Select::JOIN_LEFT)
+            ->join(['bt' => 'building_types'], 'events.targetBuildingType = bt.id',
+                [
+                    'building_types.id'                 => 'id',
+                    'building_types.name'               => 'name',
+                    'building_types.description'        => 'description',
+                    'building_types.type'               => 'type',
+                    'building_types.produce_metall'     => 'produce_metall',
+                    'building_types.produce_heavygas'   => 'produce_heavygas',
+                    'building_types.produce_ore'        => 'produce_ore',
+                    'building_types.produce_hydro'      => 'produce_hydro',
+                    'building_types.produce_titan'      => 'produce_titan',
+                    'building_types.produce_darkmatter' => 'produce_darkmatter',
+                    'building_types.produce_redmatter'  => 'produce_redmatter',
+                    'building_types.produce_anti'       => 'produce_anti',
+                    'building_types.produce_electricity'=> 'produce_electricity',
+                    'building_types.consume_metall'     => 'consume_metall',
+                    'building_types.consume_heavygas'   => 'consume_heavygas',
+                    'building_types.consume_ore'        => 'consume_ore',
+                    'building_types.consume_hydro'      => 'consume_hydro',
+                    'building_types.consume_titan'      => 'consume_titan',
+                    'building_types.consume_darkmatter' => 'consume_darkmatter',
+                    'building_types.consume_redmatter'  => 'consume_redmatter',
+                    'building_types.consume_anti'       => 'consume_anti',
+                    'building_types.consume_electricity'=> 'consume_electricity',
+                    'building_types.picture'            => 'picture'
+                ],
                 Select::JOIN_LEFT);
         if($criteria) {
             $select->where($criteria);
@@ -224,6 +251,33 @@ class EventRepository implements EntityRepositoryInterface
                     'sputniks.mineral_anti'      => 'mineral_anti',
                     'sputniks.electricity'       => 'electricity',
                     'sputniks.owner'             => 'owner'
+                ],
+                Select::JOIN_LEFT)
+            ->join(['bt' => 'building_types'], 'events.targetBuildingType = bt.id',
+                [
+                    'building_types.id'                 => 'id',
+                    'building_types.name'               => 'name',
+                    'building_types.description'        => 'description',
+                    'building_types.type'               => 'type',
+                    'building_types.produce_metall'     => 'produce_metall',
+                    'building_types.produce_heavygas'   => 'produce_heavygas',
+                    'building_types.produce_ore'        => 'produce_ore',
+                    'building_types.produce_hydro'      => 'produce_hydro',
+                    'building_types.produce_titan'      => 'produce_titan',
+                    'building_types.produce_darkmatter' => 'produce_darkmatter',
+                    'building_types.produce_redmatter'  => 'produce_redmatter',
+                    'building_types.produce_anti'       => 'produce_anti',
+                    'building_types.produce_electricity'=> 'produce_electricity',
+                    'building_types.consume_metall'     => 'consume_metall',
+                    'building_types.consume_heavygas'   => 'consume_heavygas',
+                    'building_types.consume_ore'        => 'consume_ore',
+                    'building_types.consume_hydro'      => 'consume_hydro',
+                    'building_types.consume_titan'      => 'consume_titan',
+                    'building_types.consume_darkmatter' => 'consume_darkmatter',
+                    'building_types.consume_redmatter'  => 'consume_redmatter',
+                    'building_types.consume_anti'       => 'consume_anti',
+                    'building_types.consume_electricity'=> 'consume_electricity',
+                    'building_types.picture'            => 'picture'
                 ],
                 Select::JOIN_LEFT);
         $select->where($criteria ? $criteria : ['events.id = ?' => $id]);

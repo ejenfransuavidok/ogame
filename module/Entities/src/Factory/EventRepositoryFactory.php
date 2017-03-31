@@ -7,6 +7,7 @@ use Entities\Model\Event;
 use Entities\Model\EventRepository;
 use Entities\Model\Hydrator\EventHydrator;
 use Entities\Model\UserRepository;
+use Entities\Model\BuildingTypeRepository;
 use Universe\Model\StarRepository;
 use Universe\Model\GalaxyRepository;
 use Universe\Model\PlanetSystemRepository;
@@ -26,8 +27,9 @@ class EventRepositoryFactory implements FactoryInterface
                 $container->get(PlanetRepository::class),
                 $container->get(SputnikRepository::class),
                 $container->get(StarRepository::class),
-                $container->get(UserRepository::class)),
-            new Event(null,null,null,null,null,null,null,null,null,null)
+                $container->get(UserRepository::class),
+                $container->get(BuildingTypeRepository::class)),
+            new Event(null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }

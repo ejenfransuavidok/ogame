@@ -36,7 +36,8 @@
             "Entities\\": "module/Entities/src/",
             "Flight\\": "module/Flight/src/",
             "App\\": "module/App/src/",
-            "Cron\\": "module/Cron/src/"
+            "Cron\\": "module/Cron/src/",
+            "Eventer\\": "module/Eventer/src/"
         }
     },
     "autoload-dev": {

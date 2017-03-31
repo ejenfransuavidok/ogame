@@ -21,11 +21,15 @@
 							<div class="tabs__content js-scroll-hor">
 								<div class="build__list">
                                     <?php foreach($source_buildings as $building) : ?>
-                                    <div class="build__item" data-entity="srcbuilding" data-identifier="<?= $building->getId() ?>">
+                                    <div class="build__item" 
+                                        data-entity="srcbuilding" 
+                                        data-identifier="<?= $building->getId() ?>"
+                                        data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
+                                        data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>">
 										<div class="keep__item clr_red">
 											<?= $building->getPicture() ?>
 											<div class="keep__item-text"><span data-entity="keep__item-text"><?= $building->getName() ?></span></div>
-											<div class="keep__item-lvl"><span>lv. 3</span></div>
+											<div class="keep__item-lvl"><span>lv. <?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?></span></div>
 										</div>
                                         <div style="display:none;" data-entity="building-description"><?= $building->getDescription() ?></div>
                                     </div>
@@ -46,7 +50,7 @@
                                          data-entity="popup_building-popup__pp-layout-popup__pp-content-title">
                                         Ракетостроительный<br>завод&nbsp;<span class="btn btn_lvl">lv.1</span>
                                     </div>
-									<div class="popup__pp-content__text">Время исследования : <span class="clr_white">40m 0c</span></div>
+									<div class="popup__pp-content__text">Время исследования : <span data-entity="popup_building-popup__pp-layout-popup__pp-building-period" class="clr_white">40m 0c</span></div>
 									<div class="popup__pp-content__text"
                                          data-entity="popup_building-popup__pp-layout-popup__pp-content-description">
                                          Будет освоено производство межконтинентальных ракет баллистических и оперативно - тактических ракет для комплексов "Ярс-М", "Булава" и "Искандер"

@@ -12,6 +12,10 @@ var _ogSources_updater = require('og.sources_updater.js');
 
 var _ogPopup_building = require('og.popup_building.js');
 
+var _ogDb_eventer = require('og.db_eventer.js');
+
+var _ogFleet_ = require('og.fleet_1.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var JQueryStarter = function () {
@@ -60,6 +64,9 @@ var Main = function () {
             //this.buildings = new Buildings();
             this.source_updater = new _ogSources_updater.SrcUpdater();
             this.popup_building_handler = new _ogPopup_building.PopupBuilding();
+            this.popup_fleet_1_handler = new _ogFleet_.Fleet_1();
+
+            this.dbeventer = new _ogDb_eventer.DBEventer(this.popup_building_handler);
         }
     }]);
 

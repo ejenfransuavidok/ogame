@@ -10,7 +10,10 @@ use App\Controller\AuthController;
 use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
 use Universe\Model\PlanetRepository;
+use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingTypeRepository;
+use Entities\Model\EventCommand;
+use Entities\Model\EventRepository;
 
 class IndexControllerFactory implements FactoryInterface
 {
@@ -30,7 +33,10 @@ class IndexControllerFactory implements FactoryInterface
                 $container->get(UserCommand::class)
             ),
             $container->get(PlanetRepository::class),
-            $container->get(BuildingTypeRepository::class)
+            $container->get(BuildingRepository::class),
+            $container->get(BuildingTypeRepository::class),
+            $container->get(EventRepository::class),
+            $container->get(EventCommand::class)
         );
     }
 }

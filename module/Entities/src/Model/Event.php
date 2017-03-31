@@ -52,35 +52,60 @@ class Event extends Entity
      */
     protected $target_sputnik;
     
+    /**
+     * @ BuildingType
+     */
+    protected $targetBuildingType;
+    
+    /**
+     * @ int
+     */
+    protected $targetLevel;
     
     
-    public function __construct($name, $description, $user, $event_type, $event_begin, $event_end, $target_star, $target_planet, $target_sputnik, $id=null)
+    public function __construct(
+        $name, 
+        $description, 
+        $user, 
+        $event_type, 
+        $event_begin, 
+        $event_end, 
+        $target_star, 
+        $target_planet, 
+        $target_sputnik, 
+        $targetBuildingType,
+        $targetLevel,
+        $id=null)
     {
         parent::__construct(self::TABLE_NAME);
-        $this->name             = $name;
-        $this->description      = $description;
-        $this->user             = $user;
-        $this->event_type       = $event_type;
-        $this->event_begin      = $event_begin;
-        $this->event_end        = $event_end;
-        $this->target_star      = $target_star;
-        $this->target_planet    = $target_planet;
-        $this->target_sputnik   = $target_sputnik;
-        $this->id               = $id;
+        $this->name                 = $name;
+        $this->description          = $description;
+        $this->user                 = $user;
+        $this->event_type           = $event_type;
+        $this->event_begin          = $event_begin;
+        $this->event_end            = $event_end;
+        $this->target_star          = $target_star;
+        $this->target_planet        = $target_planet;
+        $this->target_sputnik       = $target_sputnik;
+        $this->targetBuildingType   = $targetBuildingType;
+        $this->targetLevel          = $targetLevel;
+        $this->id                   = $id;
     }
     
     public function exchangeArray(array $data, $prefix = '')
     {
-        $this->id               = !empty($data[$prefix.'id']) ? $data[$prefix.'id'] : null;
-        $this->name             = !empty($data[$prefix.'name']) ? $data[$prefix.'name'] : null;
-        $this->description      = !empty($data[$prefix.'description']) ? $data[$prefix.'description'] : null;
-        $this->user             = !empty($data[$prefix.'user']) ? $data[$prefix.'user'] : null;
-        $this->event_type       = !empty($data[$prefix.'event_type']) ? $data[$prefix.'event_type'] : null;
-        $this->event_begin      = !empty($data[$prefix.'event_begin']) ? $data[$prefix.'event_begin'] : null;
-        $this->event_end        = !empty($data[$prefix.'event_end']) ? $data[$prefix.'event_end'] : null;
-        $this->target_star      = !empty($data[$prefix.'target_star']) ? $data[$prefix.'target_star'] : null;
-        $this->target_planet    = !empty($data[$prefix.'target_planet']) ? $data[$prefix.'target_planet'] : null;
-        $this->target_sputnik   = !empty($data[$prefix.'target_sputnik']) ? $data[$prefix.'target_sputnik'] : null;
+        $this->id                   = !empty($data[$prefix.'id']) ? $data[$prefix.'id'] : null;
+        $this->name                 = !empty($data[$prefix.'name']) ? $data[$prefix.'name'] : null;
+        $this->description          = !empty($data[$prefix.'description']) ? $data[$prefix.'description'] : null;
+        $this->user                 = !empty($data[$prefix.'user']) ? $data[$prefix.'user'] : null;
+        $this->event_type           = !empty($data[$prefix.'event_type']) ? $data[$prefix.'event_type'] : null;
+        $this->event_begin          = !empty($data[$prefix.'event_begin']) ? $data[$prefix.'event_begin'] : null;
+        $this->event_end            = !empty($data[$prefix.'event_end']) ? $data[$prefix.'event_end'] : null;
+        $this->target_star          = !empty($data[$prefix.'target_star']) ? $data[$prefix.'target_star'] : null;
+        $this->target_planet        = !empty($data[$prefix.'target_planet']) ? $data[$prefix.'target_planet'] : null;
+        $this->target_sputnik       = !empty($data[$prefix.'target_sputnik']) ? $data[$prefix.'target_sputnik'] : null;
+        $this->targetBuildingType   = !empty($data[$prefix.'targetBuildingType']) ? $data[$prefix.'targetBuildingType'] : null;
+        $this->targetLevel          = !empty($data[$prefix.'targetLevel']) ? $data[$prefix.'targetLevel'] : null;
     }
     
     public function getArrayCopy()
@@ -156,6 +181,26 @@ class Event extends Entity
     public function getTargetSputnik()
     {
         return $this->target_sputnik;
+    }
+    
+    public function getTargetBuildingType()
+    {
+        return $this->targetBuildingType;
+    }
+    
+    public function setTargetBuildingType($targetBuildingType)
+    {
+        $this->targetBuildingType = $targetBuildingType;
+    }
+    
+    public function getTargetLevel()
+    {
+        return $this->targetLevel;
+    }
+    
+    public function setTargetLevel($targetLevel)
+    {
+        $this->targetLevel = $targetLevel;
     }
     
 }

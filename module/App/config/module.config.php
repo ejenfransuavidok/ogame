@@ -81,6 +81,17 @@ return [
                         ],
                     ],
                     
+                    'planetkeep' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/planetkeep',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action' => 'planetkeep',
+                            ],
+                        ],
+                    ],
+                    
                 ],
             ],
         ],

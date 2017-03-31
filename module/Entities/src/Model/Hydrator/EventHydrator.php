@@ -6,6 +6,7 @@ use Universe\Model\PlanetRepository;
 use Universe\Model\SputnikRepository;
 use Entities\Model\UserRepository;
 use Entities\Model\Event;
+use Entities\Model\BuildingTypeRepository;
 use Zend\Hydrator\Exception\BadMethodCallException;
 use Zend\Hydrator\HydratorInterface;
 
@@ -31,16 +32,24 @@ class EventHydrator implements HydratorInterface
      */
     private $userRepository;
     
+    /**
+     * @ BuildingTypeRepository
+     */
+    private $buildingTypeRepository;
+    
+    
     public function __construct(
         PlanetRepository $planetRepository,
         SputnikRepository $sputnikRepository,
         StarRepository $starRepository,
-        UserRepository $userRepository)
+        UserRepository $userRepository,
+        BuildingTypeRepository $buildingTypeRepository)
     {
         $this->planetRepository = $planetRepository;
         $this->sputnikRepository = $sputnikRepository;
         $this->starRepository = $starRepository;
         $this->userRepository = $userRepository;
+        $this->buildingTypeRepository = $buildingTypeRepository;
     }
     
     /**
@@ -59,12 +68,13 @@ class EventHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $event = new Event(null,null,null,null,null,null,null,null,null,null);
+        $event = new Event(null,null,null,null,null,null,null,null,null,null,null,null);
         $event->exchangeArray($data);
         $user_id = $event->getUser();
         $star_id = $event->getTargetStar();
         $planet_id = $event->getTargetPlanet();
         $sputnik_id = $event->getTargetSputnik();
+        $target_building_type_id = $event->getTargetBuildingType();
         try {
             $user = $this->userRepository->findEntity($user_id);
         }
@@ -89,11 +99,17 @@ class EventHydrator implements HydratorInterface
         catch (\Exception $e) {
             $sputnik = null;
         }
+        try {
+            $targetBuildingType = $this->buildingTypeRepository->findEntity($target_building_type_id);
+        }
+        catch (\Exception $e) {
+            $targetBuildingType = null;
+        }
         $event->setUser($user);
         $event->setTargetStar($star);
         $event->setTargetPlanet($planet);
         $event->setTargetSputnik($sputnik);
-        
+        $event->setTargetBuildingType($targetBuildingType);
         return $event;
     }
     
