@@ -600,14 +600,9 @@ class BuildingType extends Entity
     public function getBuildingPeriod($currentPlanet, $currentSputnik, $buildingRepository)
     {
         $level = $this->getCurrentLevel($currentPlanet, $currentSputnik, $buildingRepository) + 1;
-        if($building = $this->getCurrentBuilding($currentPlanet, $currentSputnik, $buildingRepository)){
-            $K = $this->factor * $level;
-            $time = intval(ceil($K * $this->getConsumeAll() / 30));
-            return TimeUtils::time2Interval($time);
-        }
-        else{
-            return 0;
-        }
+        $K = $this->factor * $level;
+        $time = intval(ceil($K * $this->getConsumeAll() / 30));
+        return TimeUtils::time2Interval($time);
     }
     
 }

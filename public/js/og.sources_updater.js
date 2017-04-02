@@ -41,6 +41,16 @@ var SrcUpdater = exports.SrcUpdater = function () {
                                     if (Object.keys(values).length) {
                                         for (var key in values) {
                                             $('[data-resources=' + key + ']').text(values[key]);
+                                            var val = parseInt(values[key]);
+                                            if (val > 1000000) {
+                                                val = Math.ceil(val / 1000000);
+                                                $('[data-resources_min=' + key + ']').text(val + 'm');
+                                            } else if (val > 1000) {
+                                                val = Math.ceil(val / 1000);
+                                                $('[data-resources_min=' + key + ']').text(val + 'k');
+                                            } else {
+                                                $('[data-resources_min=' + key + ']').text(val);
+                                            }
                                         }
                                     }
                                 } else {

@@ -9,6 +9,8 @@
 
 namespace Universe\Model;
 
+use Universe\Classes\Prettier;
+
 class Planet extends CelestialBody
 {
     const TABLE_NAME = 'planets';
@@ -304,4 +306,51 @@ class Planet extends CelestialBody
         return $this->owner;
     }
     
+    /**
+     * @ pretty
+     */
+    public function getMetallPretty()
+    {
+        return Prettier::doIt($this->mineral_metall != null ? $this->mineral_metall : 0);
+    }
+    
+    public function getHeavyGasPretty()
+    {
+        return Prettier::doIt($this->mineral_heavygas != null ? $this->mineral_heavygas : 0);
+    }
+    
+    public function getOrePretty()
+    {
+        return Prettier::doIt($this->mineral_ore != null ? $this->mineral_ore : 0);
+    }
+    
+    public function getHydroPretty()
+    {
+        return Prettier::doIt($this->mineral_hydro != null ? $this->mineral_hydro : 0);
+    }
+    
+    public function getTitanPretty()
+    {
+        return Prettier::doIt($this->mineral_titan != null ? $this->mineral_titan : 0);
+    }
+    
+    public function getDarkmatterPretty()
+    {
+        return Prettier::doIt($this->mineral_darkmatter != null ? $this->mineral_darkmatter : 0);
+    }
+    
+    public function getRedmatterPretty()
+    {
+        return Prettier::doIt($this->mineral_redmatter != null ? $this->mineral_redmatter : 0);
+    }
+    
+    public function getAntiPretty()
+    {
+        return Prettier::doIt($this->mineral_anti != null ? $this->mineral_anti : 0);
+    }
+    
+    public function getElectricityPretty()
+    {
+        return Prettier::doIt($this->electricity != null ? $this->electricity : 0);
+    }
 }
