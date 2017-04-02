@@ -12,14 +12,6 @@ $(function(){
 
 
 
-
-		//
-
-		theGame.fleetRangeSlider.init();
-
-
-
-
 		$('body')
 
 			.on('click', function (e) {
@@ -182,7 +174,6 @@ $(function(){
 				e.preventDefault();
 				$(this).closest('form').submit();
 			})
-/*
 			.on('submit', '.game__login-form', function(e){
 				e.preventDefault();
 				var $form = $(this);
@@ -227,7 +218,7 @@ $(function(){
 					});
 				}
 			})
-*/
+
 
 
 
@@ -241,6 +232,18 @@ $(function(){
 					.find('.planet__item-all')
 					.slideToggle(200, function(){
 						$t.closest('.planet__item').toggleClass('is-open');
+					})
+				;
+			})
+
+			.on('click', '.force__item-name-title', function(e){
+				var $t = $(this);
+
+				$t
+					.closest('.force__item')
+					.find('.force__item-all')
+					.slideToggle(200, function(){
+						$t.closest('.force__item').toggleClass('is-open');
 					})
 				;
 			})
@@ -288,6 +291,7 @@ $(function(){
 				}
 			})
 
+
 		;
 
 	}
@@ -297,9 +301,6 @@ $(function(){
 (function(){
 	var app = {
 		module: {
-
-
-
 
 
 			checkForm: function(form){
@@ -521,57 +522,61 @@ $(function(){
 							rMax = $t.data('range-max'),
 							rStart = +$counter.find('.counter__value').text() * $t.data('range-max') / 100;
 
-						$wrap.find('.range__current').html(rStart + ' ' + $t.data('range-val'));
-						$wrap.find('.range__max').html($t.data('range-max') + ' ' + $t.data('range-val'));
+						if ( !$t.hasClass('is-inited')){
+							$t.addClass('is-inited')
 
-						noUiSlider.create(slider, {
-							margin: 1,
-							step: 1,
-							start: rStart,
-							connect: [true, false],
-							range: {
-								'min': 0,
-								'max': rMax
+							$wrap.find('.range__current').html(rStart + ' ' + $t.data('range-val'));
+							$wrap.find('.range__max').html($t.data('range-max') + ' ' + $t.data('range-val'));
+
+							noUiSlider.create(slider, {
+								margin: 1,
+								step: 1,
+								start: rStart,
+								connect: [true, false],
+								range: {
+									'min': 0,
+									'max': rMax
+								}
+							});
+
+							slider.noUiSlider.on('change', function ( values, handle ) {
+							});
+
+							slider.noUiSlider.on('slide', function ( values, handle ) {
+								$wrap.find('.range__current').html(parseInt(values[0]) + ' ' + $t.data('range-val'));
+								$counter.find('.counter__value').text(parseInt((100 * values[0])/ rMax));
+							});
+
+							$counter.on('click', '.counter__up', function(){
+								var val = +$counter.find('.counter__value').text();
+
+								if ( val < 100 ){
+									val++;
+									setValue(val);
+								}
+
+
+							}).on('click', '.counter__down', function(){
+								var val = +$counter.find('.counter__value').text();
+
+								if ( val > 0 ){
+									val--;
+									setValue(val);
+								}
+
+							});
+
+							function setValue(val){
+
+								$counter.find('.counter__value').text(val);
+
+								var range = rMax / 100 * val;
+								$wrap.find('.range__current').html(parseInt(range) + ' ' + $t.data('range-val'));
+
+
+								console.info($t.data('range-val'));
+								$slider[0].noUiSlider.set([range]);
 							}
-						});
-
-						slider.noUiSlider.on('change', function ( values, handle ) {
-						});
-
-						slider.noUiSlider.on('slide', function ( values, handle ) {
-							$wrap.find('.range__current').html(parseInt(values[0]) + ' ' + $t.data('range-val'));
-							$counter.find('.counter__value').text(parseInt((100 * values[0])/ rMax));
-						});
-
-						$counter.on('click', '.counter__up', function(){
-							var val = +$counter.find('.counter__value').text();
-
-							if ( val < 100 ){
-								val++;
-								setValue(val);
-							}
-
-
-						}).on('click', '.counter__down', function(){
-							var val = +$counter.find('.counter__value').text();
-
-							if ( val > 0 ){
-								val--;
-								setValue(val);
-							}
-
-						});
-
-						function setValue(val){
-
-							$counter.find('.counter__value').text(val);
-
-							var range = rMax / 100 * val;
-							$wrap.find('.range__current').html(parseInt(range) + ' ' + $t.data('range-val'));
-
-
-							console.info($t.data('range-val'));
-							$slider[0].noUiSlider.set([range]);
 						}
 
 
@@ -746,45 +751,53 @@ $(function(){
 						});
 					}
 				}
+			},
+
+			tabs: {
+				init: function(){
+					$('body')
+						.on('click', '[data-tab-link]', function(e){
+							/**
+							 * data-tab-link='name_1', data-tab-group='names'
+							 * data-tab-targ='name_1', data-tab-group='names'
+							 **/
+							e.preventDefault();
+							var $t = $(this);
+							var group = $t.data('tab-group');
+							var $links = $('[data-tab-link]').filter(selectGroup);
+							var $tabs = $('[data-tab-targ]').filter(selectGroup);
+							var ind = $t.data('tab-link');
+							var $tabItem = $('[data-tab-targ='+ind+']').filter(selectGroup);
+
+							if( !$t.hasClass('active')){
+								$links.removeClass('active');
+								$t.addClass('active');
+								$tabs.fadeOut(150);
+								setTimeout(function(){
+									$tabs.removeClass('active');
+									$tabItem.fadeIn(150, function(){
+										$(this).addClass('active');
+									});
+								}, 150)
+							}
+
+							function selectGroup(){
+								return $(this).data('tab-group') === group;
+							}
+
+						})
+					;
+				}
+			},
+
+			plugs:{
+				update: function(){
+					theGame.fleetRangeSlider.init();
+					self.scrollBar.init('.js-scroll-wrap', 'v');
+					self.scrollBar.init('.js-scroll-hor', 'h');
+				}
 			}
 
-		},
-
-		tabs: {
-			init: function(){
-				$('body')
-					.on('click', '[data-tab-link]', function(e){
-						/**
-						 * data-tab-link='name_1', data-tab-group='names'
-						 * data-tab-targ='name_1', data-tab-group='names'
-						 **/
-						e.preventDefault();
-						var $t = $(this);
-						var group = $t.data('tab-group');
-						var $links = $('[data-tab-link]').filter(selectGroup);
-						var $tabs = $('[data-tab-targ]').filter(selectGroup);
-						var ind = $t.data('tab-link');
-						var $tabItem = $('[data-tab-targ='+ind+']').filter(selectGroup);
-
-						if( !$t.hasClass('active')){
-							$links.removeClass('active');
-							$t.addClass('active');
-							$tabs.fadeOut(150);
-							setTimeout(function(){
-								$tabs.removeClass('active');
-								$tabItem.fadeIn(150, function(){
-									$(this).addClass('active');
-								});
-							}, 150)
-						}
-
-						function selectGroup(){
-							return $(this).data('tab-group') === group;
-						}
-
-					})
-				;
-			}
 		},
 
 		init: function() {
@@ -793,8 +806,7 @@ $(function(){
 			self.popup.init();
 			self.fsRem.init();
 			self.tooltip.init();
-			self.scrollBar.init('.js-scroll-wrap', 'v');
-			self.scrollBar.init('.js-scroll-hor', 'h');
+			self.plugs.update();
 			//self.bottomStick.init('.js-bottom-stick');
 
 			//$('[data-required=phone]').mask('+7 (999) 999-99-99');

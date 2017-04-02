@@ -337,13 +337,20 @@ class TechLoadController extends AbstractActionController
             'consume_redmatter'         =>  'Потребление красной материи',
             'consume_anti'              =>  'Потребление антивещества',
             'consume_electricity'       =>  'Потребление электричества',
+            'capacity_metall'           =>  'Вместимость хранилища металла',
+            'capacity_heavygas'         =>  'Вместимость хранилища тяжёлого газа',
+            'capacity_ore'              =>  'Вместимость хранилища руды',
+            'capacity_hydro'            =>  'Вместимость хранилища водорода',
+            'capacity_titan'            =>  'Вместимость хранилища титана',
+            'capacity_darkmatter'       =>  'Вместимость хранилища ТМ',
+            'capacity_redmatter'        =>  'Вместимость хранилища КМ',
             'factor'                    =>  'Фактор',
             'picture'                   =>  'Картинка',
             'description'               =>  'Описание');
         $parser = new XmlParser();
         $result = $parser->parse($file);
-        if(!is_array($result) && count($result) != 22){
-            throw new FormatFailXml('data is not array or array size != 20');
+        if(!is_array($result) && count($result) != 29){
+            throw new FormatFailXml('data is not array or array size != 29');
         }
         else{
             $entities = array();
@@ -397,6 +404,13 @@ class TechLoadController extends AbstractActionController
                             $one['consume_redmatter'],
                             $one['consume_anti'],
                             $one['consume_electricity'],
+                            $one['capacity_metall'],
+                            $one['capacity_heavygas'],
+                            $one['capacity_ore'],
+                            $one['capacity_hydro'],
+                            $one['capacity_titan'],
+                            $one['capacity_darkmatter'],
+                            $one['capacity_redmatter'],
                             $one['picture']);
                         /**
                          * 3. сохраним в БД

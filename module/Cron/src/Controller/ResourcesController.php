@@ -88,7 +88,7 @@ class ResourcesController extends AbstractActionController
                     $electricity = 0;
                     foreach($this->buildingRepository->findBy('buildings.planet = ' . $planet->getId() . ' AND buildings.type = ' . Building::$BUILDING_RESOURCE) as $building){
                         $update = $building->getUpdate();
-                        $electricity = $electricity + $building->getProduceElectricity() - $building->getConsumeElectricity;
+                        $electricity = $electricity + $building->getProduceElectricity() - $building->getConsumeElectricity();
                         /**
                          * пришло время для обновления
                          */

@@ -73,6 +73,12 @@ var PopupBuilding = exports.PopupBuilding = function () {
             $(document).on('click', '[data-entity=popup_building-popup__pp-popup__pp-control-build-button]', function (evt) {
                 return _this2.build(evt);
             });
+            $(document).on('mousedown', '[data-popup_id=popup_building]', function (evt) {
+                var obj = $(evt.target).closest('.keep__item-preview');
+                var tab = $(obj).data('tab_open');
+                $('.popup_building').find('[data-building_tab]').removeClass('is-active');
+                $('.popup_building').find('[data-building_tab=resource]').addClass('is-active');
+            });
         }
     }, {
         key: 'install_reject_button_handler',
@@ -110,6 +116,7 @@ var PopupBuilding = exports.PopupBuilding = function () {
                                     $(data.popup_building).insertAfter('.game');
                                     _this4.start_continue_timer(data.event_id, data.begin, data.end, data.now);
                                     _this4.install_reject_button_handler(data.event_id);
+                                    window.theGame.plugs.update();
                                 } else {
                                     $.notify(data.message);
                                 }
@@ -131,7 +138,9 @@ var PopupBuilding = exports.PopupBuilding = function () {
             var _this5 = this;
 
             var obj = $(evt.target);
-            this.close_popup(obj);
+            window.theGame.popup.close('.popup');
+            $(obj).closest('.popup__pp').removeClass('is-open');
+            this.building_id = $(obj).closest('.popup__pp').data('building_id');
             $.ajax({
                 type: 'post',
                 url: '/eventer/initbuild',
@@ -160,12 +169,6 @@ var PopupBuilding = exports.PopupBuilding = function () {
                     }
                 }
             });
-        }
-    }, {
-        key: 'close_popup',
-        value: function close_popup(obj) {
-            $(obj).closest('.popup__pp').removeClass('is-open');
-            this.building_id = $(obj).closest('.popup__pp').data('building_id');
         }
     }, {
         key: 'src_building_select',

@@ -49,6 +49,7 @@ class BuildingTypeCommand implements EntityCommandInterface
             'description'          => $buildingType->getDescription(),
             'type'                 => $buildingType->getType(),
             'factor'               => $buildingType->getFactor(),
+            
             'produce_metall'       => $buildingType->getProduceMetall(),
             'produce_heavygas'     => $buildingType->getProduceHeavygas(),
             'produce_ore'          => $buildingType->getProduceOre(),
@@ -58,6 +59,7 @@ class BuildingTypeCommand implements EntityCommandInterface
             'produce_redmatter'    => $buildingType->getProduceRedmatter(),
             'produce_anti'         => $buildingType->getProduceAnti(),
             'produce_electricity'  => $buildingType->getProduceElectricity(),
+            
             'consume_metall'       => $buildingType->getConsumeMetall(),
             'consume_heavygas'     => $buildingType->getConsumeHeavygas(),
             'consume_ore'          => $buildingType->getConsumeOre(),
@@ -67,6 +69,15 @@ class BuildingTypeCommand implements EntityCommandInterface
             'consume_redmatter'    => $buildingType->getConsumeRedmatter(),
             'consume_anti'         => $buildingType->getConsumeAnti(),
             'consume_electricity'  => $buildingType->getConsumeElectricity(),
+            
+            'capacity_metall'      => $buildingType->getCapacityMetall(),
+            'capacity_heavygas'    => $buildingType->getCapacityHeavygas(),
+            'capacity_ore'         => $buildingType->getCapacityOre(),
+            'capacity_hydro'       => $buildingType->getCapacityHydro(),
+            'capacity_titan'       => $buildingType->getCapacityTitan(),
+            'capacity_darkmatter'  => $buildingType->getCapacityDarkmatter(),
+            'capacity_redmatter'   => $buildingType->getCapacityRedmatter(),
+            
             'picture'              => $buildingType->getPicture()
         ]);
 
@@ -105,6 +116,15 @@ class BuildingTypeCommand implements EntityCommandInterface
             $buildingType->getConsumeAnti(),
             $buildingType->getConsumeRedmatter(),
             $buildingType->getConsumeElectricity(),
+            
+            $buildingType->getCapacityMetall(),
+            $buildingType->getCapacityHeavygas(),
+            $buildingType->getCapacityOre(),
+            $buildingType->getCapacityHydro(),
+            $buildingType->getCapacityTitan(),
+            $buildingType->getCapacityDarkmatter(),
+            $buildingType->getCapacityRedmatter(),
+            
             $buildingType->getPicture(),
             $result->getGeneratedValue()
         );
@@ -143,6 +163,15 @@ class BuildingTypeCommand implements EntityCommandInterface
             'consume_redmatter'    => $buildingType->getConsumeRedmatter(),
             'consume_anti'         => $buildingType->getConsumeAnti(),
             'consume_electricity'  => $buildingType->getConsumeElectricity(),
+
+            'capacity_metall'      => $buildingType->getCapacityMetall(),
+            'capacity_heavygas'    => $buildingType->getCapacityHeavygas(),
+            'capacity_ore'         => $buildingType->getCapacityOre(),
+            'capacity_hydro'       => $buildingType->getCapacityHydro(),
+            'capacity_titan'       => $buildingType->getCapacityTitan(),
+            'capacity_darkmatter'  => $buildingType->getCapacityDarkmatter(),
+            'capacity_redmatter'   => $buildingType->getCapacityRedmatter(),
+
             'picture'              => $buildingType->getPicture()
         ]);
         $update->where(['id = ?' => $buildingType->getId()]);

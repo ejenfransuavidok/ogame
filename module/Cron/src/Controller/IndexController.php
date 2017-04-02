@@ -186,7 +186,14 @@ class IndexController extends AbstractActionController
                                 $targetBuildingType->getConsumeDarkmatter(),
                                 $targetBuildingType->getConsumeRedmatter(),
                                 $targetBuildingType->getConsumeAnti(),
-                                $targetBuildingType->getConsumeElectricity()
+                                $targetBuildingType->getConsumeElectricity(),
+                                $targetBuildingType->getCapacityMetall(),
+                                $targetBuildingType->getCapacityHeavygas(),
+                                $targetBuildingType->getCapacityOre(),
+                                $targetBuildingType->getCapacityHydro(),
+                                $targetBuildingType->getCapacityTitan(),
+                                $targetBuildingType->getCapacityDarkmatter(),
+                                $targetBuildingType->getCapacityRedmatter()
                                 );
                             $building = $this->buildingCommand->insertEntity($building);
                         }

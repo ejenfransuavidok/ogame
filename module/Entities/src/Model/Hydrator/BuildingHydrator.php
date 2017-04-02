@@ -58,7 +58,7 @@ class BuildingHydrator implements HydratorInterface
             ));
         }
         
-        $building = new Building(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $building = new Building(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         $building->exchangeArray($data);
         $planet_id = $building->getPlanet();
         $sputnik_id = $building->getSputnik();

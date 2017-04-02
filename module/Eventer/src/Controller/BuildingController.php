@@ -156,8 +156,7 @@ class BuildingController extends AbstractActionController
          * @ переводим в объекты
          */
         $planet = $this->planetRepository->findOneBy($planet);
-        $buildingType = $this->buildingTypeRepository->findOneBy($buildingType);
-        
+        $buildingType = $this->buildingTypeRepository->findOneBy('building_types.id = ' . $buildingType);
         if($this->authController->isAuthorized()){
             $this->user = $this->authController->getUser();
             /**
@@ -182,12 +181,20 @@ class BuildingController extends AbstractActionController
                 /**
                  * @ есть ли на данной планете уже такое здание (поиск по имени)
                  */
-                if($building = $this->buildingRepository->findOneBy(
-                    'buildings.name = "' . $buildingType->getName() . '" AND buildings.planet = ' . $planet->getId())){
+                try{
+                    if($building = $this->buildingRepository->findOneBy(
+                        'buildings.name = "' . $buildingType->getName() . '" AND buildings.planet = ' . $planet->getId())){
+                        /**
+                         * @ здание есть, увеличиваем level
+                         */
+                        $level = $building->getLevel() + 1;
+                    }
+                }
+                catch(\Exception $e){
                     /**
-                     * @ здание есть, увеличиваем level
+                     * @ на случай, если таблица зданий пустая
                      */
-                    $level = $building->getLevel() + 1;
+                    $level = 1;
                 }
                 /**
                  * @ хватит ли ресурсов на планете
@@ -202,6 +209,41 @@ class BuildingController extends AbstractActionController
                 $redmatter      = $planet->getRedmatter()   - $buildingType->getConsumeRedmatter()  * $K;
                 $anti           = $planet->getAnti()        - $buildingType->getConsumeAnti()       * $K;
                 $electricity    = $planet->getElectricity() - $buildingType->getConsumeElectricity()* $K;
+                /*
+                print_r(array(
+                    'metall'        => $planet->getMetall(), 
+                    'hydro'         => $planet->getHydro(), 
+                    'heavygas'      => $planet->getHeavyGas(), 
+                    'ore'           => $planet->getOre(), 
+                    'hydro'         => $planet->getHydro(), 
+                    'titan'         => $planet->getTitan(), 
+                    'darkmatter'    => $planet->getDarkmatter(), 
+                    'redmatter'     => $planet->getRedmatter(),
+                    'anti'          => $planet->getAnti(), 
+                    'electricity'   => $planet->getElectricity()));
+                print_r(array(
+                    'metall'        => $buildingType->getConsumeMetall(), 
+                    'hydro'         => $buildingType->getConsumeHydro(), 
+                    'heavygas'      => $buildingType->getConsumeHeavygas(), 
+                    'ore'           => $buildingType->getConsumeOre(), 
+                    'hydro'         => $buildingType->getConsumeHydro(), 
+                    'titan'         => $buildingType->getConsumeTitan(), 
+                    'darkmatter'    => $buildingType->getConsumeDarkmatter(), 
+                    'redmatter'     => $buildingType->getConsumeRedmatter(),
+                    'anti'          => $buildingType->getConsumeAnti(), 
+                    'electricity'   => $buildingType->getConsumeElectricity()));
+                print_r(array(
+                    'metall'        => $metall, 
+                    'hydro'         => $hydro, 
+                    'heavygas'      => $heavygas, 
+                    'ore'           => $ore, 
+                    'hydro'         => $hydro, 
+                    'titan'         => $titan, 
+                    'darkmatter'    => $darkmatter, 
+                    'redmatter'     => $redmatter,
+                    'anti'          => $anti, 
+                    'electricity'   => $electricity));
+                */
                 if(
                     $metall      >= 0 && 
                     $heavygas    >= 0 && 
@@ -278,13 +320,11 @@ class BuildingController extends AbstractActionController
         if($this->authController->isAuthorized()){
             $this->user = $this->authController->getUser();
             try{
-                $event          = $this->eventRepository->findOneBy($event_id);
+                $event          = $this->eventRepository->findOneBy('events.id = ' . $event_id);
                 $buildingType   = $event->getTargetBuildingType();
                 $name           = $event->getName();
                 $planet         = $event->getTargetPlanet();
                 $level          = $event->getTargetLevel();
-                $building       = $this->buildingRepository->findOneBy(
-                    'buildings.name = "' . $name . '" AND buildings.planet = ' . $planet->getId());
                 /**
                  * удаляем событие
                  */
@@ -314,7 +354,7 @@ class BuildingController extends AbstractActionController
                 $view->setVariable('data', array('result' => 'YES', 'auth' => 'YES', 'message' => 'Строительство данного объекта отменено'));
             }
             catch(\Exception $e){
-                $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => 'Строительство данного объекта не ведется!'));
+                $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => 'Строительство данного объекта не ведется!', 'error' => $e->getMessage()));
             }
         }
         else{

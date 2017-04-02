@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -10,19 +10,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Popups = exports.Popups = function () {
     function Popups() {
-        var _this = this;
+        /*
+        if($('[data-popup_id=popup_building]').length) {
+            $(document).on('mousedown', '[data-popup_id=popup_building]', (evt) => this.popup_building(evt));
+        }
+        */
 
         _classCallCheck(this, Popups);
-
-        if ($('[data-popup_id=popup_building]').length) {
-            $(document).on('mousedown', '[data-popup_id=popup_building]', function (evt) {
-                return _this.popup_building(evt);
-            });
-        }
     }
 
     _createClass(Popups, [{
-        key: 'popup_building',
+        key: "popup_building",
         value: function popup_building(evt) {
             /*
             let obj = $(evt.target).closest('[data-popup_tab]');

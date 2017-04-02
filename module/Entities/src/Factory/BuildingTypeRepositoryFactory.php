@@ -19,7 +19,7 @@ class BuildingTypeRepositoryFactory implements FactoryInterface
         return new BuildingTypeRepository(
             $container->get(AdapterInterface::class),
             new ReflectionHydrator(),
-            new BuildingType(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+            new BuildingType(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }

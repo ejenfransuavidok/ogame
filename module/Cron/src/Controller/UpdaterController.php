@@ -109,7 +109,7 @@ class UpdaterController extends AbstractActionController
                     /**
                      * @ вернем планету
                      */
-                    $planet = $this->planetRepository->findOneBy($planet_id);
+                    $planet = $this->planetRepository->findOneBy('planets.id = ' . $planet_id);
                     $result = array();
                     $result['metall']       = $planet->getMetall()     ?   $planet->getMetall()         : 0;
                     $result['heavygas']     = $planet->getHeavygas()   ?   $planet->getHeavygas()       : 0;

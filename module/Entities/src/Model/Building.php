@@ -146,6 +146,41 @@ class Building extends Entity
      */
     protected $update;
     
+    /**
+     * @ int
+     */
+    protected $capacity_metall;
+    
+    /**
+     * @ int
+     */
+    protected $capacity_heavygas;
+    
+    /**
+     * @ int
+     */
+    protected $capacity_ore;
+    
+    /**
+     * @ int
+     */
+    protected $capacity_hydro;
+    
+    /**
+     * @ int
+     */
+    protected $capacity_titan;
+    
+    /**
+     * @ int
+     */
+    protected $capacity_darkmatter;
+    
+    /**
+     * @ int
+     */
+    protected $capacity_redmatter;
+    
     
     public function __construct(
         $name, 
@@ -175,6 +210,13 @@ class Building extends Entity
         $consume_redmatter,
         $consume_anti,
         $consume_electricity,
+        $capacity_metall,
+        $capacity_heavygas,
+        $capacity_ore,
+        $capacity_hydro,
+        $capacity_titan,
+        $capacity_darkmatter,
+        $capacity_redmatter,
         $id=null)
     {
         parent::__construct(self::TABLE_NAME);
@@ -205,39 +247,53 @@ class Building extends Entity
         $this->consume_redmatter    = $consume_redmatter;
         $this->consume_anti         = $consume_anti;
         $this->consume_electricity  = $consume_electricity;
+        $this->capacity_metall      = $capacity_metall;
+        $this->capacity_heavygas    = $capacity_heavygas;
+        $this->capacity_ore         = $capacity_ore;
+        $this->capacity_hydro       = $capacity_hydro;
+        $this->capacity_titan       = $capacity_titan;
+        $this->capacity_darkmatter  = $capacity_darkmatter;
+        $this->capacity_redmatter   = $capacity_redmatter;
         $this->id                   = $id;
     }
     
     public function exchangeArray(array $data, $prefix = '')
     {
-        $this->id                   = !empty($data[$prefix.'id']) ? $data[$prefix.'id'] : null;
-        $this->name                 = !empty($data[$prefix.'name']) ? $data[$prefix.'name'] : null;
-        $this->description          = !empty($data[$prefix.'description']) ? $data[$prefix.'description'] : null;
-        $this->planet               = !empty($data[$prefix.'planet']) ? $data[$prefix.'planet'] : null;
-        $this->sputnik              = !empty($data[$prefix.'sputnik']) ? $data[$prefix.'sputnik'] : null;
-        $this->owner                = !empty($data[$prefix.'owner']) ? $data[$prefix.'owner'] : null;
-        $this->level                = !empty($data[$prefix.'level']) ? $data[$prefix.'level'] : null;
-        $this->type                 = !empty($data[$prefix.'type']) ? $data[$prefix.'type'] : null;
-        $this->update               = !empty($data[$prefix.'update']) ? $data[$prefix.'update'] : null;
-        $this->factor               = !empty($data[$prefix.'factor']) ? $data[$prefix.'factor'] : null;
-        $this->produce_metall       = !empty($data[$prefix.'produce_metall']) ? $data[$prefix.'produce_metall'] : null;
-        $this->produce_heavygas     = !empty($data[$prefix.'produce_heavygas']) ? $data[$prefix.'produce_heavygas'] : null;
-        $this->produce_ore          = !empty($data[$prefix.'produce_ore']) ? $data[$prefix.'produce_ore'] : null;
-        $this->produce_hydro        = !empty($data[$prefix.'produce_hydro']) ? $data[$prefix.'produce_hydro'] : null;
-        $this->produce_titan        = !empty($data[$prefix.'produce_titan']) ? $data[$prefix.'produce_titan'] : null;
-        $this->produce_darkmatter   = !empty($data[$prefix.'produce_darkmatter']) ? $data[$prefix.'produce_darkmatter'] : null;
-        $this->produce_redmatter    = !empty($data[$prefix.'produce_redmatter']) ? $data[$prefix.'produce_redmatter'] : null;
-        $this->produce_anti         = !empty($data[$prefix.'produce_anti']) ? $data[$prefix.'produce_anti'] : null;
-        $this->produce_electricity  = !empty($data[$prefix.'produce_electricity']) ? $data[$prefix.'produce_electricity'] : null;
-        $this->consume_metall       = !empty($data[$prefix.'consume_metall']) ? $data[$prefix.'consume_metall'] : null;
-        $this->consume_heavygas     = !empty($data[$prefix.'consume_heavygas']) ? $data[$prefix.'consume_heavygas'] : null;
-        $this->consume_ore          = !empty($data[$prefix.'consume_ore']) ? $data[$prefix.'consume_ore'] : null;
-        $this->consume_hydro        = !empty($data[$prefix.'consume_hydro']) ? $data[$prefix.'consume_hydro'] : null;
-        $this->consume_titan        = !empty($data[$prefix.'consume_titan']) ? $data[$prefix.'consume_titan'] : null;
-        $this->consume_darkmatter   = !empty($data[$prefix.'consume_darkmatter']) ? $data[$prefix.'consume_darkmatter'] : null;
-        $this->consume_redmatter    = !empty($data[$prefix.'consume_redmatter']) ? $data[$prefix.'consume_redmatter'] : null;
-        $this->consume_anti         = !empty($data[$prefix.'consume_anti']) ? $data[$prefix.'consume_anti'] : null;
-        $this->consume_electricity  = !empty($data[$prefix.'consume_electricity']) ? $data[$prefix.'consume_electricity'] : null;
+        $this->id                   = !empty($data[$prefix.'id'])                   ? $data[$prefix.'id'] : null;
+        $this->name                 = !empty($data[$prefix.'name'])                 ? $data[$prefix.'name'] : null;
+        $this->description          = !empty($data[$prefix.'description'])          ? $data[$prefix.'description'] : null;
+        $this->planet               = !empty($data[$prefix.'planet'])               ? $data[$prefix.'planet'] : null;
+        $this->sputnik              = !empty($data[$prefix.'sputnik'])              ? $data[$prefix.'sputnik'] : null;
+        $this->owner                = !empty($data[$prefix.'owner'])                ? $data[$prefix.'owner'] : null;
+        $this->level                = !empty($data[$prefix.'level'])                ? $data[$prefix.'level'] : null;
+        $this->type                 = !empty($data[$prefix.'type'])                 ? $data[$prefix.'type'] : null;
+        $this->update               = !empty($data[$prefix.'update'])               ? $data[$prefix.'update'] : null;
+        $this->factor               = !empty($data[$prefix.'factor'])               ? $data[$prefix.'factor'] : null;
+        $this->produce_metall       = !empty($data[$prefix.'produce_metall'])       ? $data[$prefix.'produce_metall'] : null;
+        $this->produce_heavygas     = !empty($data[$prefix.'produce_heavygas'])     ? $data[$prefix.'produce_heavygas'] : null;
+        $this->produce_ore          = !empty($data[$prefix.'produce_ore'])          ? $data[$prefix.'produce_ore'] : null;
+        $this->produce_hydro        = !empty($data[$prefix.'produce_hydro'])        ? $data[$prefix.'produce_hydro'] : null;
+        $this->produce_titan        = !empty($data[$prefix.'produce_titan'])        ? $data[$prefix.'produce_titan'] : null;
+        $this->produce_darkmatter   = !empty($data[$prefix.'produce_darkmatter'])   ? $data[$prefix.'produce_darkmatter'] : null;
+        $this->produce_redmatter    = !empty($data[$prefix.'produce_redmatter'])    ? $data[$prefix.'produce_redmatter'] : null;
+        $this->produce_anti         = !empty($data[$prefix.'produce_anti'])         ? $data[$prefix.'produce_anti'] : null;
+        $this->produce_electricity  = !empty($data[$prefix.'produce_electricity'])  ? $data[$prefix.'produce_electricity'] : null;
+        $this->consume_metall       = !empty($data[$prefix.'consume_metall'])       ? $data[$prefix.'consume_metall'] : null;
+        $this->consume_heavygas     = !empty($data[$prefix.'consume_heavygas'])     ? $data[$prefix.'consume_heavygas'] : null;
+        $this->consume_ore          = !empty($data[$prefix.'consume_ore'])          ? $data[$prefix.'consume_ore'] : null;
+        $this->consume_hydro        = !empty($data[$prefix.'consume_hydro'])        ? $data[$prefix.'consume_hydro'] : null;
+        $this->consume_titan        = !empty($data[$prefix.'consume_titan'])        ? $data[$prefix.'consume_titan'] : null;
+        $this->consume_darkmatter   = !empty($data[$prefix.'consume_darkmatter'])   ? $data[$prefix.'consume_darkmatter'] : null;
+        $this->consume_redmatter    = !empty($data[$prefix.'consume_redmatter'])    ? $data[$prefix.'consume_redmatter'] : null;
+        $this->consume_anti         = !empty($data[$prefix.'consume_anti'])         ? $data[$prefix.'consume_anti'] : null;
+        $this->consume_electricity  = !empty($data[$prefix.'consume_electricity'])  ? $data[$prefix.'consume_electricity'] : null;
+        $this->capacity_metall      = !empty($data[$prefix.'capacity_metall'])      ? $data[$prefix.'capacity_metall'] : null;
+        $this->capacity_heavygas    = !empty($data[$prefix.'capacity_heavygas'])    ? $data[$prefix.'capacity_heavygas'] : null;
+        $this->capacity_ore         = !empty($data[$prefix.'capacity_ore'])         ? $data[$prefix.'capacity_ore'] : null;
+        $this->capacity_hydro       = !empty($data[$prefix.'capacity_hydro'])       ? $data[$prefix.'capacity_hydro'] : null;
+        $this->capacity_titan       = !empty($data[$prefix.'capacity_titan'])       ? $data[$prefix.'capacity_titan'] : null;
+        $this->capacity_darkmatter  = !empty($data[$prefix.'capacity_darkmatter'])  ? $data[$prefix.'capacity_darkmatter'] : null;
+        $this->capacity_redmatter   = !empty($data[$prefix.'capacity_redmatter'])   ? $data[$prefix.'capacity_redmatter'] : null;
     }
     
     public function getArrayCopy()
@@ -495,6 +551,76 @@ class Building extends Entity
     public function getConsumeElectricity()
     {
         return $this->consume_electricity != null ? $this->consume_electricity : 0;
+    }
+    
+    public function setCapacityMetall($capacity_metall)
+    {
+        $this->capacity_metall = $capacity_metall;
+    }
+    
+    public function getCapacityMetall()
+    {
+        return $this->capacity_metall;
+    }
+    
+    public function setCapacityHeavygas($capacity_heavygas)
+    {
+        $this->capacity_heavygas = $capacity_heavygas;
+    }
+    
+    public function getCapacityHeavygas()
+    {
+        return $this->capacity_heavygas;
+    }
+    
+    public function setCapacityOre($capacity_ore)
+    {
+        $this->capacity_ore = $capacity_ore;
+    }
+    
+    public function getCapacityOre()
+    {
+        return $this->capacity_ore;
+    }
+    
+    public function setCapacityHydro($capacity_hydro)
+    {
+        $this->capacity_hydro = $capacity_hydro;
+    }
+    
+    public function getCapacityHydro()
+    {
+        return $this->capacity_hydro;
+    }
+    
+    public function setCapacityTitan($capacity_titan)
+    {
+        $this->capacity_titan = $capacity_titan;
+    }
+    
+    public function getCapacityTitan()
+    {
+        return $this->capacity_titan;
+    }
+    
+    public function setCapacityDarkmatter($capacity_darkmatter)
+    {
+        $this->capacity_darkmatter = $capacity_darkmatter;
+    }
+    
+    public function getCapacityDarkmatter()
+    {
+        return $this->capacity_darkmatter;
+    }
+    
+    public function setCapacityRedmatter($capacity_redmatter)
+    {
+        $this->capacity_redmatter = $capacity_redmatter;
+    }
+    
+    public function getCapacityRedmatter()
+    {
+        return $this->capacity_redmatter;
     }
     
     public function getConsumeAll()

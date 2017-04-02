@@ -71,7 +71,14 @@ class BuildingCommand implements EntityCommandInterface
             'consume_darkmatter'   => $building->getConsumeDarkmatter(),
             'consume_redmatter'    => $building->getConsumeRedmatter(),
             'consume_anti'         => $building->getConsumeAnti(),
-            'consume_electricity'  => $building->getConsumeElectricity()
+            'consume_electricity'  => $building->getConsumeElectricity(),
+            'capacity_metall'      => $building->getCapacityMetall(),
+            'capacity_heavygas'    => $building->getCapacityHeavygas(),
+            'capacity_ore'         => $building->getCapacityOre(),
+            'capacity_hydro'       => $building->getCapacityHydro(),
+            'capacity_titan'       => $building->getCapacityTitan(),
+            'capacity_darkmatter'  => $building->getCapacityDarkmatter(),
+            'capacity_redmatter'   => $building->getCapacityRedmatter()
         ]);
 
         $sql = new Sql($this->db);
@@ -114,6 +121,13 @@ class BuildingCommand implements EntityCommandInterface
             $building->getConsumeAnti(),
             $building->getConsumeRedmatter(),
             $building->getConsumeElectricity(),
+            $building->getCapacityMetall(),
+            $building->getCapacityHeavygas(),
+            $building->getCapacityOre(),
+            $building->getCapacityHydro(),
+            $building->getCapacityTitan(),
+            $building->getCapacityDarkmatter(),
+            $building->getCapacityRedmatter(),
             $result->getGeneratedValue()
         );
     }
@@ -155,7 +169,14 @@ class BuildingCommand implements EntityCommandInterface
             'consume_darkmatter'   => $building->getConsumeDarkmatter(),
             'consume_redmatter'    => $building->getConsumeRedmatter(),
             'consume_anti'         => $building->getConsumeAnti(),
-            'consume_electricity'  => $building->getConsumeElectricity()
+            'consume_electricity'  => $building->getConsumeElectricity(),
+            'capacity_metall'      => $building->getCapacityMetall(),
+            'capacity_heavygas'    => $building->getCapacityHeavygas(),
+            'capacity_ore'         => $building->getCapacityOre(),
+            'capacity_hydro'       => $building->getCapacityHydro(),
+            'capacity_titan'       => $building->getCapacityTitan(),
+            'capacity_darkmatter'  => $building->getCapacityDarkmatter(),
+            'capacity_redmatter'   => $building->getCapacityRedmatter()
         ]);
         $update->where(['id = ?' => $building->getId()]);
 
