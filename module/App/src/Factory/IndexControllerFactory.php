@@ -7,6 +7,9 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Db\Adapter\AdapterInterface;
 use App\Controller\IndexController;
 use App\Controller\AuthController;
+use App\Renderer\PopupFleet1Renderer;
+use App\Renderer\PopupFleet2Renderer;
+use App\Renderer\PopupFleet3Renderer;
 use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
 use Universe\Model\PlanetRepository;
@@ -36,7 +39,10 @@ class IndexControllerFactory implements FactoryInterface
             $container->get(BuildingRepository::class),
             $container->get(BuildingTypeRepository::class),
             $container->get(EventRepository::class),
-            $container->get(EventCommand::class)
+            $container->get(EventCommand::class),
+            $container->get(PopupFleet1Renderer::class),
+            $container->get(PopupFleet2Renderer::class),
+            $container->get(PopupFleet3Renderer::class)
         );
     }
 }

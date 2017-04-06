@@ -50,6 +50,7 @@ class BuildingTypeCommand implements EntityCommandInterface
             'type'                 => $buildingType->getType(),
             'factor'               => $buildingType->getFactor(),
             
+            'building_acceleration'=> $buildingType->getBuildingAcceleration(),
             'produce_metall'       => $buildingType->getProduceMetall(),
             'produce_heavygas'     => $buildingType->getProduceHeavygas(),
             'produce_ore'          => $buildingType->getProduceOre(),
@@ -98,6 +99,7 @@ class BuildingTypeCommand implements EntityCommandInterface
             $buildingType->getDescription(),
             $buildingType->getType(),
             $buildingType->getFactor(),
+            $buildingType->getBuildingAcceleration(),
             $buildingType->getProduceMetall(),
             $buildingType->getProduceHeavygas(),
             $buildingType->getProduceOre(),
@@ -145,6 +147,7 @@ class BuildingTypeCommand implements EntityCommandInterface
             'description'          => $buildingType->getDescription(),
             'type'                 => $buildingType->getType(),
             'factor'               => $buildingType->getFactor(),
+            'building_acceleration'=> $buildingType->getBuildingAcceleration(),
             'produce_metall'       => $buildingType->getProduceMetall(),
             'produce_heavygas'     => $buildingType->getProduceHeavygas(),
             'produce_ore'          => $buildingType->getProduceOre(),

@@ -18,6 +18,8 @@ var _ogFleet_ = require('og.fleet_1.js');
 
 var _ogPopups = require('og.popups.js');
 
+var _ogFleet_2 = require('og.fleet_2.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var JQueryStarter = function () {
@@ -68,6 +70,7 @@ var Main = function () {
             this.source_updater = new _ogSources_updater.SrcUpdater();
             this.popup_building_handler = new _ogPopup_building.PopupBuilding();
             this.popup_fleet_1_handler = new _ogFleet_.Fleet_1();
+            this.popup_fleet_2_handler = new _ogFleet_2.Fleet_2();
 
             this.dbeventer = new _ogDb_eventer.DBEventer(this.popup_building_handler);
         }

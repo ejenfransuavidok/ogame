@@ -23,7 +23,7 @@ class BuildingRepositoryFactory implements FactoryInterface
                 $container->get(PlanetRepository::class),
                 $container->get(SputnikRepository::class),
                 $container->get(UserRepository::class)),
-            new Building(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+            new Building(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
         );
     }
 }

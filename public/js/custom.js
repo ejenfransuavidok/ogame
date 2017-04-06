@@ -769,16 +769,13 @@ $(function(){
 							var ind = $t.data('tab-link');
 							var $tabItem = $('[data-tab-targ='+ind+']').filter(selectGroup);
 
-							if( !$t.hasClass('active')){
-								$links.removeClass('active');
-								$t.addClass('active');
-								$tabs.fadeOut(150);
-								setTimeout(function(){
-									$tabs.removeClass('active');
-									$tabItem.fadeIn(150, function(){
-										$(this).addClass('active');
-									});
-								}, 150)
+							if( !$t.hasClass('is-active')){
+								$links.removeClass('is-active');
+								$t.addClass('is-active');
+								$tabs.removeClass('is-active');
+								$tabItem.addClass('is-active');
+
+								$t.closest('.mCustomScrollbar').mCustomScrollbar("update");
 							}
 
 							function selectGroup(){
@@ -807,6 +804,7 @@ $(function(){
 			self.fsRem.init();
 			self.tooltip.init();
 			self.plugs.update();
+			self.tabs.init();
 			//self.bottomStick.init('.js-bottom-stick');
 
 			//$('[data-required=phone]').mask('+7 (999) 999-99-99');

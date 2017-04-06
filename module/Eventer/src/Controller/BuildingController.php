@@ -165,7 +165,7 @@ class BuildingController extends AbstractActionController
             $events = $this->eventRepository->findAllEntities(
                 'events.user = ' . $this->user->getId() .
                 ' AND events.target_planet = ' . $planet->getId() .
-                ' AND events.targetBuildingType IS NOT NULL'
+                ' AND (events.event_type = ' . EventTypes::$DO_BUILD_RESOURCES . ' OR events.event_type = ' . EventTypes::$DO_BUILD_INDUSTRIAL . ')'
                 )->buffer();
             if(count($events)) {
                 /**

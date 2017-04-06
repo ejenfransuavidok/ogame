@@ -345,12 +345,14 @@ class TechLoadController extends AbstractActionController
             'capacity_darkmatter'       =>  'Вместимость хранилища ТМ',
             'capacity_redmatter'        =>  'Вместимость хранилища КМ',
             'factor'                    =>  'Фактор',
+            'type'                      =>  'Тип здания',
+            'building_acceleration'     =>  'Увеличение скорости постройки',
             'picture'                   =>  'Картинка',
             'description'               =>  'Описание');
         $parser = new XmlParser();
         $result = $parser->parse($file);
-        if(!is_array($result) && count($result) != 29){
-            throw new FormatFailXml('data is not array or array size != 29');
+        if(!is_array($result) && count($result) != 31){
+            throw new FormatFailXml('data is not array or array size != 31');
         }
         else{
             $entities = array();
@@ -381,11 +383,18 @@ class TechLoadController extends AbstractActionController
                         /**
                          * 2. такого прототипа здания нет, создадим
                          */
+                        if($one['type'] == 'Ресурсное здание')
+                            $type = Building::$BUILDING_RESOURCE;
+                        else if($one['type'] == 'Производственное здание')
+                            $type = Building::$BUILDING_INDUSTRIAL;
+                        else
+                            $type = 0;
                         $buildingType = new BuildingType(
                             $one['name'], 
                             $one['description'],
-                            Building::$BUILDING_RESOURCE,
+                            $type,
                             $one['factor'],
+                            $one['building_acceleration'],
                             $one['produce_metall'],
                             $one['produce_heavygas'],
                             $one['produce_ore'],

@@ -1,152 +1,218 @@
 <div class="popup popup_fleet popup_fleet_3">
-			<div class="popup__inner">
-				<div class="popup__layout">
-					<div class="popup__close"></div>
-					<div class="popup__title">Отправка флота</div>
-					<div class="popup__head">
-                        <a data-popup=".popup_fleet_2" href="#" class="popup__head-item popup__head-item_back"><span>Назад</span></a>
-						<div class="popup__head-group"><a href="#" class="popup__head-item"><i class="ico"><img src="/img/ico/simp-ico-rocket.svg" alt="" class="svg"></i> <span>Флот</span></a><a href="#" class="popup__head-item"><i class="ico"><img src="/img/ico/simp-ico-attack.svg" alt="" class="svg"></i> <span>Цель</span></a>
-							<a
-							 href="#" class="popup__head-item is-active"><i class="ico"><img src="/img/ico/simp-ico-flag.svg" alt="" class="svg"></i> <span>Задание</span></a>
-						</div><a href="#" class="popup__head-item popup__head-item_submit"><span>Отправить</span></a> </div>
-					<div class="popup__content">
-						<div class="fleet__target">
-							<div class="fleet__target-title">Выберите цель отправки</div>
-							<div class="fleet__target-list"> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" value="1" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"><span><img src="/img/ico/ico-fleet-target-some.svg"></span></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" value="2" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"><span><img src="/img/ico/ico-fleet-target-some.svg"></span></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" checked="checked" value="3" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"><span><img src="/img/ico/ico-fleet-target-some.svg"></span></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" value="4" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"><span><img src="/img/ico/ico-fleet-target-some.svg"></span></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" value="5" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"><span><img src="/img/ico/ico-fleet-target-some.svg"></span></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" value="6" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"><span><img src="/img/ico/ico-fleet-target-some.svg"></span></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" disabled="disabled" value="7" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" disabled="disabled" value="8" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" value="9" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"><span><img src="/img/ico/ico-fleet-target-some.svg"></span></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> <label class="fleet__target-item">
-                  <input type="radio" name="fleetTarget" disabled="disabled" value="10" class="fleet__target-item-input">
-                  <div class="fleet__target-item-img"></div>
-                  <div class="fleet__target-item-name">Название</div>
-                </label> </div>
-							<div class="fleet__target-title">Информация о задании</div>
-							<div class="fleet__target-info">
-								<div class="fleet__target-info-col">
-									<p>Координаты цели <span class="fl-r clr_white">[8:390:7] Колония</span></p>
-									<p>Время полета <span class="fl-r clr_white">641</span></p>
-								</div>
-								<div class="fleet__target-info-col fleet__target-info-col_time">
-									<p>Прибытие <span class="fl-r clr_white">19.02.17 5:23:45 ч.</span></p>
-									<p>Возврат <span class="fl-r clr_white">21.04.17 5:23:45 ч.</span></p>
-								</div>
-								<div class="fleet__target-info-col fleet__target-info-col_stat">Потребляемое топливо: <span class="clr_white">641</span> <a href="#" class="btn btn_big">Статиcтика</a></div>
-							</div>
-						</div>
-						<div class="fleet__store">
-							<div class="fleet__store-table">
-								<div class="fleet__store-row">
-									<div class="fleet__store-item">
-										<div class="fleet__store-name"><i class="ico"></i><span>Деньги</span></div>
-										<div class="fleet__store-counter">
-											<div class="counter"> <input type="hidden" value="17000" name="">
-												<div class="counter__down"></div>
-												<div class="counter__value">17 000</div>
-												<div class="counter__up"></div>
-											</div>
-										</div>
-									</div>
-									<div class="fleet__store-item">
-										<div class="fleet__store-name"><i class="ico"></i><span>Металл</span></div>
-										<div class="fleet__store-counter">
-											<div class="counter"> <input type="hidden" value="17000" name="">
-												<div class="counter__down"></div>
-												<div class="counter__value">17 000</div>
-												<div class="counter__up"></div>
-											</div>
-										</div>
-									</div>
-									<div class="fleet__store-item">
-										<div class="fleet__store-name"><i class="ico"></i><span>Алюмининий</span></div>
-										<div class="fleet__store-counter">
-											<div class="counter"> <input type="hidden" value="17000" name="">
-												<div class="counter__down"></div>
-												<div class="counter__value">17 000</div>
-												<div class="counter__up"></div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="fleet__store-row">
-									<div class="fleet__store-item">
-										<div class="fleet__store-name"><i class="ico"></i><span>Энергия</span></div>
-										<div class="fleet__store-counter">
-											<div class="counter"> <input type="hidden" value="17000" name="">
-												<div class="counter__down"></div>
-												<div class="counter__value">17 000</div>
-												<div class="counter__up"></div>
-											</div>
-										</div>
-									</div>
-									<div class="fleet__store-item">
-										<div class="fleet__store-name"><i class="ico"></i><span>Электроника</span></div>
-										<div class="fleet__store-counter">
-											<div class="counter"> <input type="hidden" value="17000" name="">
-												<div class="counter__down"></div>
-												<div class="counter__value">17 000</div>
-												<div class="counter__up"></div>
-											</div>
-										</div>
-									</div>
-									<div class="fleet__store-item">
-										<div class="fleet__store-name"><i class="ico"></i><span>Уран</span></div>
-										<div class="fleet__store-counter">
-											<div class="counter"> <input type="hidden" value="17000" name="">
-												<div class="counter__down"></div>
-												<div class="counter__value">17 000</div>
-												<div class="counter__up"></div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="fleet__store-cargo">
-								<div class="fleet__store-cargo-title">Грузовой отсек</div>
-								<div class="fleet__store-cargo-fill">
-									<div class="fleet__store-cargo-current">1 400 000</div>
-									<div class="fleet__store-cargo-bulk">Вместимость 1 000 000 000</div>
-									<div class="fleet__store-cargo-line">
-										<div style="width:80.5%" class="fleet__store-cargo-progress"></div>
-									</div>
-								</div>
-								<div class="fleet__store-cargo-send"><a href="#" class="btn btn_big">Заполнить</a></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="popup__overlay"></div>
-		</div>
+    <div class="popup__inner">
+        <div class="popup__layout">
+            <div class="popup__close"></div>
+            <div class="popup__title">Отправка флота</div>
+            <div class="popup__head">
+                <a data-popup=".popup_fleet_2" href="#" class="popup__head-item popup__head-item_back">
+                    <span>Назад</span>
+                </a>
+                <div class="popup__head-group">
+                    <a href="#" class="popup__head-item">
+                        <i class="ico">
+                            <img src="/img/ico/simp-ico-rocket.svg" alt="" class="svg">
+                        </i> 
+                        <span>Флот</span>
+                    </a>
+                    <a href="#" class="popup__head-item">
+                        <i class="ico">
+                            <img src="/img/ico/simp-ico-attack.svg" alt="" class="svg">
+                        </i> 
+                        <span>Цель</span>
+                    </a>
+                    <a href="#" class="popup__head-item is-active">
+                        <i class="ico">
+                            <img src="/img/ico/simp-ico-flag.svg" alt="" class="svg">
+                        </i> 
+                        <span>Задание</span>
+                    </a>
+                </div>
+                <a class="popup__head-item popup__head-item_submit" data-entity="popup_fleet_3_go" style="cursor: pointer;">
+                    <span>Отправить</span>
+                </a> 
+            </div>
+            <div class="popup__content">
+                <div class="fleet__target">
+                    <div class="fleet__target-title">Выберите цель отправки</div>
+                    <div class="fleet__target-list"> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" value="1" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img">
+                                <span>
+                                    <img src="/img/ico/ico-fleet-target-some.svg">
+                                </span>
+                            </div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" value="2" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img">
+                                <span>
+                                    <img src="/img/ico/ico-fleet-target-some.svg">
+                                </span>
+                            </div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" checked="checked" value="3" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img">
+                                <span>
+                                    <img src="/img/ico/ico-fleet-target-some.svg">
+                                </span>
+                            </div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" value="4" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img">
+                                <span>
+                                    <img src="/img/ico/ico-fleet-target-some.svg">
+                                </span>
+                            </div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" value="5" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img">
+                                <span>
+                                    <img src="/img/ico/ico-fleet-target-some.svg">
+                                </span>
+                            </div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" value="6" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img">
+                                <span>
+                                    <img src="/img/ico/ico-fleet-target-some.svg">
+                                </span>
+                            </div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" disabled="disabled" value="7" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img"></div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" disabled="disabled" value="8" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img"></div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" value="9" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img">
+                                <span>
+                                    <img src="/img/ico/ico-fleet-target-some.svg">
+                                </span>
+                            </div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                        <label class="fleet__target-item">
+                            <input type="radio" name="fleetTarget" disabled="disabled" value="10" class="fleet__target-item-input">
+                            <div class="fleet__target-item-img"></div>
+                            <div class="fleet__target-item-name">Название</div>
+                        </label> 
+                    </div>
+                    <div class="fleet__target-title">Информация о задании</div>
+                    <div class="fleet__target-info">
+                        <div class="fleet__target-info-col">
+                            <p>Координаты цели <span class="fl-r clr_white">[8:390:7] Колония</span></p>
+                            <p>Время полета <span class="fl-r clr_white">641</span></p>
+                        </div>
+                        <div class="fleet__target-info-col fleet__target-info-col_time">
+                            <p>Прибытие <span class="fl-r clr_white">19.02.17 5:23:45 ч.</span></p>
+                            <p>Возврат <span class="fl-r clr_white">21.04.17 5:23:45 ч.</span></p>
+                        </div>
+                        <div class="fleet__target-info-col fleet__target-info-col_stat">
+                            Потребляемое топливо: <span class="clr_white">641</span> 
+                            <a href="#" class="btn btn_big">Статиcтика</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="fleet__store">
+                    <div class="fleet__store-table">
+                        <div class="fleet__store-row">
+                            <div class="fleet__store-item">
+                                <div class="fleet__store-name"><i class="ico"></i><span>Деньги</span></div>
+                                <div class="fleet__store-counter">
+                                    <div class="counter"> 
+                                        <input type="hidden" value="17000" name="">
+                                        <div class="counter__down"></div>
+                                        <div class="counter__value">17 000</div>
+                                        <div class="counter__up"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fleet__store-item">
+                                <div class="fleet__store-name"><i class="ico"></i><span>Металл</span></div>
+                                <div class="fleet__store-counter">
+                                    <div class="counter"> <input type="hidden" value="17000" name="">
+                                        <div class="counter__down"></div>
+                                        <div class="counter__value">17 000</div>
+                                        <div class="counter__up"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fleet__store-item">
+                                <div class="fleet__store-name"><i class="ico"></i><span>Алюмининий</span></div>
+                                <div class="fleet__store-counter">
+                                    <div class="counter"> <input type="hidden" value="17000" name="">
+                                        <div class="counter__down"></div>
+                                        <div class="counter__value">17 000</div>
+                                        <div class="counter__up"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fleet__store-row">
+                            <div class="fleet__store-item">
+                                <div class="fleet__store-name"><i class="ico"></i><span>Энергия</span></div>
+                                <div class="fleet__store-counter">
+                                    <div class="counter"> 
+                                        <input type="hidden" value="17000" name="">
+                                        <div class="counter__down"></div>
+                                        <div class="counter__value">17 000</div>
+                                        <div class="counter__up"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fleet__store-item">
+                                <div class="fleet__store-name"><i class="ico"></i><span>Электроника</span></div>
+                                <div class="fleet__store-counter">
+                                    <div class="counter"> <input type="hidden" value="17000" name="">
+                                        <div class="counter__down"></div>
+                                        <div class="counter__value">17 000</div>
+                                        <div class="counter__up"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fleet__store-item">
+                                <div class="fleet__store-name"><i class="ico"></i><span>Уран</span></div>
+                                <div class="fleet__store-counter">
+                                    <div class="counter"> <input type="hidden" value="17000" name="">
+                                        <div class="counter__down"></div>
+                                        <div class="counter__value">17 000</div>
+                                        <div class="counter__up"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fleet__store-cargo">
+                        <div class="fleet__store-cargo-title">Грузовой отсек</div>
+                        <div class="fleet__store-cargo-fill">
+                            <div class="fleet__store-cargo-current">1 400 000</div>
+                            <div class="fleet__store-cargo-bulk">Вместимость 1 000 000 000</div>
+                            <div class="fleet__store-cargo-line">
+                                <div style="width:80.5%" class="fleet__store-cargo-progress"></div>
+                            </div>
+                        </div>
+                        <div class="fleet__store-cargo-send"><a href="#" class="btn btn_big">Заполнить</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popup__overlay"></div>
+</div>

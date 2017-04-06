@@ -486,6 +486,11 @@ class SpaceSheep extends Entity
         return $this->distance;
     }
     
+    public function calcSpendFuelByDistance($distance)
+    {
+        return ceil($distance * $this->fuel_consumption * $this->capacity / $this->fuel_factor);
+    }
+    
     public function setTimeFactor($time_factor)
     {
         $this->time_factor = $time_factor;

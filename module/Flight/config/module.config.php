@@ -14,6 +14,7 @@ return [
         'aliases' => [
         ],
         'factories' => [
+            Classes\FlightCalculator::class => Factory\FlightCalculatorFactory::class,
         ],
     ],
     'controllers' => [

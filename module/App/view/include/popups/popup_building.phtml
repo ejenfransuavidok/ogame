@@ -4,31 +4,31 @@
             <div class="popup__close"></div>
             <div class="popup__title">Строительство</div>
             <div class="popup__head">
-                <a href="#" class="popup__head-item" data-building_tab="fleet">
+                <a href="#" class="popup__head-item" data-building_tab="building_fleets">
                     <i class="ico">
                         <img src="/img/ico/simp-ico-fleet.svg" alt="" class="svg">
                     </i>
                     <span>Флот</span>
                 </a>
-                <a href="#" class="popup__head-item" data-building_tab="defence">
+                <a href="#" class="popup__head-item" data-building_tab="building_defences">
                     <i class="ico">
                         <img src="/img/ico/simp-ico-defense.svg" alt="" class="svg">
                     </i>
                     <span>Оборона</span>
                 </a>
-                <a href="#" class="popup__head-item" data-building_tab="resource">
+                <a href="#" class="popup__head-item" data-building_tab="building_resources">
                     <i class="ico">
                         <img src="/img/ico/simp-ico-resources.svg" alt="" class="svg">
                     </i> 
                     <span>Ресурсы</span>
                 </a>
-                <a href="#" class="popup__head-item is-active" data-building_tab="industrial">
+                <a href="#" class="popup__head-item is-active" data-building_tab="building_industrials">
                     <i class="ico">
                         <img src="/img/ico/simp-ico-factories.svg" alt="" class="svg">
                     </i> 
                     <span>Заводы</span>
                 </a>
-                <a href="#" class="popup__head-item" data-building_tab="science">
+                <a href="#" class="popup__head-item" data-building_tab="building_sciences">
                     <i class="ico">
                         <img src="/img/ico/simp-ico-technology.svg" alt="" class="svg">
                     </i> 
@@ -39,15 +39,16 @@
                 <div class="popup__content-image"></div>
                 <div class="tabs">
                     <div class="tabs__menu">
-                        <div class="tabs__item is-active">РЕСУРСНЫЕ</div>
-                        <!--
-								<div class="tabs__item">ГРАЖДАНСКИЕ</div>
-								<div class="tabs__item">СТАНКОСТРОИТЕЛЬНЫЕ</div>
-								<div class="tabs__item">АЭРОКОСМИЧЕСКИЕ</div>
+                        <div data-tab-link="building_resources" data-tab-group="building" class="tabs__item is-active">РЕСУРСНЫЕ</div>
+                        <div data-tab-link="building_industrials" data-tab-group="building" class="tabs__item">ПРОИЗВОДСТВЕННЫЕ</div>
+						<!--
+                        <div data-tab-link="building_1" data-tab-group="building" class="tabs__item">СТАНКОСТРОИТЕЛЬНЫЕ</div>
+						<div data-tab-link="building_1" data-tab-group="building" class="tabs__item">АЭРОКОСМИЧЕСКИЕ</div>
                         -->
                     </div>
+                    
                     <div class="tabs__content js-scroll-hor">
-                        <div class="build__list">
+                        <div data-tab-targ="building_resources" data-tab-group="building" class="build__list is-active">
                             <?php foreach($source_buildings as $building) : ?>
                             <div class="build__item" 
                                 data-entity="srcbuilding" 
@@ -63,7 +64,24 @@
                             </div>
                             <?php endforeach; ?>
                         </div>
+                        <div data-tab-targ="building_industrials" data-tab-group="building" class="build__list">
+                            <?php foreach($industrial_buildings as $building) : ?>
+                            <div class="build__item" 
+                                data-entity="srcbuilding" 
+                                data-identifier="<?= $building->getId() ?>"
+                                data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
+                                data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>">
+                                <div class="keep__item clr_red">
+                                    <?= $building->getPicture() ?>
+                                    <div class="keep__item-text"><span data-entity="keep__item-text"><?= $building->getName() ?></span></div>
+                                    <div class="keep__item-lvl"><span>lv. <?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?></span></div>
+                                </div>
+                                <div style="display:none;" data-entity="building-description"><?= $building->getDescription() ?></div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
+                    
                 </div>
                 <div class="popup__pp" data-entity="popup_building-popup__pp" data-building_id="">
                     <div class="popup__pp-layout">

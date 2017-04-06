@@ -77,7 +77,21 @@ var PopupBuilding = exports.PopupBuilding = function () {
                 var obj = $(evt.target).closest('.keep__item-preview');
                 var tab = $(obj).data('tab_open');
                 $('.popup_building').find('[data-building_tab]').removeClass('is-active');
-                $('.popup_building').find('[data-building_tab=resource]').addClass('is-active');
+                $('.popup_building').find('[data-building_tab=building_resources]').addClass('is-active');
+            });
+            $(document).on('mousedown', '[data-tab-group=building]', function (evt) {
+                var obj = $(evt.target);
+                var link = $(obj).data('tab-link');
+                $('.popup_building').find('[data-building_tab]').removeClass('is-active');
+                $('.popup_building').find('[data-building_tab=' + link + ']').addClass('is-active');
+            });
+            $(document).on('click', '[data-building_tab]', function (evt) {
+                evt.preventDefault();
+                var obj = $(evt.target).closest('.popup__head-item');
+                var tab = $(obj).data('building_tab');
+                $('[data-building_tab]').removeClass('is-active');
+                $('[data-building_tab=' + tab + ']').addClass('is-active');
+                $('[data-tab-link=' + tab + ']').trigger('click');
             });
         }
     }, {

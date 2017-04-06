@@ -27,6 +27,7 @@ return [
             Model\StarRepository::class => Factory\StarRepositoryFactory::class,
             Model\PlanetRepository::class => Factory\PlanetRepositoryFactory::class,
             Model\SputnikRepository::class => Factory\SputnikRepositoryFactory::class,
+            Classes\PlanetCapacity::class => Factory\PlanetCapacityFactory::class
         ],
     ],
     'controllers' => [

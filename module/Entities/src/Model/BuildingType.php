@@ -29,6 +29,11 @@ class BuildingType extends Entity
     /**
      * @ int
      */
+    protected $building_acceleration;
+    
+    /**
+     * @ int
+     */
     protected $produce_metall;
     
     /**
@@ -167,6 +172,7 @@ class BuildingType extends Entity
         $description, 
         $type,
         $factor,
+        $building_acceleration,
         $produce_metall,
         $produce_heavygas,
         $produce_ore,
@@ -200,6 +206,7 @@ class BuildingType extends Entity
         $this->description          = $description;
         $this->type                 = $type;
         $this->factor               = $factor;
+        $this->building_acceleration= $building_acceleration;
         $this->produce_metall       = $produce_metall;
         $this->produce_heavygas     = $produce_heavygas;
         $this->produce_ore          = $produce_ore;
@@ -236,6 +243,7 @@ class BuildingType extends Entity
         $this->description          = !empty($data[$prefix.'description'])          ? $data[$prefix.'description'] : null;
         $this->type                 = !empty($data[$prefix.'type'])                 ? $data[$prefix.'type'] : null;
         $this->factor               = !empty($data[$prefix.'factor'])               ? $data[$prefix.'factor'] : null;
+        $this->building_acceleration= !empty($data[$prefix.'building_acceleration'])? $data[$prefix.'building_acceleration'] : null;
         
         $this->produce_metall       = !empty($data[$prefix.'produce_metall'])       ? $data[$prefix.'produce_metall'] : null;
         $this->produce_heavygas     = !empty($data[$prefix.'produce_heavygas'])     ? $data[$prefix.'produce_heavygas'] : null;
@@ -291,6 +299,16 @@ class BuildingType extends Entity
     public function getFactor()
     {
         return $this->factor;
+    }
+    
+    public function setBuildingAcceleration($building_acceleration)
+    {
+        $this->building_acceleration = $building_acceleration;
+    }
+    
+    public function getBuildingAcceleration()
+    {
+        return $this->building_acceleration;
     }
     
     public function setProduceMetall($produce_metall)

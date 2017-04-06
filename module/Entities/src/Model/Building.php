@@ -19,6 +19,8 @@ class Building extends Entity
     
     public static $BUILDING_RESOURCE = 1;
     
+    public static $BUILDING_INDUSTRIAL = 2;
+    
     public static $DELTA_REFRESH = 10;
     
     /**
@@ -45,6 +47,11 @@ class Building extends Entity
      * @ float
      */
     protected $factor;
+    
+    /**
+     * @ int
+     */
+    protected $building_acceleration;
     
     /**
      * @ int
@@ -192,6 +199,7 @@ class Building extends Entity
         $type,
         $update,
         $factor,
+        $building_acceleration,
         $produce_metall,
         $produce_heavygas,
         $produce_ore,
@@ -229,6 +237,7 @@ class Building extends Entity
         $this->type                 = $type;
         $this->update               = $update;
         $this->factor               = $factor;
+        $this->building_acceleration= $building_acceleration;
         $this->produce_metall       = $produce_metall;
         $this->produce_heavygas     = $produce_heavygas;
         $this->produce_ore          = $produce_ore;
@@ -269,6 +278,7 @@ class Building extends Entity
         $this->type                 = !empty($data[$prefix.'type'])                 ? $data[$prefix.'type'] : null;
         $this->update               = !empty($data[$prefix.'update'])               ? $data[$prefix.'update'] : null;
         $this->factor               = !empty($data[$prefix.'factor'])               ? $data[$prefix.'factor'] : null;
+        $this->building_acceleration= !empty($data[$prefix.'building_acceleration'])? $data[$prefix.'building_acceleration'] : null;
         $this->produce_metall       = !empty($data[$prefix.'produce_metall'])       ? $data[$prefix.'produce_metall'] : null;
         $this->produce_heavygas     = !empty($data[$prefix.'produce_heavygas'])     ? $data[$prefix.'produce_heavygas'] : null;
         $this->produce_ore          = !empty($data[$prefix.'produce_ore'])          ? $data[$prefix.'produce_ore'] : null;
@@ -369,6 +379,16 @@ class Building extends Entity
     public function getFactor()
     {
         return $this->factor;
+    }
+    
+    public function setBuildingAcceleration($building_acceleration)
+    {
+        $this->building_acceleration = $building_acceleration;
+    }
+    
+    public function getBuildingAcceleration()
+    {
+        return $this->building_acceleration;
     }
     
     public function setProduceMetall($produce_metall)
@@ -560,7 +580,7 @@ class Building extends Entity
     
     public function getCapacityMetall()
     {
-        return $this->capacity_metall;
+        return $this->capacity_metall != null ? $this->capacity_metall : 0;
     }
     
     public function setCapacityHeavygas($capacity_heavygas)
@@ -570,7 +590,7 @@ class Building extends Entity
     
     public function getCapacityHeavygas()
     {
-        return $this->capacity_heavygas;
+        return $this->capacity_heavygas != null ? $this->capacity_heavygas : 0;
     }
     
     public function setCapacityOre($capacity_ore)
@@ -580,7 +600,7 @@ class Building extends Entity
     
     public function getCapacityOre()
     {
-        return $this->capacity_ore;
+        return $this->capacity_ore != null ? $this->capacity_ore : 0;
     }
     
     public function setCapacityHydro($capacity_hydro)
@@ -590,7 +610,7 @@ class Building extends Entity
     
     public function getCapacityHydro()
     {
-        return $this->capacity_hydro;
+        return $this->capacity_hydro != null ? $this->capacity_hydro : 0;
     }
     
     public function setCapacityTitan($capacity_titan)
@@ -600,7 +620,7 @@ class Building extends Entity
     
     public function getCapacityTitan()
     {
-        return $this->capacity_titan;
+        return $this->capacity_titan != null ? $this->capacity_titan : 0;
     }
     
     public function setCapacityDarkmatter($capacity_darkmatter)
@@ -610,7 +630,7 @@ class Building extends Entity
     
     public function getCapacityDarkmatter()
     {
-        return $this->capacity_darkmatter;
+        return $this->capacity_darkmatter != null ? $this->capacity_darkmatter : 0;
     }
     
     public function setCapacityRedmatter($capacity_redmatter)
@@ -620,7 +640,7 @@ class Building extends Entity
     
     public function getCapacityRedmatter()
     {
-        return $this->capacity_redmatter;
+        return $this->capacity_redmatter != null ? $this->capacity_redmatter : 0;
     }
     
     public function getConsumeAll()

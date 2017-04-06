@@ -12,12 +12,16 @@ return [
         'aliases' => [
         ],
         'factories' => [
+            Renderer\PopupFleet1Renderer::class => Factory\PopupFleet1RendererFactory::class,
+            Renderer\PopupFleet2Renderer::class => Factory\PopupFleet2RendererFactory::class,
+            Renderer\PopupFleet3Renderer::class => Factory\PopupFleet3RendererFactory::class,
         ],
     ],
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => Factory\IndexControllerFactory::class,
             Controller\AuthController::class => Factory\AuthControllerFactory::class,
+            Controller\FleetSetupTargetController::class => Factory\FleetSetupTargetControllerFactory::class,
         ],
     ],
     'router' => [
@@ -88,6 +92,17 @@ return [
                             'defaults' => [
                                 'controller' => Controller\IndexController::class,
                                 'action' => 'planetkeep',
+                            ],
+                        ],
+                    ],
+                    
+                    'setuptarget' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/setuptarget',
+                            'defaults' => [
+                                'controller' => Controller\FleetSetupTargetController::class,
+                                'action' => 'setuptarget',
                             ],
                         ],
                     ],

@@ -5,6 +5,7 @@ use Interop\Container\ContainerInterface;
 use Universe\Model\PlanetRepository;
 use Universe\Model\PlanetCommand;
 use Universe\Model\SputnikRepository;
+use Universe\Classes\PlanetCapacity;
 use Entities\Model\UserRepository;
 use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingCommand;
@@ -23,7 +24,8 @@ class ResourcesControllerFactory implements FactoryInterface
             $container->get(SputnikRepository::class),
             $container->get(UserRepository::class),
             $container->get(BuildingRepository::class),
-            $container->get(BuildingCommand::class)
+            $container->get(BuildingCommand::class),
+            $container->get(PlanetCapacity::class)
         );
     }
 }
