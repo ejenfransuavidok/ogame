@@ -1,0 +1,11 @@
+<?= $this->json(
+    array(
+            'result'                    => $result,
+            'message'                   => $message,
+            'auth'                      => $auth,
+            'fleet_forward_1'           => $this->fleet_forward_1, 
+            'fleet_forward_2'           => $this->fleet_forward_2, 
+            'fleet_forward_3'           => $this->fleet_forward_3,
+            'fleet_mooving_activity'    => $this->fleet_mooving_activity
+    ))
+?>

@@ -21,6 +21,9 @@ use Entities\Model\EventRepository;
 use App\Renderer\PopupFleet1Renderer;
 use App\Renderer\PopupFleet2Renderer;
 use App\Renderer\PopupFleet3Renderer;
+use App\Renderer\FleetMoovingActivity;
+use App\Renderer\PlanetKeepRenderer;
+use App\Renderer\PopupBuildingRenderer;
 
 
 class IndexController extends AbstractActionController
@@ -75,6 +78,21 @@ class IndexController extends AbstractActionController
      */
     private $popupFleet3Renderer;
     
+    /**
+     * @ FleetMoovingActivity
+     */
+    private $fleetMoovingActivity;
+    
+    /**
+     * @ PlanetKeepRenderer
+     */
+    private $planetKeepRenderer;
+    
+    /**
+     * @ PopupBuildingRenderer
+     */
+    private $popupBuildingRenderer;
+    
     public function __construct(
         AdapterInterface        $db,
         AuthController          $authController,
@@ -85,19 +103,28 @@ class IndexController extends AbstractActionController
         EventCommand            $eventCommand,
         PopupFleet1Renderer     $popupFleet1Renderer,
         PopupFleet2Renderer     $popupFleet2Renderer,
-        PopupFleet3Renderer     $popupFleet3Renderer
+        PopupFleet3Renderer     $popupFleet3Renderer,
+        FleetMoovingActivity    $fleetMoovingActivity
         )
     {
-        $this->dbAdapter = $db;
-        $this->authController = $authController;
-        $this->planetRepository = $planetRepository;
-        $this->buildingRepository = $buildingRepository;
-        $this->buildingTypeRepository = $buildingTypeRepository;
-        $this->eventRepository = $eventRepository;
-        $this->eventCommand = $eventCommand;
-        $this->popupFleet1Renderer = $popupFleet1Renderer;
-        $this->popupFleet2Renderer = $popupFleet2Renderer;
-        $this->popupFleet3Renderer = $popupFleet3Renderer;
+        $this->dbAdapter                = $db;
+        $this->authController           = $authController;
+        $this->planetRepository         = $planetRepository;
+        $this->buildingRepository       = $buildingRepository;
+        $this->buildingTypeRepository   = $buildingTypeRepository;
+        $this->eventRepository          = $eventRepository;
+        $this->eventCommand             = $eventCommand;
+        $this->popupFleet1Renderer      = $popupFleet1Renderer;
+        $this->popupFleet2Renderer      = $popupFleet2Renderer;
+        $this->popupFleet3Renderer      = $popupFleet3Renderer;
+        $this->fleetMoovingActivity     = $fleetMoovingActivity;
+        
+        $this->planetKeepRenderer       = new PlanetKeepRenderer($this->eventRepository, $this->authController);
+        $this->popupBuildingRenderer    = new PopupBuildingRenderer(
+                                                    $this->buildingTypeRepository, 
+                                                    $this->buildingRepository, 
+                                                    $this->planetRepository,
+                                                    $this->authController);
     }
     
     public function indexAction()
@@ -124,12 +151,13 @@ class IndexController extends AbstractActionController
             /**
              * @ парсинг круга на главной 
              */
-            $result = $this->parsePlanetkeep($planetid);
-            $planetkeep = $result['planetkeep'];
+            //$result = $this->parsePlanetkeep($planetid);
+            //$planetkeep = $result['planetkeep'];
+            $planetkeep = $this->planetKeepRenderer->render($planetid);
             /**
              * @
              */
-             
+            /* 
             $popup_building = new ViewModel
                 ([
                     'source_buildings' => $this->buildingTypeRepository->findAllEntities('building_types.type = ' . Building::$BUILDING_RESOURCE)->buffer(),
@@ -138,6 +166,8 @@ class IndexController extends AbstractActionController
             $popup_building->setTemplate('include/popups/popup_building');
             $popup_building->setVariable('buildingRepository', $this->buildingRepository);
             $popup_building->setVariable('planet', $this->user, $planet);
+            */
+            $popup_building = $this->popupBuildingRenderer->render($planetid);
             /**
              * @ парсинг всплывающего окна флота
              */
@@ -155,6 +185,12 @@ class IndexController extends AbstractActionController
             /**
              * 
              */
+            $fleet_mooving_activity = new ViewModel([]);
+            $fleet_mooving_activity->setTemplate('include/fleet_mooving_activity');
+            $this->fleetMoovingActivity->execute($fleet_mooving_activity);
+            /**
+             * 
+             */
             $game = new ViewModel(['planet' => $planet]);
             $game->setTemplate('include/game');
             $game
@@ -162,7 +198,8 @@ class IndexController extends AbstractActionController
                 ->addChild($popup_building, 'popup_building')
                 ->addChild($fleet_forward_1, 'fleet_forward_1')
                 ->addChild($fleet_forward_2, 'fleet_forward_2')
-                ->addChild($fleet_forward_3, 'fleet_forward_3');
+                ->addChild($fleet_forward_3, 'fleet_forward_3')
+                ->addChild($fleet_mooving_activity, 'fleet_mooving_activity');
             
             $view = new ViewModel([]);
             $view
@@ -302,6 +339,76 @@ class IndexController extends AbstractActionController
         $producesrc->setVariable('minutes', $minutes);
         $producesrc->setVariable('seconds', $seconds);
         return $event;
+    }
+    
+    public function fleetforwardpopupupdaterAction()
+    {
+        $view = new ViewModel([]);
+        $view->setTerminal(true);
+        if($this->authController->isAuthorized()){
+            try{
+                $this->user = $this->authController->getUser();
+                $current_planet = $this->params()->fromPost('current_planet');
+                $planet = $this->planetRepository->findOneBy('planets.id = ' . $current_planet);
+                
+                $fleet_forward_1 = new ViewModel([]);
+                $fleet_forward_1->setTemplate('include/popups/popup_fleet_1');
+                $this->popupFleet1Renderer->execute($fleet_forward_1, $this->user, $planet);
+                $fleet_forward_2 = new ViewModel([]);
+                $fleet_forward_2->setTemplate('include/popups/popup_fleet_2');
+                $this->popupFleet2Renderer->execute($fleet_forward_2, $this->user, $planet);
+                $fleet_forward_3 = new ViewModel([]);
+                $fleet_forward_3->setTemplate('include/popups/popup_fleet_3');
+                $this->popupFleet3Renderer->execute($fleet_forward_3);
+                $fleet_mooving_activity = new ViewModel([]);
+                $fleet_mooving_activity->setTemplate('include/fleet_mooving_activity');
+                $this->fleetMoovingActivity->execute($fleet_mooving_activity);
+                
+                $view
+                    ->addChild($fleet_forward_1,        'fleet_forward_1')
+                    ->addChild($fleet_forward_2,        'fleet_forward_2')
+                    ->addChild($fleet_forward_3,        'fleet_forward_3')
+                    ->addChild($fleet_mooving_activity, 'fleet_mooving_activity');
+                $view->setVariable('result', 'YES');
+                $view->setVariable('auth', 'YES');
+                $view->setVariable('message', 'good');
+            }
+            catch(\Exception $e){
+                $view->setVariable('result', 'ERR');
+                $view->setVariable('auth', 'YES');
+                $view->setVariable('message', $e->getMessage());
+            }
+        }
+        else{
+            $view->setVariable('result', 'ERR');
+            $view->setVariable('auth', 'NO');
+            $view->setVariable('message', 'Пользователь не авторизован');
+        }
+        return $view;
+    }
+    
+    public function fleetmoovingupdaterAction()
+    {
+        $view = new ViewModel([]);
+        $view->setTerminal(true);
+        if($this->authController->isAuthorized()){
+            try{
+                $view->setVariable('result', 'YES');
+                $view->setVariable('auth', 'YES');
+                $view->setVariable('message', 'good');
+            }
+            catch(\Exception $e){
+                $view->setVariable('result', 'ERR');
+                $view->setVariable('auth', 'YES');
+                $view->setVariable('message', $e->getMessage());
+            }
+        }
+        else{
+            $view->setVariable('result', 'ERR');
+            $view->setVariable('auth', 'NO');
+            $view->setVariable('message', 'Пользователь не авторизован');
+        }
+        return $view;
     }
     
 }

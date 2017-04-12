@@ -125,15 +125,19 @@ class IndexController extends AbstractActionController
     
     public function indexAction()
     {
+        $view = new ViewModel([]);
+        $view->setTerminal(true);
         try{
             /**
              * @ работа с событиями для строительства ресурсных зданий
              */
             $this->executeResourcesBuildingDoBuild();
+            $view->setVariable('data', array('result' => 'YES', 'auth' => 'YES', 'message' => 'building completed'));
         }
         catch(\Exception $e){
-            die($e->getMessage());
+            $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => $e->getMessage()));
         }
+        return $view;
     }
     
     private function executeResourcesBuildingDoBuild()
@@ -141,141 +145,62 @@ class IndexController extends AbstractActionController
         /**
          * @ выберем все события по строительству ресурсных зданий
          */
-        try{
-            $events = $this->eventRepository->findAllEntities('events.event_type = ' . EventTypes::$DO_BUILD_RESOURCES)->buffer();
-            if(count($events)){
-                foreach($events as $event){
+        $events = $this->eventRepository->findAllEntities('events.event_type = ' . EventTypes::$DO_BUILD_RESOURCES)->buffer();
+        if(count($events)){
+            foreach($events as $event){
+                /**
+                * @ если евент просрочен, выполняем
+                */
+                if(time() >= $event->getEventEnd()) {
+                    $targetBuildingType = $event->getTargetBuildingType();
                     /**
-                     * @ если евент просрочен, выполняем
-                     */
-                    if(time() >= $event->getEventEnd()) {
-                        $targetBuildingType = $event->getTargetBuildingType();
+                    * @ если это здание уже есть у юзера, то просто обновляем левел
+                    *   иначе создаем здание по-новой
+                    */
+                    $level = $event->getTargetLevel();
+                    if($level == 1){
                         /**
-                         * @ если это здание уже есть у юзера, то просто обновляем левел
-                         *   иначе создаем здание по-новой
-                         */
-                        $level = $event->getTargetLevel();
-                        if($level == 1){
-                            /**
-                             * @ этого здания у юзера нет
-                             */
-                            /**
-                            $name, 
-                            $description, 
-                            $planet,
-                            $sputnik,
-                            $owner,
-                            $level,
-                            $type,
-                            $update,
-                            $factor,
-                            $building_acceleration,
-                            $produce_metall,
-                            $produce_heavygas,
-                            $produce_ore,
-                            $produce_hydro,
-                            $produce_titan,
-                            $produce_darkmatter,
-                            $produce_redmatter,
-                            $produce_anti,
-                            $produce_electricity,
-                            $consume_metall,
-                            $consume_heavygas,
-                            $consume_ore,
-                            $consume_hydro,
-                            $consume_titan,
-                            $consume_darkmatter,
-                            $consume_redmatter,
-                            $consume_anti,
-                            $consume_electricity,
-                            $capacity_metall,
-                            $capacity_heavygas,
-                            $capacity_ore,
-                            $capacity_hydro,
-                            $capacity_titan,
-                            $capacity_darkmatter,
-                            $capacity_redmatter,
-                            $id=null
-                            */
-                            $building = new Building(
-                                $targetBuildingType->getName(),
-                                $targetBuildingType->getDescription(),
-                                $event->getTargetPlanet(),
-                                $event->getTargetSputnik(),
-                                $event->getUser(),
-                                $event->getTargetLevel(),
-                                $targetBuildingType->getType(),
-                                time(),
-                                $targetBuildingType->getFactor(),
-                                $targetBuildingType->getBuildingAcceleration(),
-                                $targetBuildingType->getProduceMetall(),
-                                $targetBuildingType->getProduceHeavygas(),
-                                $targetBuildingType->getProduceOre(),
-                                $targetBuildingType->getProduceHydro(),
-                                $targetBuildingType->getProduceTitan(),
-                                $targetBuildingType->getProduceDarkmatter(),
-                                $targetBuildingType->getProduceRedmatter(),
-                                $targetBuildingType->getProduceAnti(),
-                                $targetBuildingType->getProduceElectricity(),
-                                $targetBuildingType->getConsumeMetall(),
-                                $targetBuildingType->getConsumeHeavygas(),
-                                $targetBuildingType->getConsumeOre(),
-                                $targetBuildingType->getConsumeHydro(),
-                                $targetBuildingType->getConsumeTitan(),
-                                $targetBuildingType->getConsumeDarkmatter(),
-                                $targetBuildingType->getConsumeRedmatter(),
-                                $targetBuildingType->getConsumeAnti(),
-                                $targetBuildingType->getConsumeElectricity(),
-                                $targetBuildingType->getCapacityMetall(),
-                                $targetBuildingType->getCapacityHeavygas(),
-                                $targetBuildingType->getCapacityOre(),
-                                $targetBuildingType->getCapacityHydro(),
-                                $targetBuildingType->getCapacityTitan(),
-                                $targetBuildingType->getCapacityDarkmatter(),
-                                $targetBuildingType->getCapacityRedmatter()
-                                );
-                            $building = $this->buildingCommand->insertEntity($building);
-                        }
-                        else{
-                            /**
-                             * @ у юзера уже есть этот тип здания, значит надо обновить фактор и умножить на него
-                             *   вырабатываемые ресурсы
-                             */
-                            $user           = $event->getUser();
-                            $name           = $targetBuildingType->getName();
-                            $building       = $this->buildingRepository->findOneBy('buildings.owner = ' . $user->getId() . ' AND buildings.name = "' . $name . '"');
-                            $factor         = $building->getFactor()            * $level;
-                            $metall         = $building->getProduceMetall()     * $factor;
-                            $heavygas       = $building->getProduceHeavygas()   * $factor;
-                            $ore            = $building->getProduceOre()        * $factor;
-                            $hydro          = $building->getProduceHydro()      * $factor;
-                            $titan          = $building->getProduceTitan()      * $factor;
-                            $darkmatter     = $building->getProduceDarkmatter() * $factor;
-                            $redmatter      = $building->getProduceRedmatter()  * $factor;
-                            $anti           = $building->getProduceAnti()       * $factor;
-                            $electricity    = $building->getProduceElectricity()* $factor;
-                            $building->setLevel             ($level);
-                            $building->setProduceMetall     ($metall);
-                            $building->setProduceHeavygas   ($heavygas);
-                            $building->setProduceOre        ($ore);
-                            $building->setProduceHydro      ($hydro);
-                            $building->setProduceTitan      ($titan);
-                            $building->setProduceDarkmatter ($darkmatter);
-                            $building->setProduceRedmatter  ($redmatter);
-                            $building->setProduceAnti       ($anti);
-                            $building->setProduceElectricity($electricity);
-                            $building = $this->buildingCommand->updateEntity($building);
-                        }
+                        * @ этого здания у юзера нет
+                        */
                         /**
-                         * @удаляем ивент
-                         */
-                        $this->eventCommand->deleteEntity($event);
+                        $name, 
+                        $description, 
+                        $planet,
+                        $sputnik,
+                        $owner,
+                        $level,
+                        $buildingType,
+                        $update,
+                        $id=null
+                        */
+                        $building = new Building(
+                            $targetBuildingType->getName(),
+                            $targetBuildingType->getDescription(),
+                            $event->getTargetPlanet(),
+                            $event->getTargetSputnik(),
+                            $event->getUser(),
+                            $event->getTargetLevel(),
+                            $targetBuildingType,
+                            time()
+                            );
+                        $building = $this->buildingCommand->insertEntity($building);
                     }
+                    else{
+                        /**
+                        * @ у юзера уже есть этот тип здания, значит надо обновить левел
+                        */
+                        $user           = $event->getUser();
+                        $name           = $targetBuildingType->getName();
+                        $building       = $this->buildingRepository->findOneBy('buildings.owner = ' . $user->getId() . ' AND buildings.name = "' . $name . '"');
+                        $building->setLevel ($level);
+                        $building = $this->buildingCommand->updateEntity($building);
+                    }
+                    /**
+                    * @удаляем ивент
+                    */
+                    $this->eventCommand->deleteEntity($event);
                 }
             }
-        }
-        catch (\Exception $e){
-            die($e->getMessage());
         }
     }
     

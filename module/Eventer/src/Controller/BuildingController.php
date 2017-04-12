@@ -155,7 +155,7 @@ class BuildingController extends AbstractActionController
         /**
          * @ переводим в объекты
          */
-        $planet = $this->planetRepository->findOneBy($planet);
+        $planet = $this->planetRepository->findEntity($planet);
         $buildingType = $this->buildingTypeRepository->findOneBy('building_types.id = ' . $buildingType);
         if($this->authController->isAuthorized()){
             $this->user = $this->authController->getUser();
@@ -165,7 +165,7 @@ class BuildingController extends AbstractActionController
             $events = $this->eventRepository->findAllEntities(
                 'events.user = ' . $this->user->getId() .
                 ' AND events.target_planet = ' . $planet->getId() .
-                ' AND (events.event_type = ' . EventTypes::$DO_BUILD_RESOURCES . ' OR events.event_type = ' . EventTypes::$DO_BUILD_INDUSTRIAL . ')'
+                ' AND (events.event_type = ' . EventTypes::$DO_BUILD_RESOURCES . ')'
                 )->buffer();
             if(count($events)) {
                 /**
@@ -199,7 +199,7 @@ class BuildingController extends AbstractActionController
                 /**
                  * @ хватит ли ресурсов на планете
                  */
-                $K              = $buildingType->getFactor() * $level;
+                $K              = pow($buildingType->getPriceFactor(), $level - 1);
                 $metall         = $planet->getMetall()      - $buildingType->getConsumeMetall()     * $K;
                 $heavygas       = $planet->getHeavyGas()    - $buildingType->getConsumeHeavygas()   * $K;
                 $ore            = $planet->getOre()         - $buildingType->getConsumeOre()        * $K;
@@ -208,42 +208,11 @@ class BuildingController extends AbstractActionController
                 $darkmatter     = $planet->getDarkmatter()  - $buildingType->getConsumeDarkmatter() * $K;
                 $redmatter      = $planet->getRedmatter()   - $buildingType->getConsumeRedmatter()  * $K;
                 $anti           = $planet->getAnti()        - $buildingType->getConsumeAnti()       * $K;
-                $electricity    = $planet->getElectricity() - $buildingType->getConsumeElectricity()* $K;
-                /*
-                print_r(array(
-                    'metall'        => $planet->getMetall(), 
-                    'hydro'         => $planet->getHydro(), 
-                    'heavygas'      => $planet->getHeavyGas(), 
-                    'ore'           => $planet->getOre(), 
-                    'hydro'         => $planet->getHydro(), 
-                    'titan'         => $planet->getTitan(), 
-                    'darkmatter'    => $planet->getDarkmatter(), 
-                    'redmatter'     => $planet->getRedmatter(),
-                    'anti'          => $planet->getAnti(), 
-                    'electricity'   => $planet->getElectricity()));
-                print_r(array(
-                    'metall'        => $buildingType->getConsumeMetall(), 
-                    'hydro'         => $buildingType->getConsumeHydro(), 
-                    'heavygas'      => $buildingType->getConsumeHeavygas(), 
-                    'ore'           => $buildingType->getConsumeOre(), 
-                    'hydro'         => $buildingType->getConsumeHydro(), 
-                    'titan'         => $buildingType->getConsumeTitan(), 
-                    'darkmatter'    => $buildingType->getConsumeDarkmatter(), 
-                    'redmatter'     => $buildingType->getConsumeRedmatter(),
-                    'anti'          => $buildingType->getConsumeAnti(), 
-                    'electricity'   => $buildingType->getConsumeElectricity()));
-                print_r(array(
-                    'metall'        => $metall, 
-                    'hydro'         => $hydro, 
-                    'heavygas'      => $heavygas, 
-                    'ore'           => $ore, 
-                    'hydro'         => $hydro, 
-                    'titan'         => $titan, 
-                    'darkmatter'    => $darkmatter, 
-                    'redmatter'     => $redmatter,
-                    'anti'          => $anti, 
-                    'electricity'   => $electricity));
-                */
+                /**
+                 * @ электричество вычисляется по другой формуле
+                 */
+                $electricity    = $planet->getElectricity() - $buildingType->getPowerFactor() * $level * $level;
+                
                 if(
                     $metall      >= 0 && 
                     $heavygas    >= 0 && 
@@ -262,6 +231,7 @@ class BuildingController extends AbstractActionController
                      * @ время на строительство
                      */
                     $time = intval(ceil($K * $buildingType->getConsumeAll() / 30));
+                    
                     $event = new Event(
                         $buildingType->getName(),
                         $buildingType->getDescription(),
@@ -291,7 +261,14 @@ class BuildingController extends AbstractActionController
                     /**
                      * @
                      */
-                    $view->setVariable('data', array('result' => 'YES', 'auth' => 'YES', 'message' => 'Строительство успешно началось!'));
+                    $view->setVariable('data', array(
+                        'result'        => 'YES', 
+                        'auth'          => 'YES',
+                        'event_id'      => $event->getId(),
+                        'begin'         => $event->getEventBegin(),
+                        'end'           => $event->getEventEnd(),
+                        'now'           => time(),
+                        'message' => 'Строительство успешно началось!'));
                 }
                 else {
                     /**
@@ -332,7 +309,7 @@ class BuildingController extends AbstractActionController
                 /**
                  * вернем ресурсы обратно
                  */
-                $K              = $buildingType->getFactor() * $level;
+                $K              = pow($buildingType->getPriceFactor(), $level - 1);
                 $metall         = $planet->getMetall()      + $buildingType->getConsumeMetall()     * $K;
                 $heavygas       = $planet->getHeavyGas()    + $buildingType->getConsumeHeavygas()   * $K;
                 $ore            = $planet->getOre()         + $buildingType->getConsumeOre()        * $K;

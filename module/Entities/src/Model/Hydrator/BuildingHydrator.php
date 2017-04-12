@@ -4,6 +4,7 @@ namespace Entities\Model\Hydrator;
 use Universe\Model\PlanetRepository;
 use Universe\Model\SputnikRepository;
 use Entities\Model\UserRepository;
+use Entities\Model\BuildingTypeRepository;
 use Entities\Model\Building;
 use Zend\Hydrator\Exception\BadMethodCallException;
 use Zend\Hydrator\HydratorInterface;
@@ -31,14 +32,22 @@ class BuildingHydrator implements HydratorInterface
      */
     private $userRepository;
     
+    /**
+     * @ BuildingTypeRepository
+     */
+    private $buildingTypeRepository;
+    
+    
     public function __construct(
         PlanetRepository $planetRepository,
         SputnikRepository $sputnikRepository,
-        UserRepository $userRepository)
+        UserRepository $userRepository,
+        BuildingTypeRepository $buildingTypeRepository)
     {
         $this->planetRepository = $planetRepository;
         $this->sputnikRepository = $sputnikRepository;
         $this->userRepository = $userRepository;
+        $this->buildingTypeRepository = $buildingTypeRepository;
     }
     
     /**
@@ -58,11 +67,12 @@ class BuildingHydrator implements HydratorInterface
             ));
         }
         
-        $building = new Building(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $building           = new Building(null,null,null,null,null,null,null,null);
         $building->exchangeArray($data);
-        $planet_id = $building->getPlanet();
-        $sputnik_id = $building->getSputnik();
-        $user_id = $building->getOwner();
+        $planet_id          = $building->getPlanet();
+        $sputnik_id         = $building->getSputnik();
+        $user_id            = $building->getOwner();
+        $buildingType_id    = $building->getBuildingType();
         try {
             $planet = $this->planetRepository->findEntity($planet_id);
         }
@@ -81,9 +91,16 @@ class BuildingHydrator implements HydratorInterface
         catch (\Exception $e) {
             $user = null;
         }
+        try {
+            $buildingType = $this->buildingTypeRepository->findEntity($buildingType_id);
+        }
+        catch (\Exception $e) {
+            $buildingType = null;
+        }
         $building->setPlanet($planet);
         $building->setSputnik($sputnik);
         $building->setOwner($user);
+        $building->setBuildingType($buildingType);
         return $building;
     }
     

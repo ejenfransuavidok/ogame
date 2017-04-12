@@ -48,9 +48,12 @@ class BuildingTypeCommand implements EntityCommandInterface
             'name'                 => $buildingType->getName(),
             'description'          => $buildingType->getDescription(),
             'type'                 => $buildingType->getType(),
-            'factor'               => $buildingType->getFactor(),
             
-            'building_acceleration'=> $buildingType->getBuildingAcceleration(),
+            'price_factor'         => $buildingType->getPriceFactor(),
+            'power_factor'         => $buildingType->getPowerFactor(),
+            'save_factor'          => $buildingType->getSaveFactor(),
+            'building_acceleration_factor'=> $buildingType->getBuildingAccelerationFactor(),
+            
             'produce_metall'       => $buildingType->getProduceMetall(),
             'produce_heavygas'     => $buildingType->getProduceHeavygas(),
             'produce_ore'          => $buildingType->getProduceOre(),
@@ -98,8 +101,12 @@ class BuildingTypeCommand implements EntityCommandInterface
             $buildingType->getName(),
             $buildingType->getDescription(),
             $buildingType->getType(),
-            $buildingType->getFactor(),
-            $buildingType->getBuildingAcceleration(),
+            
+            $buildingType->getPriceFactor(),
+            $buildingType->getPowerFactor(),
+            $buildingType->getSaveFactor(),
+            $buildingType->getBuildingAccelerationFactor(),
+            
             $buildingType->getProduceMetall(),
             $buildingType->getProduceHeavygas(),
             $buildingType->getProduceOre(),
@@ -146,7 +153,12 @@ class BuildingTypeCommand implements EntityCommandInterface
             'name'                 => $buildingType->getName(),
             'description'          => $buildingType->getDescription(),
             'type'                 => $buildingType->getType(),
-            'factor'               => $buildingType->getFactor(),
+            
+            'price_factor'         => $buildingType->getPriceFactor(),
+            'power_factor'         => $buildingType->getPowerFactor(),
+            'save_factor'          => $buildingType->getSaveFactor(),
+            'building_acceleration_factor'=> $buildingType->getBuildingAccelerationFactor(),
+            
             'building_acceleration'=> $buildingType->getBuildingAcceleration(),
             'produce_metall'       => $buildingType->getProduceMetall(),
             'produce_heavygas'     => $buildingType->getProduceHeavygas(),

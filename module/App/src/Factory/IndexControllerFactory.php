@@ -10,6 +10,7 @@ use App\Controller\AuthController;
 use App\Renderer\PopupFleet1Renderer;
 use App\Renderer\PopupFleet2Renderer;
 use App\Renderer\PopupFleet3Renderer;
+use App\Renderer\FleetMoovingActivity;
 use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
 use Universe\Model\PlanetRepository;
@@ -42,7 +43,8 @@ class IndexControllerFactory implements FactoryInterface
             $container->get(EventCommand::class),
             $container->get(PopupFleet1Renderer::class),
             $container->get(PopupFleet2Renderer::class),
-            $container->get(PopupFleet3Renderer::class)
+            $container->get(PopupFleet3Renderer::class),
+            $container->get(FleetMoovingActivity::class)
         );
     }
 }

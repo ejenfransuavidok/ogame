@@ -20,8 +20,10 @@ class Building extends Entity
     public static $BUILDING_RESOURCE = 1;
     
     public static $BUILDING_INDUSTRIAL = 2;
-    
-    public static $DELTA_REFRESH = 10;
+    /**
+     * @ час - по ТЗ
+     */
+    public static $DELTA_REFRESH = 3600;
     
     /**
      * @ Planet
@@ -44,149 +46,9 @@ class Building extends Entity
     protected $level;
     
     /**
-     * @ float
+     * @ BuildinType
      */
-    protected $factor;
-    
-    /**
-     * @ int
-     */
-    protected $building_acceleration;
-    
-    /**
-     * @ int
-     */
-    protected $produce_metall;
-    
-    /**
-     * @ int
-     */
-    protected $produce_heavygas;
-    
-    /**
-     * @ int
-     */
-    protected $produce_ore;
-    
-    /**
-     * @ int
-     */
-    protected $produce_hydro;
-    
-    /**
-     * @ int
-     */
-    protected $produce_titan;
-    
-    /**
-     * @ int
-     */
-    protected $produce_darkmatter;
-    
-    /**
-     * @ int
-     */
-    protected $produce_redmatter;
-    
-    /**
-     * @ int
-     */
-    protected $produce_anti;
-    
-    /**
-     * @ int
-     */
-    protected $produce_electricity;
-    
-    /**
-     * @ int
-     */
-    protected $consume_metall;
-    
-    /**
-     * @ int
-     */
-    protected $consume_heavygas;
-    
-    /**
-     * @ int
-     */
-    protected $consume_ore;
-    
-    /**
-     * @ int
-     */
-    protected $consume_hydro;
-    
-    /**
-     * @ int
-     */
-    protected $consume_titan;
-    
-    /**
-     * @ int
-     */
-    protected $consume_darkmatter;
-    
-    /**
-     * @ int
-     */
-    protected $consume_redmatter;
-    
-    /**
-     * @ int
-     */
-    protected $consume_anti;
-    
-    /**
-     * @ int
-     */
-    protected $consume_electricity;
-    
-    /**
-     * @ int
-     */
-    protected $type;
-    
-    /**
-     * @ int
-     */
-    protected $update;
-    
-    /**
-     * @ int
-     */
-    protected $capacity_metall;
-    
-    /**
-     * @ int
-     */
-    protected $capacity_heavygas;
-    
-    /**
-     * @ int
-     */
-    protected $capacity_ore;
-    
-    /**
-     * @ int
-     */
-    protected $capacity_hydro;
-    
-    /**
-     * @ int
-     */
-    protected $capacity_titan;
-    
-    /**
-     * @ int
-     */
-    protected $capacity_darkmatter;
-    
-    /**
-     * @ int
-     */
-    protected $capacity_redmatter;
+    protected $buidingType;
     
     
     public function __construct(
@@ -196,35 +58,8 @@ class Building extends Entity
         $sputnik,
         $owner,
         $level,
-        $type,
+        $buildingType,
         $update,
-        $factor,
-        $building_acceleration,
-        $produce_metall,
-        $produce_heavygas,
-        $produce_ore,
-        $produce_hydro,
-        $produce_titan,
-        $produce_darkmatter,
-        $produce_redmatter,
-        $produce_anti,
-        $produce_electricity,
-        $consume_metall,
-        $consume_heavygas,
-        $consume_ore,
-        $consume_hydro,
-        $consume_titan,
-        $consume_darkmatter,
-        $consume_redmatter,
-        $consume_anti,
-        $consume_electricity,
-        $capacity_metall,
-        $capacity_heavygas,
-        $capacity_ore,
-        $capacity_hydro,
-        $capacity_titan,
-        $capacity_darkmatter,
-        $capacity_redmatter,
         $id=null)
     {
         parent::__construct(self::TABLE_NAME);
@@ -234,35 +69,8 @@ class Building extends Entity
         $this->sputnik              = $sputnik;
         $this->owner                = $owner;
         $this->level                = $level;
-        $this->type                 = $type;
+        $this->buildingType         = $buildingType;
         $this->update               = $update;
-        $this->factor               = $factor;
-        $this->building_acceleration= $building_acceleration;
-        $this->produce_metall       = $produce_metall;
-        $this->produce_heavygas     = $produce_heavygas;
-        $this->produce_ore          = $produce_ore;
-        $this->produce_hydro        = $produce_hydro;
-        $this->produce_titan        = $produce_titan;
-        $this->produce_darkmatter   = $produce_darkmatter;
-        $this->produce_redmatter    = $produce_redmatter;
-        $this->produce_anti         = $produce_anti;
-        $this->produce_electricity  = $produce_electricity;
-        $this->consume_metall       = $consume_metall;
-        $this->consume_heavygas     = $consume_heavygas;
-        $this->consume_ore          = $consume_ore;
-        $this->consume_hydro        = $consume_hydro;
-        $this->consume_titan        = $consume_titan;
-        $this->consume_darkmatter   = $consume_darkmatter;
-        $this->consume_redmatter    = $consume_redmatter;
-        $this->consume_anti         = $consume_anti;
-        $this->consume_electricity  = $consume_electricity;
-        $this->capacity_metall      = $capacity_metall;
-        $this->capacity_heavygas    = $capacity_heavygas;
-        $this->capacity_ore         = $capacity_ore;
-        $this->capacity_hydro       = $capacity_hydro;
-        $this->capacity_titan       = $capacity_titan;
-        $this->capacity_darkmatter  = $capacity_darkmatter;
-        $this->capacity_redmatter   = $capacity_redmatter;
         $this->id                   = $id;
     }
     
@@ -275,35 +83,8 @@ class Building extends Entity
         $this->sputnik              = !empty($data[$prefix.'sputnik'])              ? $data[$prefix.'sputnik'] : null;
         $this->owner                = !empty($data[$prefix.'owner'])                ? $data[$prefix.'owner'] : null;
         $this->level                = !empty($data[$prefix.'level'])                ? $data[$prefix.'level'] : null;
-        $this->type                 = !empty($data[$prefix.'type'])                 ? $data[$prefix.'type'] : null;
+        $this->buildingType         = !empty($data[$prefix.'buildingType'])         ? $data[$prefix.'buildingType'] : null;
         $this->update               = !empty($data[$prefix.'update'])               ? $data[$prefix.'update'] : null;
-        $this->factor               = !empty($data[$prefix.'factor'])               ? $data[$prefix.'factor'] : null;
-        $this->building_acceleration= !empty($data[$prefix.'building_acceleration'])? $data[$prefix.'building_acceleration'] : null;
-        $this->produce_metall       = !empty($data[$prefix.'produce_metall'])       ? $data[$prefix.'produce_metall'] : null;
-        $this->produce_heavygas     = !empty($data[$prefix.'produce_heavygas'])     ? $data[$prefix.'produce_heavygas'] : null;
-        $this->produce_ore          = !empty($data[$prefix.'produce_ore'])          ? $data[$prefix.'produce_ore'] : null;
-        $this->produce_hydro        = !empty($data[$prefix.'produce_hydro'])        ? $data[$prefix.'produce_hydro'] : null;
-        $this->produce_titan        = !empty($data[$prefix.'produce_titan'])        ? $data[$prefix.'produce_titan'] : null;
-        $this->produce_darkmatter   = !empty($data[$prefix.'produce_darkmatter'])   ? $data[$prefix.'produce_darkmatter'] : null;
-        $this->produce_redmatter    = !empty($data[$prefix.'produce_redmatter'])    ? $data[$prefix.'produce_redmatter'] : null;
-        $this->produce_anti         = !empty($data[$prefix.'produce_anti'])         ? $data[$prefix.'produce_anti'] : null;
-        $this->produce_electricity  = !empty($data[$prefix.'produce_electricity'])  ? $data[$prefix.'produce_electricity'] : null;
-        $this->consume_metall       = !empty($data[$prefix.'consume_metall'])       ? $data[$prefix.'consume_metall'] : null;
-        $this->consume_heavygas     = !empty($data[$prefix.'consume_heavygas'])     ? $data[$prefix.'consume_heavygas'] : null;
-        $this->consume_ore          = !empty($data[$prefix.'consume_ore'])          ? $data[$prefix.'consume_ore'] : null;
-        $this->consume_hydro        = !empty($data[$prefix.'consume_hydro'])        ? $data[$prefix.'consume_hydro'] : null;
-        $this->consume_titan        = !empty($data[$prefix.'consume_titan'])        ? $data[$prefix.'consume_titan'] : null;
-        $this->consume_darkmatter   = !empty($data[$prefix.'consume_darkmatter'])   ? $data[$prefix.'consume_darkmatter'] : null;
-        $this->consume_redmatter    = !empty($data[$prefix.'consume_redmatter'])    ? $data[$prefix.'consume_redmatter'] : null;
-        $this->consume_anti         = !empty($data[$prefix.'consume_anti'])         ? $data[$prefix.'consume_anti'] : null;
-        $this->consume_electricity  = !empty($data[$prefix.'consume_electricity'])  ? $data[$prefix.'consume_electricity'] : null;
-        $this->capacity_metall      = !empty($data[$prefix.'capacity_metall'])      ? $data[$prefix.'capacity_metall'] : null;
-        $this->capacity_heavygas    = !empty($data[$prefix.'capacity_heavygas'])    ? $data[$prefix.'capacity_heavygas'] : null;
-        $this->capacity_ore         = !empty($data[$prefix.'capacity_ore'])         ? $data[$prefix.'capacity_ore'] : null;
-        $this->capacity_hydro       = !empty($data[$prefix.'capacity_hydro'])       ? $data[$prefix.'capacity_hydro'] : null;
-        $this->capacity_titan       = !empty($data[$prefix.'capacity_titan'])       ? $data[$prefix.'capacity_titan'] : null;
-        $this->capacity_darkmatter  = !empty($data[$prefix.'capacity_darkmatter'])  ? $data[$prefix.'capacity_darkmatter'] : null;
-        $this->capacity_redmatter   = !empty($data[$prefix.'capacity_redmatter'])   ? $data[$prefix.'capacity_redmatter'] : null;
     }
     
     public function getArrayCopy()
@@ -351,14 +132,14 @@ class Building extends Entity
         return $this->level;
     }
     
-    public function setType($type)
+    public function setBuildingType($buildingType)
     {
-        $this->type = $type;
+        $this->buildingType = $buildingType;
     }
     
-    public function getType()
+    public function getBuildingType()
     {
-        return $this->type;
+        return $this->buildingType;
     }
     
     public function setUpdate($update)
@@ -371,280 +152,160 @@ class Building extends Entity
         return $this->update;
     }
     
-    public function setFactor($factor)
-    {
-        $this->factor = $factor;
-    }
-    
-    public function getFactor()
-    {
-        return $this->factor;
-    }
-    
-    public function setBuildingAcceleration($building_acceleration)
-    {
-        $this->building_acceleration = $building_acceleration;
-    }
-    
-    public function getBuildingAcceleration()
-    {
-        return $this->building_acceleration;
-    }
-    
-    public function setProduceMetall($produce_metall)
-    {
-        $this->produce_metall = $produce_metall;
-    }
-    
-    public function getProduceMetall()
-    {
-        return $this->produce_metall != null ? $this->produce_metall : 0;
-    }
-    
-    public function setProduceHeavygas($produce_heavygas)
-    {
-        $this->produce_heavygas = $produce_heavygas;
-    }
-    
-    public function getProduceHeavygas()
-    {
-        return $this->produce_heavygas != null ? $this->produce_heavygas : 0;
-    }
-    
-    public function setProduceOre($produce_ore)
-    {
-        $this->produce_ore = $produce_ore;
-    }
-    
-    public function getProduceOre()
-    {
-        return $this->produce_ore != null ? $this->produce_ore : 0;
-    }
-    
-    public function setProduceHydro($produce_hydro)
-    {
-        $this->produce_hydro = $produce_hydro;
-    }
-    
-    public function getProduceHydro()
-    {
-        return $this->produce_hydro != null ? $this->produce_hydro : 0;
-    }
-    
-    public function setProduceTitan($produce_titan)
-    {
-        $this->produce_titan = $produce_titan;
-    }
-    
-    public function getProduceTitan()
-    {
-        return $this->produce_titan != null ? $this->produce_titan : 0;
-    }
-    
-    public function setProduceDarkmatter($produce_darkmatter)
-    {
-        $this->produce_darkmatter = $produce_darkmatter;
-    }
-    
-    public function getProduceDarkmatter()
-    {
-        return $this->produce_darkmatter != null ? $this->produce_darkmatter : 0;
-    }
-    
-    public function setProduceRedmatter($produce_redmatter)
-    {
-        $this->produce_redmatter = $produce_redmatter;
-    }
-    
-    public function getProduceRedmatter()
-    {
-        return $this->produce_redmatter != null ? $this->produce_redmatter : 0;
-    }
-    
-    public function setProduceAnti($produce_anti)
-    {
-        $this->produce_anti = $produce_anti;
-    }
-    
-    public function getProduceAnti()
-    {
-        return $this->produce_anti != null ? $this->produce_anti : 0;
-    }
-    
-    public function setProduceElectricity($produce_electricity)
-    {
-        $this->produce_electricity = $produce_electricity;
-    }
-    
     public function getProduceElectricity()
     {
-        return $this->produce_electricity != null ? $this->produce_electricity : 0;
-    }
-    
-    /*consume*/
-    
-    public function setConsumeMetall($consume_metall)
-    {
-        $this->consume_metall = $consume_metall;
-    }
-    
-    public function getConsumeMetall()
-    {
-        return $this->consume_metall != null ? $this->consume_metall : 0;
-    }
-    
-    public function setConsumeHeavygas($consume_heavygas)
-    {
-        $this->consume_heavygas = $consume_heavygas;
-    }
-    
-    public function getConsumeHeavygas()
-    {
-        return $this->consume_heavygas != null ? $this->consume_heavygas : 0;
-    }
-    
-    public function setConsumeOre($consume_ore)
-    {
-        $this->consume_ore = $consume_ore;
-    }
-    
-    public function getConsumeOre()
-    {
-        return $this->consume_ore != null ? $this->consume_ore : 0;
-    }
-    
-    public function setConsumeHydro($consume_hydro)
-    {
-        $this->consume_hydro = $consume_hydro;
-    }
-    
-    public function getConsumeHydro()
-    {
-        return $this->consume_hydro != null ? $this->consume_hydro : 0;
-    }
-    
-    public function setConsumeTitan($consume_titan)
-    {
-        $this->consume_titan = $consume_titan;
-    }
-    
-    public function getConsumeTitan()
-    {
-        return $this->consume_titan != null ? $this->consume_titan : 0;
-    }
-    
-    public function setConsumeDarkmatter($consume_darkmatter)
-    {
-        $this->consume_darkmatter = $consume_darkmatter;
-    }
-    
-    public function getConsumeDarkmatter()
-    {
-        return $this->consume_darkmatter != null ? $this->consume_darkmatter : 0;
-    }
-    
-    public function setConsumeRedmatter($consume_redmatter)
-    {
-        $this->consume_redmatter = $consume_redmatter;
-    }
-    
-    public function getConsumeRedmatter()
-    {
-        return $this->consume_redmatter != null ? $this->consume_redmatter : 0;
-    }
-    
-    public function setConsumeAnti($consume_anti)
-    {
-        $this->consume_anti = $consume_anti;
-    }
-    
-    public function getConsumeAnti()
-    {
-        return $this->consume_anti != null ? $this->consume_anti : 0;
-    }
-    
-    public function setConsumeElectricity($consume_electricity)
-    {
-        $this->consume_electricity = $consume_electricity;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceElectricity() * $this->level * $this->level;
     }
     
     public function getConsumeElectricity()
     {
-        return $this->consume_electricity != null ? $this->consume_electricity : 0;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getPowerFactor() * $this->level * $this->level;
     }
     
-    public function setCapacityMetall($capacity_metall)
+    public function getProduceMetallPerHour()
     {
-        $this->capacity_metall = $capacity_metall;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceMetall() * $this->level * $this->level;
     }
     
+    public function getProduceHeavygasPerHour()
+    {
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceHeavygas() * $this->level * $this->level;
+    }
+    
+    public function getProduceOrePerHour()
+    {
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceOre() * $this->level * $this->level;
+    }
+    
+    public function getProduceHydroPerHour()
+    {
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceHydro() * $this->level * $this->level;
+    }
+    
+    public function getProduceTitanPerHour()
+    {
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceTitan() * $this->level * $this->level;
+    }
+    
+    public function getProduceDarkmatterPerHour()
+    {
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceDarkmatter() * $this->level * $this->level;
+    }
+    
+    public function getProduceRedmatterPerHour()
+    {
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceRedmatter() * $this->level * $this->level;
+    }
+    
+    public function getProduceAntiPerHour()
+    {
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getProduceAnti() * $this->level * $this->level;
+    }
+    
+    /**
+     * CONSUME
+     */
     public function getCapacityMetall()
     {
-        return $this->capacity_metall != null ? $this->capacity_metall : 0;
-    }
-    
-    public function setCapacityHeavygas($capacity_heavygas)
-    {
-        $this->capacity_heavygas = $capacity_heavygas;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getCapacityMetall() * $this->level * $this->level * $this->level;
     }
     
     public function getCapacityHeavygas()
     {
-        return $this->capacity_heavygas != null ? $this->capacity_heavygas : 0;
-    }
-    
-    public function setCapacityOre($capacity_ore)
-    {
-        $this->capacity_ore = $capacity_ore;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getCapacityHeavygas() * $this->level * $this->level * $this->level;
     }
     
     public function getCapacityOre()
     {
-        return $this->capacity_ore != null ? $this->capacity_ore : 0;
-    }
-    
-    public function setCapacityHydro($capacity_hydro)
-    {
-        $this->capacity_hydro = $capacity_hydro;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getCapacityOre() * $this->level * $this->level  * $this->level;
     }
     
     public function getCapacityHydro()
     {
-        return $this->capacity_hydro != null ? $this->capacity_hydro : 0;
-    }
-    
-    public function setCapacityTitan($capacity_titan)
-    {
-        $this->capacity_titan = $capacity_titan;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getCapacityHydro() * $this->level * $this->level * $this->level;
     }
     
     public function getCapacityTitan()
     {
-        return $this->capacity_titan != null ? $this->capacity_titan : 0;
-    }
-    
-    public function setCapacityDarkmatter($capacity_darkmatter)
-    {
-        $this->capacity_darkmatter = $capacity_darkmatter;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getCapacityTitan() * $this->level * $this->level * $this->level;
     }
     
     public function getCapacityDarkmatter()
     {
-        return $this->capacity_darkmatter != null ? $this->capacity_darkmatter : 0;
-    }
-    
-    public function setCapacityRedmatter($capacity_redmatter)
-    {
-        $this->capacity_redmatter = $capacity_redmatter;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getCapacityDarkmatter() * $this->level * $this->level * $this->level;
     }
     
     public function getCapacityRedmatter()
     {
-        return $this->capacity_redmatter != null ? $this->capacity_redmatter : 0;
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getCapacityRedmatter() * $this->level * $this->level * $this->level;
     }
+    
+    public function getCapacityAnti()
+    {
+        /**
+         * @ согласно Таблица данных 0.5.xlsx
+         */
+        return $this->buildingType->getCapacityAnti() * $this->level * $this->level * $this->level;
+    } 
+    
+    /**
+     * 
+     */
     
     public function getConsumeAll()
     {
+        /*
         $metall         = $this->getConsumeMetall();
         $heavygas       = $this->getConsumeHeavygas();
         $ore            = $this->getConsumeOre();
@@ -654,6 +315,7 @@ class Building extends Entity
         $redmatter      = $this->getConsumeRedmatter();
         $anti           = $this->getConsumeAnti();
         return ($metall + $heavygas + $ore + $hydro + $titan + $darkmatter + $redmatter + $anti);
+        */
     }
     
 }

@@ -36,14 +36,6 @@ var Fleet_2 = exports.Fleet_2 = function () {
             $(document).on('keyup', '.fleet__deliver-coordinates-item', function (evt) {
                 return _this.fleet__delivery_coordinates_change(evt);
             });
-            $(document).on('click', '[data-entity=popup_fleet_3_go]', function (evt) {
-                return _this.fleet_go(evt);
-            });
-        }
-    }, {
-        key: 'fleet_go',
-        value: function fleet_go(evt) {
-            $.notify('Полетели...');
         }
     }, {
         key: 'fleet__delivery_coordinates_change',

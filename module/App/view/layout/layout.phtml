@@ -29,6 +29,10 @@
         </div>
         <?= $this->headLink() ?>
         <?= $this->inlineScript() ?>
+        <script src="/node/socket.io/socket.io.js"></script>
+        <script>
+            //var socket = io('http://www.ogame.zz:8000');
+        </script>
         <script>
             SystemJS.config({
                 baseURL: '<?= $this->basePath('/js/') ?>'

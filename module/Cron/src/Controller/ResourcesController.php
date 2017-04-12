@@ -96,25 +96,36 @@ class ResourcesController extends AbstractActionController
                      * 3. выберем все ресурсные здания на планете
                      */
                     $electricity = 0;
-                    foreach($this->buildingRepository->findBy('buildings.planet = ' . $planet->getId() . ' AND buildings.type = ' . Building::$BUILDING_RESOURCE) as $building){
+                    foreach($this->buildingRepository->findBy('buildings.planet = ' . $planet->getId() . ' AND building_types_alias.type = ' . Building::$BUILDING_RESOURCE) as $building){
                         $update = $building->getUpdate();
+                        $buildingType = $building->getBuildingType();
+                        
                         $electricity = $electricity + $building->getProduceElectricity() - $building->getConsumeElectricity();
                         /**
                          * пришло время для обновления
                          */
                         if($now > $update){
-                            $K          = intval(ceil(($now - $update) / Building::$DELTA_REFRESH));
-                            $metall     = intval(ceil($K * $type->getMetall() * $building->getProduceMetall()           + $planet->getMetall()));
-                            $heavygas   = intval(ceil($K * $type->getHeavyGas() * $building->getProduceHeavygas()       + $planet->getHeavyGas()));
-                            $ore        = intval(ceil($K * $type->getOre() * $building->getProduceOre()                 + $planet->getOre()));
-                            $hydro      = intval(ceil($K * $type->getHydro() * $building->getProduceHydro()             + $planet->getHydro()));
-                            $titan      = intval(ceil($K * $type->getTitan() * $building->getProduceTitan()             + $planet->getTitan()));
-                            $darkmatter = intval(ceil($K * $type->getDarkmatter() * $building->getProduceDarkmatter()   + $planet->getDarkmatter()));
-                            $redmatter  = intval(ceil($K * $type->getRedmatter() * $building->getProduceRedmatter()     + $planet->getRedmatter()));
-                            $anti       = intval(ceil($K * $type->getAnti() * $building->getProduceAnti()               + $planet->getAnti()));
+                            $K          = floatval(ceil(($now - $update) / Building::$DELTA_REFRESH));
+                            $metall     = intval(ceil($K * $type->getMetall() * $building->getProduceMetallPerHour() 
+                                + $planet->getMetall()));
+                            $heavygas   = intval(ceil($K * $type->getHeavyGas() * $building->getProduceHeavygasPerHour() 
+                                + $planet->getHeavyGas()));
+                            $ore        = intval(ceil($K * $type->getOre() * $building->getProduceOrePerHour()
+                                + $planet->getOre()));
+                            $hydro      = intval(ceil($K * $type->getHydro() * $building->getProduceHydroPerHour()
+                                + $planet->getHydro()));
+                            $titan      = intval(ceil($K * $type->getTitan() * $building->getProduceTitanPerHour()
+                                + $planet->getTitan()));
+                            $darkmatter = intval(ceil($K * $type->getDarkmatter() * $building->getProduceDarkmatterPerHour()
+                                + $planet->getDarkmatter()));
+                            $redmatter  = intval(ceil($K * $type->getRedmatter() * $building->getProduceRedmatterPerHour()
+                                + $planet->getRedmatter()));
+                            $anti       = intval(ceil($K * $type->getAnti() * $building->getProduceAntiPerHour()
+                                + $planet->getAnti()));
                             /* end */
-                            $building->setUpdate($now + Building::$DELTA_REFRESH);
+                            $building->setUpdate($now + Building::$DELTA_REFRESH / 600);
                             $building = $this->buildingCommand->updateEntity($building);
+                            
                             $metall_limit       = $this->planetCapacity->getMetallCapacity($planet->getId());
                             $heavygas_limit     = $this->planetCapacity->getHeavyGasCapacity($planet->getId());
                             $ore_limit          = $this->planetCapacity->getOreCapacity($planet->getId());
@@ -122,6 +133,7 @@ class ResourcesController extends AbstractActionController
                             $titan_limit        = $this->planetCapacity->getTitanCapacity($planet->getId());
                             $darkmatter_limit   = $this->planetCapacity->getDarkmatterCapacity($planet->getId());
                             $redmatter_limit    = $this->planetCapacity->getRedmatterCapacity($planet->getId());
+                            
                             $planet->setMetall(         $metall     > $metall_limit     ? $metall_limit     : $metall);
                             $planet->setHeavyGas(       $heavygas   > $heavygas_limit   ? $heavygas_limit   : $heavygas);
                             $planet->setOre(            $ore        > $ore_limit        ? $ore_limit        : $ore);

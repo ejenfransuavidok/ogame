@@ -15,6 +15,7 @@ return [
             Renderer\PopupFleet1Renderer::class => Factory\PopupFleet1RendererFactory::class,
             Renderer\PopupFleet2Renderer::class => Factory\PopupFleet2RendererFactory::class,
             Renderer\PopupFleet3Renderer::class => Factory\PopupFleet3RendererFactory::class,
+            Renderer\FleetMoovingActivity::class => Factory\FleetMoovingActivityFactory::class,
         ],
     ],
     'controllers' => [
@@ -22,6 +23,7 @@ return [
             Controller\IndexController::class => Factory\IndexControllerFactory::class,
             Controller\AuthController::class => Factory\AuthControllerFactory::class,
             Controller\FleetSetupTargetController::class => Factory\FleetSetupTargetControllerFactory::class,
+            Controller\FleetLauncherController::class => Factory\FleetLauncherControllerFactory::class,
         ],
     ],
     'router' => [
@@ -103,6 +105,28 @@ return [
                             'defaults' => [
                                 'controller' => Controller\FleetSetupTargetController::class,
                                 'action' => 'setuptarget',
+                            ],
+                        ],
+                    ],
+                    
+                    'fleetlaunch' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/fleetlaunch',
+                            'defaults' => [
+                                'controller' => Controller\FleetLauncherController::class,
+                                'action' => 'fleetlaunch',
+                            ],
+                        ],
+                    ],
+                    
+                    'fleetforwardpopupupdater' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/fleetforwardpopupupdater',
+                            'defaults' => [
+                                'controller' => Controller\IndexController::class,
+                                'action' => 'fleetforwardpopupupdater',
                             ],
                         ],
                     ],

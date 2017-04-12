@@ -1,20 +1,40 @@
 <div class="keep__column keep__column_middle">
     <div class="keep__column-title">Ресурсы</div>
-    <div class="keep__item clr_brown" data-entity="resources-build-block" data-event_id="<?php if($is_building) { echo $event->getId(); } ?>">
-		<?php if($is_building) : ?>
+    <div class="keep__item clr_brown" 
+        data-root="root"
+        data-entity="resources-build-block-main" 
+        data-event_id="<?= $is_building ? $event->getId() : 0 ?>"
+        <?php //if($is_building) : ?>
+        data-event_id="<?= $is_building ? $event->getId() : 0 ?>"
+        data-event_begin="<?= $is_building ? $event->getEventBegin() : 0 ?>"
+        data-event_end="<?= $is_building ? $event->getEventEnd() : 0 ?>"
+        data-event_now="<?= time() ?>"
+        data-identifier="<?= $is_building ? $event->getTargetBuildingType()->getId() : 0 ?>"
+        <?php //endif; ?>
+    >
+		<?php //if($is_building) : ?>
         <div class="keep__item-info">
 			<div class="keep__item-info-header"><a href="#" class="btn">1,5x</a><a href="#" class="btn">2x</a></div>
-			<div class="keep__item-info-text"> <?= $event->getName() ?></div>
+			<div class="keep__item-info-text"> <?= $is_building ? $event->getName() : '' ?></div>
 			<div class="keep__item-info-close">
                 <i class="ico">
                     <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="#ffffff" d="M415.7,397.8l2.72-2.72a2.349,2.349,0,0,0-3.323-3.322l-2.719,2.719-2.719-2.719a2.349,2.349,0,0,0-3.322,3.322l2.719,2.72-2.719,2.719a2.349,2.349,0,0,0,3.322,3.323l2.719-2.72,2.719,2.72a2.35,2.35,0,0,0,3.323-3.323Z" transform="translate(-402.406 -387.813)"/></svg>
                 </i>
-                <span class="value" data-entity="reject_building_button_<?= $event->getId()?>">Отмена</span>
+                <span class="value" data-entity="reject_building_button">Отмена</span>
             </div>
 		</div>
-        <?php endif; ?>
-		<div class="keep__item-preview" <?php if(!$is_building) :?>data-popup=".popup_building" data-popup_id="popup_building" data-tab_open="building_resources" style="cursor: pointer;"<?php endif; ?>>
-			<div data-entity_progress="<?php if($is_building) { echo  $event->getId(); } ?>" style="height:<?= $progress ?>%;" class="keep__item-preview-progress">
+        <?php //endif; ?>
+		<div class="keep__item-preview" 
+            <?php //if(!$is_building) :?>
+                data-popup=".popup_building" 
+                data-popup_id="popup_building" 
+                data-tab_open="building_resources" 
+                style="cursor: pointer;"
+            <?php //endif; ?>>
+			<div 
+                data-entity_progress="<?php if($is_building) { echo  $event->getId(); } ?>"
+                style="height:<?= $progress ?>%;" 
+                class="keep__item-preview-progress">
                 <i>
                     <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 90 90"><path d="M75.984,80.975H-0.008V23.511l0.481-.295L38.539-.013,75.984,23.519V80.975Z" transform="translate(7.016 4.516)"/></svg>
                 </i>
@@ -30,7 +50,9 @@
                 </i>
             </div>
 		</div>
-		<div class="keep__item-timer"><span><i data-entity="timer"><?= $hours?>:<?= $minutes?>:<?= $seconds?></i></span></div>
+		<div class="keep__item-timer">
+            <span><i data-entity="timer"><?= $hours?>:<?= $minutes?>:<?= $seconds?></i></span>
+        </div>
 	</div>
     <?php if($is_building) : ?>
 	<div class="keep__item clr_brown" data-entity="source-building-process">

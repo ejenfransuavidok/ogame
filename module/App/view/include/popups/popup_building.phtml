@@ -54,7 +54,10 @@
                                 data-entity="srcbuilding" 
                                 data-identifier="<?= $building->getId() ?>"
                                 data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
-                                data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>">
+                                data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>"
+                                data-building_price_factor="<?= $building->getPriceFactor() ?>"
+                                data-summ_resource_consume="<?= $building->getConsumeAll() ?>"
+                                >
                                 <div class="keep__item clr_red">
                                     <?= $building->getPicture() ?>
                                     <div class="keep__item-text"><span data-entity="keep__item-text"><?= $building->getName() ?></span></div>

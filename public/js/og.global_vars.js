@@ -12,7 +12,8 @@ var GlobalVars = exports.GlobalVars = function () {
     function GlobalVars() {
         _classCallCheck(this, GlobalVars);
 
-        if ($('[data-current_planet]').length) this.current_planet = $('[data-current_planet]').data('current_planet');else this.current_planet = 0;
+        if ($('[data-entity_user]').length) this.current_user = $('[data-entity_user]').data('entity_user');else this.current_user = 0;
+        if ($('[data-entity_planet]').length) this.current_planet = $('[data-entity_planet]').data('entity_planet');else this.current_planet = 0;
     }
 
     _createClass(GlobalVars, [{
@@ -22,6 +23,15 @@ var GlobalVars = exports.GlobalVars = function () {
                 throw 'Current Planet did not define in that page';
             } else {
                 return this.current_planet;
+            }
+        }
+    }, {
+        key: 'getCurrentUser',
+        value: function getCurrentUser() {
+            if (!this.current_user) {
+                throw 'Current User did not define in that page';
+            } else {
+                return this.current_user;
             }
         }
     }]);

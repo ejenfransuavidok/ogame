@@ -104,7 +104,6 @@ class FlightCalculator
         $this->calcFlot($sheeps);
         $flightOrder->setTarget($targetUniversePosition->getPlanet());
         $flightOrder->setDistance(abs($targetUniversePosition->getPlanet()->getCoordinate() - $currentPlanet->getCoordinate()));
-//echo ' [ ' . $targetUniversePosition->getPlanet()->getCoordinate() . ' ][ ' . $currentPlanet->getCoordinate() . ' ] ';     
         $flightOrder->setPeriod(0);
         $flightOrder->setCanGetTarget(true);
         foreach($sheeps as $sheep) {

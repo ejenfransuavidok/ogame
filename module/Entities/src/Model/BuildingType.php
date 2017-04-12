@@ -24,12 +24,22 @@ class BuildingType extends Entity
     /**
      * @ float
      */
-    protected $factor;
+    protected $price_factor;
     
     /**
-     * @ int
+     * @ float
      */
-    protected $building_acceleration;
+    protected $power_factor;
+    
+    /**
+     * @ float
+     */
+    protected $save_factor;
+    
+    /**
+     * @ float
+     */
+    protected $building_acceleration_factor;
     
     /**
      * @ int
@@ -171,8 +181,10 @@ class BuildingType extends Entity
         $name, 
         $description, 
         $type,
-        $factor,
-        $building_acceleration,
+        $price_factor,
+        $power_factor,
+        $save_factor,
+        $building_acceleration_factor,
         $produce_metall,
         $produce_heavygas,
         $produce_ore,
@@ -205,8 +217,10 @@ class BuildingType extends Entity
         $this->name                 = $name;
         $this->description          = $description;
         $this->type                 = $type;
-        $this->factor               = $factor;
-        $this->building_acceleration= $building_acceleration;
+        $this->price_factor         = $price_factor;
+        $this->power_factor         = $power_factor;
+        $this->save_factor          = $save_factor;
+        $this->building_acceleration_factor = $building_acceleration_factor;
         $this->produce_metall       = $produce_metall;
         $this->produce_heavygas     = $produce_heavygas;
         $this->produce_ore          = $produce_ore;
@@ -242,8 +256,10 @@ class BuildingType extends Entity
         $this->name                 = !empty($data[$prefix.'name'])                 ? $data[$prefix.'name'] : null;
         $this->description          = !empty($data[$prefix.'description'])          ? $data[$prefix.'description'] : null;
         $this->type                 = !empty($data[$prefix.'type'])                 ? $data[$prefix.'type'] : null;
-        $this->factor               = !empty($data[$prefix.'factor'])               ? $data[$prefix.'factor'] : null;
-        $this->building_acceleration= !empty($data[$prefix.'building_acceleration'])? $data[$prefix.'building_acceleration'] : null;
+        $this->price_factor         = !empty($data[$prefix.'price_factor'])         ? $data[$prefix.'price_factor'] : null;
+        $this->power_factor         = !empty($data[$prefix.'power_factor'])         ? $data[$prefix.'power_factor'] : null;
+        $this->save_factor          = !empty($data[$prefix.'save_factor'])          ? $data[$prefix.'save_factor'] : null;
+        $this->building_acceleration_factor = !empty($data[$prefix.'building_acceleration_factor'])? $data[$prefix.'building_acceleration_factor'] : null;
         
         $this->produce_metall       = !empty($data[$prefix.'produce_metall'])       ? $data[$prefix.'produce_metall'] : null;
         $this->produce_heavygas     = !empty($data[$prefix.'produce_heavygas'])     ? $data[$prefix.'produce_heavygas'] : null;
@@ -291,24 +307,44 @@ class BuildingType extends Entity
         return $this->type;
     }
     
-    public function setFactor($factor)
+    public function setPriceFactor($price_factor)
     {
-        $this->factor = $factor;
+        $this->price_factor = $price_factor;
     }
     
-    public function getFactor()
+    public function getPriceFactor()
     {
-        return $this->factor;
+        return $this->price_factor;
     }
     
-    public function setBuildingAcceleration($building_acceleration)
+    public function setPowerFactor($power_factor)
     {
-        $this->building_acceleration = $building_acceleration;
+        $this->power_factor = $power_factor;
     }
     
-    public function getBuildingAcceleration()
+    public function getPowerFactor()
     {
-        return $this->building_acceleration;
+        return $this->power_factor;
+    }
+    
+    public function setSaveFactor($save_factor)
+    {
+        $this->save_factor = $save_factor;
+    }
+    
+    public function getSaveFactor()
+    {
+        return $this->save_factor;
+    }
+    
+    public function setBuildingAccelerationFactor($building_acceleration_factor)
+    {
+        $this->building_acceleration_factor = $building_acceleration_factor;
+    }
+    
+    public function getBuildingAccelerationFactor()
+    {
+        return $this->building_acceleration_factor;
     }
     
     public function setProduceMetall($produce_metall)
@@ -617,9 +653,11 @@ class BuildingType extends Entity
     
     public function getBuildingPeriod($currentPlanet, $currentSputnik, $buildingRepository)
     {
-        $level = $this->getCurrentLevel($currentPlanet, $currentSputnik, $buildingRepository) + 1;
-        $K = $this->factor * $level;
+        $level = $this->getCurrentLevel($currentPlanet, $currentSputnik, $buildingRepository);
+        
+        $K = pow($this->price_factor, $level);
         $time = intval(ceil($K * $this->getConsumeAll() / 30));
+        
         return TimeUtils::time2Interval($time);
     }
     

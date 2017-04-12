@@ -20,6 +20,10 @@ var _ogPopups = require('og.popups.js');
 
 var _ogFleet_2 = require('og.fleet_2.js');
 
+var _ogFleet_3 = require('og.fleet_3.js');
+
+var _ogGlobal_vars = require('og.global_vars.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var JQueryStarter = function () {
@@ -63,15 +67,20 @@ var Main = function () {
     _createClass(Main, [{
         key: 'processing',
         value: function processing() {
+            this.socket = io('http://www.ogame.zz:8000');
+            this.gvars = new _ogGlobal_vars.GlobalVars();
+
+            this.socket.emit('currentData', { currentUser: this.gvars.getCurrentUser(), currentPlanet: this.gvars.getCurrentPlanet() });
+
             this.popups = new _ogPopups.Popups();
             this.universe = new _ogUniverse.Universe();
             this.auth = new _ogAuth.Auth();
             //this.buildings = new Buildings();
             this.source_updater = new _ogSources_updater.SrcUpdater();
-            this.popup_building_handler = new _ogPopup_building.PopupBuilding();
+            this.popup_building_handler = new _ogPopup_building.PopupBuilding(this.socket);
             this.popup_fleet_1_handler = new _ogFleet_.Fleet_1();
             this.popup_fleet_2_handler = new _ogFleet_2.Fleet_2();
-
+            this.popup_fleet_3_handler = new _ogFleet_3.Fleet_3();
             this.dbeventer = new _ogDb_eventer.DBEventer(this.popup_building_handler);
         }
     }]);

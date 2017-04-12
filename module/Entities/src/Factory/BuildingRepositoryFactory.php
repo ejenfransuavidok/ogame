@@ -5,6 +5,7 @@ namespace Entities\Factory;
 use Interop\Container\ContainerInterface;
 use Entities\Model\Building;
 use Entities\Model\BuildingRepository;
+use Entities\Model\BuildingTypeRepository;
 use Entities\Model\Hydrator\BuildingHydrator;
 use Entities\Model\UserRepository;
 use Universe\Model\PlanetRepository;
@@ -22,8 +23,9 @@ class BuildingRepositoryFactory implements FactoryInterface
             new BuildingHydrator(
                 $container->get(PlanetRepository::class),
                 $container->get(SputnikRepository::class),
-                $container->get(UserRepository::class)),
-            new Building(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+                $container->get(UserRepository::class),
+                $container->get(BuildingTypeRepository::class)),
+            new Building(null,null,null,null,null,null,null,null)
         );
     }
 }

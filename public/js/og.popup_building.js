@@ -9,29 +9,39 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _ogAjaxer = require('og.ajaxer.js');
 
+var _ogGlobal_vars = require('og.global_vars.js');
+
+var _ogInterval = require('og.interval.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var PopupBuilding = exports.PopupBuilding = function () {
-    function PopupBuilding() {
+    function PopupBuilding(socket) {
         _classCallCheck(this, PopupBuilding);
 
+        this.socket = socket;
         this.ajaxer = new _ogAjaxer.Ajaxer();
-        this.reject_building_button_handlers = {};
+        this.interval = new _ogInterval.Interval();
+        this.src_buildind_block_checking('[data-entity=resources-build-block-main]');
+        //this.reject_building_button_handlers = {};
         if ($('.popup_building').length) {
             this.exec();
         }
+        socket.on('sourceBuildingComplete', function (data) {
+            $.notify(data.message);
+        });
     }
 
     _createClass(PopupBuilding, [{
         key: 'resources_building_callback',
         value: function resources_building_callback(id, event) {
-            if (event) {
-                this.start_continue_timer(id, event.event_begin, event.event_end, event.now);
-            }
+            //if(event){
+            //    this.start_continue_timer(id, event.event_begin, event.event_end, event.now);
+            //}
         }
     }, {
         key: 'start_continue_timer',
-        value: function start_continue_timer(event_id, begin, end, now) {
+        value: function start_continue_timer(event_id, begin, end, now, building_id, main) {
             var _this = this;
 
             var evt_id = parseInt(event_id);
@@ -39,21 +49,34 @@ var PopupBuilding = exports.PopupBuilding = function () {
             var evt_end = parseInt(end);
             var evt_now = parseInt(now);
             var rest = evt_end - evt_now;
+
             if (this.building_timer) {
                 clearInterval(this.building_timer);
             }
             this.building_timer = setInterval(function () {
                 if (rest <= -1) {
                     clearInterval(_this.building_timer);
+                    var current_level = parseInt($('[data-identifier=' + building_id + ']').attr('data-building_level'));
+                    var price_factor = parseFloat($('[data-identifier=' + building_id + ']').attr('data-building_price_factor'));
+                    var new_period = parseInt(Math.pow(parseFloat($('[data-identifier=' + building_id + ']').attr('data-building_price_factor')), current_level) * parseInt($('[data-identifier=' + building_id + ']').attr('data-summ_resource_consume')) / 30);
+                    $('[data-identifier=' + building_id + ']').attr('data-building_period', _this.interval.interval2string(new_period));
+                    $('[data-identifier=' + building_id + ']').attr('data-building_level', parseInt(current_level + 1));
+                    $('[data-identifier=' + building_id + ']').find('.keep__item-lvl').html('<span>lv. ' + parseInt(current_level + 1) + '</span>');
+                    $('[data-event_id=' + evt_id + ']').find('[data-entity_progress]').css('height', '0%');
+                    $(main).attr('data-event_id', 0);
+                    /**
+                     * @ запрос на обновление ивентов
+                     */
+                    _this.ajaxer.execute('post', '/cron/updater/index', '', 'json', function (data) {
+                        /**
+                         * @ обновим экран
+                         */
+                        console.log(data);
+                        $.notify(data.message);
+                    });
                 } else {
                     var interval = evt_end - evt_begin;
-                    var hours = Math.floor(rest / 3600);
-                    var minutes = Math.floor((rest - 3600 * hours) / 60);
-                    var seconds = rest - 3600 * hours - 60 * minutes;
-                    if (hours < 10) hours = "0" + hours;
-                    if (minutes < 10) minutes = "0" + minutes;
-                    if (seconds < 10) seconds = "0" + seconds;
-                    var time = hours + ':' + minutes + ':' + seconds;
+                    var time = _this.interval.resttime2string(rest, evt_begin, evt_end);
                     var progress = Math.ceil(100 - 100 * rest / interval);
                     $('[data-event_id=' + evt_id + ']').find('[data-entity=timer]').html(time);
                     $('[data-event_id=' + evt_id + ']').find('[data-entity_progress]').css('height', progress + '%');
@@ -72,6 +95,9 @@ var PopupBuilding = exports.PopupBuilding = function () {
             });
             $(document).on('click', '[data-entity=popup_building-popup__pp-popup__pp-control-build-button]', function (evt) {
                 return _this2.build(evt);
+            });
+            $(document).on('click', '[data-entity=reject_building_button]', function (evt) {
+                return _this2.reject_building(evt);
             });
             $(document).on('mousedown', '[data-popup_id=popup_building]', function (evt) {
                 var obj = $(evt.target).closest('.keep__item-preview');
@@ -95,6 +121,18 @@ var PopupBuilding = exports.PopupBuilding = function () {
             });
         }
     }, {
+        key: 'reject_building',
+        value: function reject_building(evt) {
+            var obj = $(evt.target);
+            var root = $(obj).closest('[data-root=root]');
+            var event_id = parseInt($(root).attr('data-event_id'));
+            if (event_id) {
+                $.notify('building going on');
+            } else {
+                $.notify('building isnt building');
+            }
+        }
+    }, {
         key: 'install_reject_button_handler',
         value: function install_reject_button_handler(event_id) {
             var _this3 = this;
@@ -113,37 +151,13 @@ var PopupBuilding = exports.PopupBuilding = function () {
         value: function updatePlanetkeep() {
             var _this4 = this;
 
-            $.ajax({
-                type: 'post',
-                url: '/app/planetkeep',
-                data: 'planetid=' + this.current_planet,
-                dataType: "json",
-                complete: function complete(res) {
-                    try {
-                        var data = res.responseJSON;
-                        if (res.status) {
-                            var status = res.status;
-                            if (status == 200) {
-                                if (data.result == 'YES') {
-                                    $('[data-entity=game__planet-keep-keep]').html(data.content);
-                                    $('.popup_building').remove();
-                                    $(data.popup_building).insertAfter('.game');
-                                    _this4.start_continue_timer(data.event_id, data.begin, data.end, data.now);
-                                    _this4.install_reject_button_handler(data.event_id);
-                                    window.theGame.plugs.update();
-                                } else {
-                                    $.notify(data.message);
-                                }
-                            } else {
-                                $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');
-                            }
-                        } else {
-                            $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');
-                        }
-                    } catch (err) {
-                        $.notify(err.message);
-                    }
-                }
+            this.ajaxer.execute('post', '/app/planetkeep', 'planetid=' + this.current_planet, 'json', function (data) {
+                $('[data-entity=game__planet-keep-keep]').html(data.content);
+                $('.popup_building').remove();
+                $(data.popup_building).insertAfter('.game');
+                _this4.start_continue_timer(data.event_id, data.begin, data.end, data.now);
+                _this4.install_reject_button_handler(data.event_id);
+                window.theGame.plugs.update();
             });
         }
     }, {
@@ -151,46 +165,41 @@ var PopupBuilding = exports.PopupBuilding = function () {
         value: function build(evt) {
             var _this5 = this;
 
+            /**
+             * @ запуск строительства
+             */
             var obj = $(evt.target);
             window.theGame.popup.close('.popup');
             $(obj).closest('.popup__pp').removeClass('is-open');
             this.building_id = $(obj).closest('.popup__pp').data('building_id');
-            $.ajax({
-                type: 'post',
-                url: '/eventer/initbuild',
-                data: 'planet=' + this.current_planet + '&buildingType=' + this.building_id,
-                dataType: "json",
-                complete: function complete(res) {
-                    try {
-                        var data = res.responseJSON;
-                        if (res.status) {
-                            var status = res.status;
-                            if (status == 200) {
-                                if (data.result == 'YES') {
-                                    $.notify(data.message);
-                                    _this5.updatePlanetkeep();
-                                } else {
-                                    $.notify(data.message);
-                                }
-                            } else {
-                                $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');
-                            }
-                        } else {
-                            $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');
-                        }
-                    } catch (err) {
-                        $.notify(err.message);
-                    }
-                }
+            this.ajaxer.execute('post', '/eventer/initbuild', 'planet=' + this.current_planet + '&buildingType=' + this.building_id, 'json', function (data) {
+                var main = $('[data-entity=resources-build-block-main]');
+                $(main).attr('data-event_id', data.event_id);
+                _this5.start_continue_timer(data.event_id, data.begin, data.end, data.now, _this5.building_id, main);
             });
+        }
+    }, {
+        key: 'src_buildind_block_checking',
+        value: function src_buildind_block_checking(selector) {
+            if ($(selector).length) {
+                var main = $(selector);
+                if (typeof $(main).attr('data-event_id') != 'undefined' && $(main).attr('data-event_id') != 0 && $(main).attr('data-event_id') != '') {
+                    var event_id = parseInt($(main).attr('data-event_id'));
+                    var begin = parseInt($(main).attr('data-event_begin'));
+                    var end = parseInt($(main).attr('data-event_end'));
+                    var now = parseInt($(main).attr('data-event_now'));
+                    var building_id = parseInt($(main).attr('data-identifier'));
+                    this.start_continue_timer(event_id, begin, end, now, building_id);
+                }
+            }
         }
     }, {
         key: 'src_building_select',
         value: function src_building_select(evt) {
             var obj = $(evt.target).closest('.build__item');
-            var id = $(obj).data('identifier');
-            var period = $(obj).data('building_period');
-            var level = $(obj).data('building_level');
+            var id = $(obj).attr('data-identifier');
+            var period = $(obj).attr('data-building_period');
+            var level = $(obj).attr('data-building_level');
             $('[data-entity=popup_building-popup__pp]').data('building_id', id);
             var title = $(obj).find('[data-entity=keep__item-text]').first().html();
             var description = $(obj).find('[data-entity=building-description]').first().html();

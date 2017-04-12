@@ -56,7 +56,7 @@ class BuildingRepository implements EntityRepositoryInterface
     {
         $sql       = new Sql($this->db);
         $select    = $sql->select('buildings')
-            ->join(['us' => 'users'], 'buildings.owner = us.id',
+            ->join(['users_alias' => 'users'], 'buildings.owner = users_alias.id',
                 [
                     'users.id'                      => 'id',
                     'users.login'                   => 'login',
@@ -77,7 +77,7 @@ class BuildingRepository implements EntityRepositoryInterface
                     'users.money'                   => 'money'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['pl' => 'planets'], 'buildings.planet = pl.id',
+            ->join(['planets_alias' => 'planets'], 'buildings.planet = planets_alias.id',
                 [
                     'planets.id'                => 'id',
                     'planets.name'              => 'name',
@@ -100,7 +100,7 @@ class BuildingRepository implements EntityRepositoryInterface
                     'planets.owner'             => 'owner'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['sp' => 'sputniks'], 'buildings.sputnik = sp.id',
+            ->join(['sputniks_alias' => 'sputniks'], 'buildings.sputnik = sputniks_alias.id',
                 [
                     'sputniks.id'                => 'id',
                     'sputniks.name'              => 'name',
@@ -121,6 +121,43 @@ class BuildingRepository implements EntityRepositoryInterface
                     'sputniks.mineral_anti'      => 'mineral_anti',
                     'sputniks.electricity'       => 'electricity',
                     'sputniks.owner'             => 'owner'
+                ],
+                Select::JOIN_LEFT)
+            ->join(['building_types_alias' => 'building_types'], 'buildings.buildingType = building_types_alias.id',
+                [
+                    'building_types.id'                             => 'id',
+                    'building_types.name'                           => 'name',
+                    'building_types.description'                    => 'description',
+                    'building_types.type'                           => 'type',
+                    'building_types.price_factor'                   => 'price_factor',
+                    'building_types.power_factor'                   => 'power_factor',
+                    'building_types.save_factor'                    => 'save_factor',
+                    'building_types.building_acceleration_factor'   => 'building_acceleration_factor',
+                    'building_types.produce_metall'                 => 'produce_metall',
+                    'building_types.produce_heavygas'               => 'produce_heavygas',
+                    'building_types.produce_ore'                    => 'produce_ore',
+                    'building_types.produce_hydro'                  => 'produce_hydro',
+                    'building_types.produce_titan'                  => 'produce_titan',
+                    'building_types.produce_darkmatter'             => 'produce_darkmatter',
+                    'building_types.produce_redmatter'              => 'produce_redmatter',
+                    'building_types.produce_anti'                   => 'produce_anti',
+                    'building_types.produce_electricity'            => 'produce_electricity',
+                    'building_types.consume_metall'                 => 'consume_metall',
+                    'building_types.consume_heavygas'               => 'consume_heavygas',
+                    'building_types.consume_ore'                    => 'consume_ore',
+                    'building_types.consume_hydro'                  => 'consume_hydro',
+                    'building_types.consume_titan'                  => 'consume_titan',
+                    'building_types.consume_darkmatter'             => 'consume_darkmatter',
+                    'building_types.consume_redmatter'              => 'consume_redmatter',
+                    'building_types.consume_anti'                   => 'consume_anti',
+                    'building_types.consume_electricity'            => 'consume_electricity',
+                    'building_types.capacity_metall'                => 'capacity_metall',
+                    'building_types.capacity_heavygas'              => 'capacity_heavygas',
+                    'building_types.capacity_ore'                   => 'capacity_ore',
+                    'building_types.capacity_hydro'                 => 'capacity_hydro',
+                    'building_types.capacity_titan'                 => 'capacity_titan',
+                    'building_types.capacity_darkmatter'            => 'capacity_darkmatter',
+                    'building_types.capacity_redmatter'             => 'capacity_redmatter'
                 ],
                 Select::JOIN_LEFT);
         if($criteria) {
@@ -142,7 +179,7 @@ class BuildingRepository implements EntityRepositoryInterface
     {
         $sql       = new Sql($this->db);
         $select    = $sql->select('buildings')
-            ->join(['us' => 'users'], 'buildings.owner = us.id',
+            ->join(['users_alias' => 'users'], 'buildings.owner = users_alias.id',
                 [
                     'users.id'                      => 'id',
                     'users.login'                   => 'login',
@@ -163,7 +200,7 @@ class BuildingRepository implements EntityRepositoryInterface
                     'users.money'                   => 'money'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['pl' => 'planets'], 'buildings.planet = pl.id',
+            ->join(['planets_alias' => 'planets'], 'buildings.planet = planets_alias.id',
                 [
                     'planets.id'                => 'id',
                     'planets.name'              => 'name',
@@ -186,7 +223,7 @@ class BuildingRepository implements EntityRepositoryInterface
                     'planets.owner'             => 'owner'
                 ],
                 Select::JOIN_LEFT)
-            ->join(['sp' => 'sputniks'], 'buildings.sputnik = sp.id',
+            ->join(['sputniks_alias' => 'sputniks'], 'buildings.sputnik = sputniks_alias.id',
                 [
                     'sputniks.id'                => 'id',
                     'sputniks.name'              => 'name',
@@ -207,6 +244,43 @@ class BuildingRepository implements EntityRepositoryInterface
                     'sputniks.mineral_anti'      => 'mineral_anti',
                     'sputniks.electricity'       => 'electricity',
                     'sputniks.owner'             => 'owner'
+                ],
+                Select::JOIN_LEFT)
+            ->join(['building_types_alias' => 'building_types'], 'buildings.buildingType = building_types_alias.id',
+                [
+                    'building_types.id'                             => 'id',
+                    'building_types.name'                           => 'name',
+                    'building_types.description'                    => 'description',
+                    'building_types.type'                           => 'type',
+                    'building_types.price_factor'                   => 'price_factor',
+                    'building_types.power_factor'                   => 'power_factor',
+                    'building_types.save_factor'                    => 'save_factor',
+                    'building_types.building_acceleration_factor'   => 'building_acceleration_factor',
+                    'building_types.produce_metall'                 => 'produce_metall',
+                    'building_types.produce_heavygas'               => 'produce_heavygas',
+                    'building_types.produce_ore'                    => 'produce_ore',
+                    'building_types.produce_hydro'                  => 'produce_hydro',
+                    'building_types.produce_titan'                  => 'produce_titan',
+                    'building_types.produce_darkmatter'             => 'produce_darkmatter',
+                    'building_types.produce_redmatter'              => 'produce_redmatter',
+                    'building_types.produce_anti'                   => 'produce_anti',
+                    'building_types.produce_electricity'            => 'produce_electricity',
+                    'building_types.consume_metall'                 => 'consume_metall',
+                    'building_types.consume_heavygas'               => 'consume_heavygas',
+                    'building_types.consume_ore'                    => 'consume_ore',
+                    'building_types.consume_hydro'                  => 'consume_hydro',
+                    'building_types.consume_titan'                  => 'consume_titan',
+                    'building_types.consume_darkmatter'             => 'consume_darkmatter',
+                    'building_types.consume_redmatter'              => 'consume_redmatter',
+                    'building_types.consume_anti'                   => 'consume_anti',
+                    'building_types.consume_electricity'            => 'consume_electricity',
+                    'building_types.capacity_metall'                => 'capacity_metall',
+                    'building_types.capacity_heavygas'              => 'capacity_heavygas',
+                    'building_types.capacity_ore'                   => 'capacity_ore',
+                    'building_types.capacity_hydro'                 => 'capacity_hydro',
+                    'building_types.capacity_titan'                 => 'capacity_titan',
+                    'building_types.capacity_darkmatter'            => 'capacity_darkmatter',
+                    'building_types.capacity_redmatter'             => 'capacity_redmatter'
                 ],
                 Select::JOIN_LEFT);
         $select->where($criteria ? $criteria : ['buildings.id = ?' => $id]);
