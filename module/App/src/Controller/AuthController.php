@@ -18,6 +18,13 @@ use Zend\Authentication\Storage\Session as SessionStorage;
 use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
 use Entities\Model\User;
+use Universe\Model\Planet;
+use Universe\Model\PlanetRepository;
+use Universe\Model\PlanetCommand;
+
+class UserIsNotAuthorizedException extends \Exception {}
+class UserHaveNoAnyPlanetsException extends \Exception {}
+class UserEmailDuplicateException extends \Exception {}
 
 class AuthController extends AbstractActionController
 {
@@ -46,15 +53,29 @@ class AuthController extends AbstractActionController
      */
     private $userCommand;
     
+    /**
+     * @ var PlanetRepository
+     */
+    private $planetRepository;
+    
+    /**
+     * @ var PlanetCommand
+     */
+    private $planetCommand;
+    
     public function __construct(
         AdapterInterface $db, 
         UserRepository $userRepository,
-        UserCommand $userCommand
+        UserCommand $userCommand,
+        PlanetRepository $planetRepository,
+        PlanetCommand $planetCommand
         )
     {
         $this->dbAdapter = $db;
         $this->userRepository = $userRepository;
         $this->userCommand = $userCommand;
+        $this->planetRepository = $planetRepository;
+        $this->planetCommand = $planetCommand;
         $this->authAdapter = new AuthAdapter(
             $this->dbAdapter,
             'users',
@@ -102,7 +123,10 @@ class AuthController extends AbstractActionController
                 $result = array('message' => 'Логин или пароль неверны', 'result' => 'error');
             }
             else {
-                $result = array('message' => 'Авторизация прошла успешно', 'result' => 'ok', 'redirect' => $this->url()->fromRoute('app', ['action' => 'index']));
+                // тут надо редиректить на первую планету владельца...
+                $planets = $this->getUsersPlanets();
+                $planet = $planets->current();
+                $result = array('message' => 'Авторизация прошла успешно', 'result' => 'ok', 'redirect' => $this->url()->fromRoute('app/planet', ['planetid' => $planet->getId()]));
             }
         }
         else{
@@ -124,12 +148,26 @@ class AuthController extends AbstractActionController
         }
         if(!$result){
             try{
-                $user = new User(null,null,null,null,null,null,null,null,null,null,null,null);
-                $user->setName($_REQUEST['login']);
-                $user->setPassword(md5($_REQUEST['password']));
-                $user->setEmail($_REQUEST['email']);
-                $user = $this->userCommand->insertEntity($user);
-                $result = array('message' => 'Поздравляем! Вы успешно зарегистрированы на нашем сайте!', 'result' => 'ok');
+                /**
+                 * есть юзер с таким мылом в бд ?
+                 */
+                if($this->userRepository->findBy('users.email LIKE "%' . $_REQUEST['email'] . '%"')->count() == 0){
+                    // тут надо редиректить на первую пустую планету...
+                    $user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+                    $user->setName($_REQUEST['login']);
+                    $user->setPassword(md5($_REQUEST['password']));
+                    $user->setEmail($_REQUEST['email']);
+                    $user = $this->userCommand->insertEntity($user);
+                    
+                    $planets = $this->getFreePlanet();
+                    $planet = $planets->current();
+                    $planet->setOwner($user);
+                    $planet = $this->planetCommand->updateEntity($planet);
+                    $result = array('message' => 'Поздравляем! Вы успешно зарегистрированы на нашем сайте!', 'result' => 'ok'/*, 'redirect' => $this->url()->fromRoute('app/planet', ['planetid' => $planet->getId()])*/);
+                }
+                else{
+                    throw new UserEmailDuplicateException('Пользователь с почтой ' . $_REQUEST['email'] . ' уже зарегистрирован!');
+                }
             }
             catch(\Exception $e){
                 $result = array('message' => $e->getMessage(), 'result' => 'error');
@@ -152,6 +190,30 @@ class AuthController extends AbstractActionController
         }
         else{
             return null;
+        }
+    }
+    
+    public function getFreePlanet()
+    {
+        $planets = $this->planetRepository->findBy('planets.owner IS NULL');
+        return $planets;
+    }
+    
+    public function getUsersPlanets()
+    {
+        if($this->isAuthorized()){
+            $user = $this->getUser();
+            // вернем все планеты юзера
+            $planets = $this->planetRepository->findBy('planets.owner = ' . $user->getId());
+            if($planets){
+                return $planets;
+            }
+            else{
+                throw new UserHaveNoAnyPlanetsException('User have no any planets');
+            }
+        }
+        else{
+            throw new UserIsNotAuthorizedException('User is not authorithed');
         }
     }
     

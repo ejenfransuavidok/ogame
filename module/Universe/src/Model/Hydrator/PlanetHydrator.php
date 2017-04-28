@@ -60,7 +60,7 @@ class PlanetHydrator implements HydratorInterface
                 __METHOD__
             ));
         }
-        $planet = new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+        $planet = new Planet(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
         $planet->exchangeArray($data);
         $planet_system_id = $planet->getCelestialParent();
         $planet_system = $this->planetSystemRepository->findEntity($planet_system_id);

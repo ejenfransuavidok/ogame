@@ -11,26 +11,53 @@ $(function(){
 	function eventLoader() {
 
 
-
-		$('body')
+		var $b = $('body');
+		$b
 
 			.on('click', function (e) {
 
-				closest('.keep__item');
-				closest('.js-dd-wrap');
-				closest('.enter__form-footnote');
-				closest('.enter__system-wrap');
-				closest('.sselect-wrap');
-				closest('.system__orbit-item .planet');
+				closest('.keep__item', 'is-open');
+				closest('.js-dd-wrap', 'is-open');
+				closest('.enter__form-footnote', 'is-open');
+				closest('.enter__system-wrap', 'is-open');
+				closest('.sselect-wrap', 'is-open');
+				closest('.system__orbit-item .planet', 'is-open');
 
-				function closest(el){
-					if ( $(el + '.is-open').size() ){
-						if ( !$(e.target).closest(el + '.is-open').size() ) $(el + '.is-open').removeClass('is-open');
+
+				if ( $('.aside').hasClass('aside_open') ){
+					if ( !$(e.target).closest('.aside_open').size() && !$(e.target).closest('.js-dd-asidemenu').size() ) {
+						$('.aside').removeClass('aside_open');
+					}
+				}
+
+
+
+				function closest(el, cls){
+					if ( $(el + '.' + cls).size() ){
+						if ( !$(e.target).closest(el + '.' + cls).size() ) $(el + '.' + cls).removeClass(cls);
 					}
 				}
 
 			})
 
+			.on('click', '.aside__menu-link', function (e) {
+				var $t = $(this),
+					$wrap = $t.closest('.aside__menu-item'),
+					$submenu = $t.siblings('.aside__submenu');
+
+				if ( $submenu.size() && !$submenu.hasClass('loading')){
+					$submenu.addClass('loading');
+					$wrap.toggleClass('is-open');
+					$submenu.slideToggle(300, function(){
+						$submenu.removeClass('loading');
+					});
+				}
+
+			})
+
+			.on('click', '.js-dd-asidemenu', function (e) {
+				$('.aside').toggleClass('aside_open');
+			})
 
 			.on('click', '.js-dd-link', function (e) {
 				var $wrap = $(this).closest('.js-dd-wrap');
@@ -169,7 +196,7 @@ $(function(){
 			})
 
 
-
+            /*
 			.on('click', '.js-submit-form', function(e){
 				e.preventDefault();
 				$(this).closest('form').submit();
@@ -218,7 +245,7 @@ $(function(){
 					});
 				}
 			})
-
+            */
 
 
 
@@ -302,6 +329,329 @@ $(function(){
 	var app = {
 		module: {
 
+
+			planetView: {
+
+				data: {
+					//three: '//cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js',
+					three: 'https://threejs.org/build/three.min.js',
+					selector: '.tjs-planet',
+					inited: false,
+
+					timer: null,
+
+					options: {
+						map: {
+							size: 10,
+							textures: {
+								//map: '/img/planets3d/earth-map.jpg',
+								//bumpMap: '/img/planets3d/earth-bump.jpg',
+								//specularMap: '/img/planets3d/earth-specular.jpg'
+							}
+						},
+						clouds: {
+							size: 0.15,
+							textures: {
+								//map: '/img/planets3d/earth-clouds.jpg',
+								//alphaMap: '/img/planets3d/earth-cloudstransperent.jpg'
+							},
+							glow: {
+								size: 1,
+								intensity: 0.6,
+								fade: 3,
+								color: 0x93cfef
+							}
+						}
+					}
+
+				},
+
+				planet: function(options){
+
+					var planet = new THREE.Object3D(),
+						shader = options.main ? 32 : 128;
+
+
+					// add map
+					var mapGeometry = new THREE.SphereGeometry(options.map.size, shader, shader);
+					var mapMaterial = new THREE.MeshPhongMaterial({
+						bumpScale: 0.5,
+						specular: new THREE.Color('grey'),
+						shininess: 8
+					});
+					var map = new THREE.Mesh(mapGeometry, mapMaterial);
+					map.name = 'map';
+					planet.add(map);
+
+					// add clouds
+					if ( options.clouds.textures.map ){
+						var cloudsGeometry = new THREE.SphereGeometry(options.map.size + options.clouds.size, shader, shader);
+						var cloudsMaterial = new THREE.MeshPhongMaterial({
+							side: THREE.DoubleSide,
+							transparent: true,
+							opacity: 0.8
+						});
+						var clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
+						clouds.name = 'clouds';
+						planet.add(clouds);
+					}
+
+					// add glow
+					var glowGeometry = new THREE.SphereGeometry(options.map.size + options.clouds.size + options.clouds.glow.size, shader, shader);
+					var glowMaterial = new THREE.ShaderMaterial({
+						uniforms: {
+							'c': {type: 'f',value: options.clouds.glow.intensity},
+							'p': {type: 'f',value: options.clouds.glow.fade},
+							glowColor: {type: 'c',value: new THREE.Color(options.clouds.glow.color)},
+							viewVector: {type: 'v3',value: options.camera.position}
+						},
+						vertexShader: 'uniform vec3 viewVector;uniform float c;uniform float p;varying float intensity;void main() {vec3 vNormal = normalize( normalMatrix * normal );vec3 vNormel = normalize( normalMatrix * viewVector );intensity = pow( c - dot(vNormal, vNormel), p );gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}',
+						fragmentShader: 'uniform vec3 glowColor;varying float intensity;void main(){vec3 glow = glowColor * intensity;gl_FragColor = vec4( glow, 1.0 );}',
+						side: THREE.BackSide,
+						blending: THREE.AdditiveBlending,
+						transparent: true
+					});
+					var glow = new THREE.Mesh(glowGeometry, glowMaterial);
+
+					glow.name = 'glow';
+					planet.add(glow);
+
+
+					$.each( options.map.textures, function( key, value ) {
+						var loader = new THREE.TextureLoader();
+						loader.load(value, function(texture) {
+							texture.minFilter = THREE.LinearFilter;
+							mapMaterial[key] = texture;
+							mapMaterial.needsUpdate = true;
+							//console.info(mapMaterial[key]);
+
+							options.container.style.opacity = 1;
+						});
+					});
+
+					$.each( options.clouds.textures, function( key, value ) {
+						var textureLoader = new THREE.TextureLoader();
+						textureLoader.load(value, function(texture) {
+							texture.minFilter = THREE.LinearFilter;
+							cloudsMaterial[key] = texture;
+							cloudsMaterial.transparent = true;
+							cloudsMaterial.needsUpdate = true;
+						});
+					});
+
+
+					return planet;
+
+				},
+
+				orbit: function(el, opts){
+
+					var $el = $(el);
+					var options = $.extend(true, {}, self.planetView.data.options, opts);
+
+					options.container = $el[0];
+					options.width = $el.width();
+					options.height = $el.height();
+
+					options.renderer = new THREE.WebGLRenderer({ alpha: true, antialiasing: true, logarithmicDepthBuffer: true });
+					options.renderer.setSize(options.width * 2, options.height * 2);
+					options.renderer.setClearColor( 0x000000, 0 );
+					options.container.appendChild(options.renderer.domElement);
+
+					options.renderer.domElement.style.width = '100%';
+					options.renderer.domElement.style.height = '100%';
+
+					options.camera = new THREE.PerspectiveCamera(45, options.width/options.height, 0.1, 1500);
+					options.camera.position.set(0,0,29);
+
+
+					options.planet = self.planetView.planet(options);
+
+
+					options.light = new THREE.SpotLight(0xffffff);
+					options.lightBack = new THREE.SpotLight(0xffffff, 0.1);
+
+					if ( options.main ){
+						options.light = new THREE.SpotLight(0xffffff, 0.5);
+						options.lightBack = new THREE.SpotLight(0xffffff, 0.3);
+						options.light.position.set(-100, 100, 100);
+						options.lightBack.position.set(100, 0, 100);
+					} else {
+						options.light = new THREE.SpotLight(0xffffff);
+						options.lightBack = new THREE.SpotLight(0xffffff, 0.1);
+						options.light.position.set(-100, 0, 100);
+						options.lightBack.position.set(1000, 0, 100);
+					}
+
+					options.scene = new THREE.Scene();
+					options.scene.add(options.camera);
+					options.scene.add(options.planet);
+					options.scene.add(options.light);
+					options.scene.add(options.lightBack);
+
+					var render = function() {
+
+						options.planet.getObjectByName('map').rotation.y += (options.map.speed / 1000);
+						if ( options.planet.getObjectByName('clouds') ) options.planet.getObjectByName('clouds').rotation.y += (options.clouds.speed / 1000);
+						requestAnimationFrame(render);
+						options.camera.lookAt(options.planet.position);
+						options.renderer.render(options.scene, options.camera);
+					};
+
+					render();
+
+
+					$(window).resize(function(){
+						if ( self.planetView.data.timer ) clearTimeout(self.planetView.data.timer);
+						if ( self.planetView.data.inited ) self.planetView.timer = setTimeout(function(){self.planetView.resize(options)}, 200);
+					});
+				},
+
+				galaxy: function (el) {
+
+					var $el = $(el),
+						container = $el[0],
+						width = $el.width(),
+						height = $el.height(),
+						renderer = new THREE.WebGLRenderer({ alpha: true, antialiasing: true }),
+						light,
+						lightBack,
+						scene,
+						galaxy,
+						camera;
+
+					renderer.setSize(width * 2, height * 2);
+					renderer.setClearColor( 0x000000, 0 );
+					container.appendChild(renderer.domElement);
+
+					renderer.domElement.style.width = '100%';
+					renderer.domElement.style.height = '100%';
+
+					camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 1500);
+					camera.position.set(0,0,29);
+
+					//light = new THREE.SpotLight(0xffffff);
+					//light.position.set(-100, 0, 100);
+
+					//lightBack = new THREE.SpotLight(0xffffff, 0.1);
+					//lightBack.position.set(1000, 0, 100);
+
+					scene = new THREE.Scene();
+
+					//scene.add(light);
+					//scene.add(lightBack);
+
+					var galaxyGeometry = new THREE.Geometry();
+
+					for ( var i = 0; i < 10000; i ++ ) {
+
+						var star = new THREE.Vector3();
+						star.x = THREE.Math.randFloatSpread( 2000 );
+						star.y = THREE.Math.randFloatSpread( 2000 );
+						star.z = THREE.Math.randFloatSpread( 3000 );
+
+						galaxyGeometry.vertices.push( star )
+
+					}
+
+					var galaxyMaterial = new THREE.PointsMaterial( { color: 0xffffff } );
+
+					galaxy = new THREE.Points( galaxyGeometry, galaxyMaterial );
+
+					scene.add( galaxy );
+
+					/***/
+
+
+
+
+					var render = function() {
+
+						galaxy.rotation.y += 0.0002;
+						requestAnimationFrame(render);
+						renderer.render(scene, camera);
+					};
+
+					render();
+				},
+
+				resize: function(options){
+
+					options.width = $(options.container).width();
+					options.height = $(options.container).height();
+					options.camera.aspect = options.width / options.height;
+					options.camera.updateProjectionMatrix();
+					options.renderer.setSize(options.width * 2, options.height * 2);
+					options.renderer.domElement.style.width = '100%';
+					options.renderer.domElement.style.height = '100%';
+				},
+
+				getData: function($el){
+					var data = {};
+
+					data.map = {};
+					data.map.speed = parseInt($el.data('planet-mapspeed')) || 1;
+					data.map.size = $el.data('planet-mapsize') ? (parseInt($el.data('planet-mapsize')) > 10 ? 10 : $el.data('planet-mapsize')) : 10;
+					data.map.textures = {};
+					data.map.textures.map = $el.data('planet-maptexturesmap');
+					data.map.textures.bumpMap = $el.data('planet-maptexturesbumpmap');
+					data.map.textures.specularMap = $el.data('planet-maptexturesspecularmap');
+
+					data.clouds = {};
+					data.clouds.speed = parseInt($el.data('planet-cloudsspeed')) || 2;
+					data.clouds.textures = {};
+					data.clouds.textures.map = $el.data('planet-cloudstexturesmap');
+					data.clouds.textures.alphaMap = $el.data('planet-cloudstexturesalphamap');
+					data.clouds.glow = {};
+					data.clouds.glow.color =  '#555555';
+
+					data.space =  $el.data('planet-space') || false;
+
+					return data;
+				},
+
+				init: function(){
+					var $pl = $(self.planetView.data.selector);
+
+					if ( $pl.size() ){
+						$.getScript(self.planetView.data.three, function(){
+							self.planetView.data.inited = true;
+							//game__visual
+							$pl.each(function(){
+								var $t = $(this), data = self.planetView.getData($t);
+
+								if ( $t.hasClass('game__visual') ){
+									data.clouds.glow.intensity = 0.9;
+									data.clouds.glow.fade = 10;
+									data.main = true;
+									data.map.size = 10.5;
+									data.clouds.glow.size = 0.5;
+									data.clouds.glow.fade = 6;
+								}
+
+								if ( !$t.hasClass('is-render')){
+									$t.addClass('is-render');
+									self.planetView.orbit($t, data);
+								}
+
+							});
+
+
+							$('.game__galaxy').each(function(){
+								var $t = $(this);
+
+								if ( !$t.hasClass('is-render')){
+									$t.addClass('is-render');
+									self.planetView.galaxy($t);
+								}
+
+							});
+
+						});
+					}
+
+				}
+			},
 
 			checkForm: function(form){
 				var $el = $(form),
@@ -664,6 +1014,9 @@ $(function(){
 						$popup.find('.popup__content').html(html);
 					}
 					$('body').addClass('overflow_hidden');
+
+					$(window).trigger('resize');
+
 					return $popup.show();
 				},
 
@@ -805,6 +1158,7 @@ $(function(){
 			self.tooltip.init();
 			self.plugs.update();
 			self.tabs.init();
+			self.planetView.init();
 			//self.bottomStick.init('.js-bottom-stick');
 
 			//$('[data-required=phone]').mask('+7 (999) 999-99-99');

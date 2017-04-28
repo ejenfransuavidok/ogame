@@ -20,7 +20,8 @@ var GlobalVars = exports.GlobalVars = function () {
         key: 'getCurrentPlanet',
         value: function getCurrentPlanet() {
             if (!this.current_planet) {
-                throw 'Current Planet did not define in that page';
+                console.log('Current Planet did not define in that page');
+                return 0;
             } else {
                 return this.current_planet;
             }
@@ -29,7 +30,8 @@ var GlobalVars = exports.GlobalVars = function () {
         key: 'getCurrentUser',
         value: function getCurrentUser() {
             if (!this.current_user) {
-                throw 'Current User did not define in that page';
+                console.log('Current User did not define in that page');
+                return 0;
             } else {
                 return this.current_user;
             }

@@ -10,7 +10,11 @@ module.exports = {
         _self.currentPlanet = 0;
         if(_self.int)
             clearInterval(_self.int);
-        _self.int = setInterval(function(){ _self.socket.emit('sourceBuildingComplete', {message: 'Hello!'}) }, 5000);
+        _self.int = setInterval(function(){
+            _self.socket.emit('sourceBuildingComplete', {
+                message: 'Hello! /currentUser = ' + _self.currentUser + '/currentPlanet = ' + _self.currentPlanet + '/'
+            }) 
+        }, 5000);
     },
     
 };

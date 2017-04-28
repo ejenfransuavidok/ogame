@@ -18,13 +18,15 @@ var Auth = exports.Auth = function () {
         _classCallCheck(this, Auth);
 
         this.theGame = window.theGame;
-        if ($('.game__login').length) {
-            if ($('.game__login-form').length) {
-                $(document).on('submit', '.game__login-form', function (evt) {
-                    return _this.form_submit(evt);
-                });
-            }
-        }
+
+        $(document).on('click', '.js-submit-form', function (evt) {
+            evt.preventDefault();
+            $(evt.target).closest('form').submit();
+        });
+
+        $(document).on('submit', '.game__login-form', function (evt) {
+            return _this.form_submit(evt);
+        });
     }
 
     _createClass(Auth, [{
@@ -33,7 +35,7 @@ var Auth = exports.Auth = function () {
             evt.preventDefault();
             var form = $(evt.target);
             var action = $(form).prop('action');
-            if (this.theGame.checkForm(form)) {
+            if (window.theGame.checkForm(form)) {
                 $.ajax({
                     type: 'post',
                     url: action,
@@ -49,7 +51,11 @@ var Auth = exports.Auth = function () {
                                         $.notify(data.result.message, 'error');
                                     } else {
                                         $.notify(data.result.message, 'message');
-                                        if (typeof data.result.redirect != 'undefined') window.location.href = data.result.redirect;
+                                        //if(typeof data.result.redirect != 'undefined')
+                                        //    window.location.href = data.result.redirect;
+                                        console.log(data);
+                                        console.log(data.result);
+                                        console.log(data.result.redirect);
                                     }
                                 } else {
                                     $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');

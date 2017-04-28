@@ -1,0 +1,135 @@
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="90px"
+	 height="270px" viewBox="0 0 90 270" style="enable-background:new 0 0 90 270;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#727585;}
+
+	.st35{opacity:0.5;}
+	.st36{opacity:0.2;fill:none;stroke:#8990AD;stroke-miterlimit:10;}
+	.st37{fill:#FDC545;}
+	.st38{fill:#31343C;}
+	.st39{opacity:0.3;fill:#8990AD;}
+	.st40{opacity:0.5;fill:#8990AD;}
+	.st41{fill:#22242B;}
+	.st42{fill:none;stroke:#FFFFFF;stroke-width:3;stroke-miterlimit:10;}
+	.st43{display:inline;fill:none;stroke:#FF4332;stroke-width:5;stroke-miterlimit:10;}
+	.st44{display:inline;opacity:0.6;}
+	.st45{opacity:0.5;fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:1,2;}
+	.st46{fill:none;stroke:#727585;stroke-miterlimit:10;}
+	.st47{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:1,2;}
+	.st48{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:1.0264,2.0527;}
+	.st49{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:0.9573,1.9146;}
+	.st50{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:1.0062,2.0124;}
+	.st51{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:0.9979,1.9958;}
+	.st52{opacity:0.4;fill:#B9BAC2;}
+	.st53{opacity:0.15;fill:#727585;}
+	.st54{opacity:0.4;fill:none;stroke:#8990AD;stroke-miterlimit:10;}
+	.st55{opacity:0.4;}
+	.st56{fill:none;stroke:#8990AD;stroke-miterlimit:10;}
+	.st57{opacity:0.3;fill:#727585;}
+	.st58{fill:#80859B;}
+
+	.stroke-animation{
+    	    stroke-dasharray: 2;
+            animation: dash 50s linear infinite;
+    	}
+
+    	@keyframes dash {
+          to {
+            stroke-dashoffset: 1000;
+          }
+        }
+</style>
+
+<g id="screen_1_">
+	<g id="SPACE">
+		<g class="st35">
+			<g>
+				<g>
+					<polyline class="st46" points="57.3,5.9 56.9,5.7 56.9,6.2 					"/>
+					<line class="st47" x1="57" y1="8.5" x2="57" y2="16.5"/>
+					<polyline class="st46" points="56.9,17.1 56.9,17.6 56.4,17.4 					"/>
+					<line class="st48" x1="54.6" y1="16.5" x2="33.3" y2="6.3"/>
+					<polyline class="st46" points="32.4,5.9 31.9,5.7 31.9,6.2 					"/>
+					<line class="st47" x1="32" y1="8.5" x2="32" y2="16.5"/>
+					<polyline class="st46" points="31.9,17.1 31.9,17.6 31.5,17.4 					"/>
+					<line class="st49" x1="29.7" y1="16.6" x2="7.1" y2="6.3"/>
+					<polyline class="st46" points="6.2,5.9 5.8,5.7 5.8,6.2 					"/>
+					<line class="st47" x1="6" y1="8.5" x2="6" y2="82.5"/>
+					<polyline class="st46" points="5.8,83.8 5.8,84.3 6.3,84.3 					"/>
+					<polyline class="st50" points="8.5,84 31.8,84 57.8,84 82.5,84 					"/>
+					<polyline class="st46" points="83.7,84.3 84.2,84.3 84.2,83.8 					"/>
+					<line class="st47" x1="84" y1="81.5" x2="84" y2="19.5"/>
+					<polyline class="st46" points="84.2,18.3 84.2,17.8 83.8,17.6 					"/>
+					<line class="st51" x1="82" y1="16.8" x2="58.3" y2="6.3"/>
+				</g>
+			</g>
+		</g>
+		<path class="st52" d="M50.7,43.5h-0.8v-2.7c0-3.2-2.6-5.7-5.7-5.7s-5.7,2.6-5.7,5.7v2.7h-0.8c-1.2,0-2.3,1-2.3,2.3v6.9
+			c0,1.2,1,2.3,2.3,2.3h13c1.2,0,2.3-1,2.3-2.3v-6.9C52.9,44.5,51.9,43.5,50.7,43.5z M41.9,40.8c0-1.3,1-2.3,2.3-2.3s2.3,1,2.3,2.3
+			v2.7h-4.7V40.8z"/>
+		<g>
+			<g>
+				<polyline class="st46" points="57.3,95.9 56.9,95.7 56.9,96.2 				"/>
+				<line class="st47" x1="57" y1="98.5" x2="57" y2="106.5"/>
+				<polyline class="st46" points="56.9,107.1 56.9,107.6 56.4,107.4 				"/>
+				<line class="st48" x1="54.6" y1="106.5" x2="33.3" y2="96.3"/>
+				<polyline class="st46" points="32.4,95.9 31.9,95.7 31.9,96.2 				"/>
+				<line class="st47" x1="32" y1="98.5" x2="32" y2="106.5"/>
+				<polyline class="st46" points="31.9,107.1 31.9,107.6 31.5,107.4 				"/>
+				<line class="st49" x1="29.7" y1="106.6" x2="7.1" y2="96.3"/>
+				<polyline class="st46" points="6.2,95.9 5.8,95.7 5.8,96.2 				"/>
+				<line class="st47" x1="6" y1="98.5" x2="6" y2="172.5"/>
+				<polyline class="st46" points="5.8,173.8 5.8,174.3 6.3,174.3 				"/>
+				<polyline class="st50" points="8.5,174 31.8,174 57.8,174 82.5,174 				"/>
+				<polyline class="st46" points="83.7,174.3 84.2,174.3 84.2,173.8 				"/>
+				<line class="st47" x1="84" y1="171.5" x2="84" y2="109.5"/>
+				<polyline class="st46" points="84.2,108.3 84.2,107.8 83.8,107.6 				"/>
+				<line class="st51" x1="82" y1="106.8" x2="58.3" y2="96.3"/>
+			</g>
+		</g>
+		<path class="st53" d="M62.7,105.8l15.7,7.1v52.6H57.8H31.8H13.5v-59.4l15.5,8.1l8.5,3.8v-9.3v-2.5l16.5,7.9l8.5,4.1v-9.4v-3.3"/>
+		<g class="st55">
+			<g>
+				<path class="st56" d="M62.2,105.8l15.7,7.1V166H57.8H31.8H13v-59.9l15.5,8.1l8.5,3.8v-9.3v-2.5l16.5,7.9l8.5,4.1v-9.4v-3.3"/>
+			</g>
+		</g>
+		<g>
+			<path class="st0" d="M54.7,140l-7.7-7.7c-0.5-0.5-1.2-0.8-1.9-0.8l-2.9,0c-0.7,0-1.3,0.6-1.3,1.3l-0.1,2.7c0,0.7,0.3,1.5,0.8,2
+				l7.8,7.8c0.5,0.5,1.4,0.5,2,0l3.3-3.3C55.3,141.4,55.3,140.5,54.7,140z"/>
+			<path class="st0" d="M35,147.9c-0.3,0.3-0.3,0.7,0,1l2.1,2.1c0.3,0.3,0.7,0.3,1,0l7.1-7.1l-3-3L35,147.9z"/>
+		</g>
+		<g>
+			<g>
+				<polyline class="st46" points="57.3,185.9 56.9,185.7 56.9,186.2 				"/>
+				<line class="st47 stroke-animation" x1="57" y1="188.5" x2="57" y2="196.5"/>
+				<polyline class="st46" points="56.9,197.1 56.9,197.6 56.4,197.4 				"/>
+				<line class="st48 stroke-animation" x1="54.6" y1="196.5" x2="33.3" y2="186.3"/>
+				<polyline class="st46" points="32.4,185.9 31.9,185.7 31.9,186.2 				"/>
+				<line class="st47 stroke-animation" x1="32" y1="188.5" x2="32" y2="196.5"/>
+				<polyline class="st46" points="31.9,197.1 31.9,197.6 31.5,197.4 				"/>
+				<line class="st49 stroke-animation" x1="29.7" y1="196.6" x2="7.1" y2="186.3"/>
+				<polyline class="st46" points="6.2,185.9 5.8,185.7 5.8,186.2 				"/>
+				<line class="st47 stroke-animation" x1="6" y1="188.5" x2="6" y2="262.5"/>
+				<polyline class="st46" points="5.8,263.8 5.8,264.3 6.3,264.3 				"/>
+				<polyline class="st50 stroke-animation" points="8.5,264 31.8,264 57.8,264 82.5,264 				"/>
+				<polyline class="st46" points="83.7,264.3 84.2,264.3 84.2,263.8 				"/>
+				<line class="st47 stroke-animation" x1="84" y1="261.5" x2="84" y2="199.5"/>
+				<polyline class="st46" points="84.2,198.3 84.2,197.8 83.8,197.6 				"/>
+				<line class="st51 stroke-animation" x1="82" y1="196.8" x2="58.3" y2="186.3"/>
+			</g>
+		</g>
+		<path class="st57" d="M62.7,195.8l15.7,7.1v52.6H57.8H31.8H13.5v-59.4l15.5,8.1l8.5,3.8v-9.3v-2.5l16.5,7.9l8.5,4.1v-9.4v-3.3"/>
+		<g class="st55">
+			<g>
+				<path class="st56" d="M62.2,195.8l15.7,7.1V256H57.8H31.8H13v-59.9l15.5,8.1l8.5,3.8v-9.3v-2.5l16.5,7.9l8.5,4.1v-9.4v-3.3"/>
+			</g>
+		</g>
+		<g>
+			<path class="st58" d="M54.7,230l-7.7-7.7c-0.5-0.5-1.2-0.8-1.9-0.8l-2.9,0c-0.7,0-1.3,0.6-1.3,1.3l-0.1,2.7c0,0.7,0.3,1.5,0.8,2
+				l7.8,7.8c0.5,0.5,1.4,0.5,2,0l3.3-3.3C55.3,231.4,55.3,230.5,54.7,230z"/>
+			<path class="st0" d="M35,237.9c-0.3,0.3-0.3,0.7,0,1l2.1,2.1c0.3,0.3,0.7,0.3,1,0l7.1-7.1l-3-3L35,237.9z"/>
+		</g>
+	</g>
+</g>
+</svg>

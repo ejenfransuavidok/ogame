@@ -2,11 +2,17 @@
     data-entity_user="<?= $user->getId() ?>"
     data-entity_planet="<?= $planet->getId() ?>">
 				<div class="header__inner">
+                    <!--
 					<div data-popup=".popup_fleet_1" class="header__menu js-dd-wrap">
 						<div class="header__label js-dd-link">
                             <span class="value">Меню</span>
                             <i class="ico"></i>
                         </div>
+						<div class="header__dropdown"></div>
+					</div>
+                    -->
+                    <div class="header__menu">
+						<div class="header__label js-dd-asidemenu"><i class="ico"></i> </div>
 						<div class="header__dropdown"></div>
 					</div>
 					<div class="header__messages js-dd-wrap">
@@ -79,7 +85,12 @@
 										<div class="header__treasure-row header__treasure-row_head">
 											<div class="header__treasure-name clr_white">Электроэнергия</div>
 											<div class="header__treasure-value clr_green" 
-                                                data-resources="electricity">
+                                                data-resources="electricity"
+                                                data-resource_velocity_per_second="0"
+                                                data-resources_limit="1000000000"
+                                                data-resources_amount="<?= $planet->getElectricity() ?>"
+                                                data-resources_capacity="1000000000"
+                                            >
                                                 <?= $planet->getElectricity() ?>
                                             </div>
 										</div>
@@ -109,7 +120,12 @@
 										<div class="header__treasure-row header__treasure-row_head">
 											<div class="header__treasure-name clr_white">Металл</div>
 											<div class="header__treasure-value clr_green" 
-                                                data-resources="metall">
+                                                data-resources="metall"
+                                                data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_metall() ?>"
+                                                data-resources_limit="<?= $planet->getMetall() ?>"
+                                                data-resources_amount="<?= $planet->getMetall() ?>"
+                                                data-resources_capacity="<?= $capacity->getMetallCapacity($planet->getId()) ?>"
+                                            >
                                                 <?= $planet->getMetall() ?>
                                             </div>
 										</div>
@@ -139,7 +155,11 @@
 										<div class="header__treasure-row header__treasure-row_head">
 											<div class="header__treasure-name clr_white">Тяжелый газ</div>
 											<div class="header__treasure-value clr_green" 
-                                                data-resources="heavygas">
+                                                data-resources="heavygas"
+                                                data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_heavygas() ?>"
+                                                data-resources_amount="<?= $planet->getHeavyGas() ?>"
+                                                data-resources_capacity="<?= $capacity->getHeavyGasCapacity($planet->getId()) ?>"
+                                            >
                                                 <?= $planet->getHeavyGas() ?>
                                             </div>
 										</div>
@@ -169,7 +189,11 @@
 										<div class="header__treasure-row header__treasure-row_head">
 											<div class="header__treasure-name clr_white">Обогащенная руда</div>
 											<div class="header__treasure-value clr_green" 
-                                                data-resources="ore">
+                                                data-resources="ore"
+                                                data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_ore() ?>"
+                                                data-resources_amount="<?= $planet->getOre() ?>"
+                                                data-resources_capacity="<?= $capacity->getOreCapacity($planet->getId()) ?>"
+                                            >
                                                 <?= $planet->getOre() ?>
                                             </div>
 										</div>
@@ -199,7 +223,11 @@
 										<div class="header__treasure-row header__treasure-row_head">
 											<div class="header__treasure-name clr_white">Водород</div>
 											<div class="header__treasure-value clr_green" 
-                                                data-resources="hydro">
+                                                data-resources="hydro"
+                                                data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_hydro() ?>"
+                                                data-resources_amount="<?= $planet->getHydro() ?>"
+                                                data-resources_capacity="<?= $capacity->getHydroCapacity($planet->getId()) ?>"
+                                            >
                                                 <?= $planet->getHydro() ?>
                                             </div>
 										</div>
@@ -229,7 +257,11 @@
 										<div class="header__treasure-row header__treasure-row_head">
 											<div class="header__treasure-name clr_white">Титан</div>
 											<div class="header__treasure-value clr_green" 
-                                                data-resources="titan">
+                                                data-resources="titan"
+                                                data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_titan() ?>"
+                                                data-resources_amount="<?= $planet->getTitan() ?>"
+                                                data-resources_capacity="<?= $capacity->getTitanCapacity($planet->getId()) ?>"
+                                            >
                                                 <?= $planet->getTitan() ?>
                                             </div>
 										</div>
@@ -259,7 +291,11 @@
 										<div class="header__treasure-row header__treasure-row_head">
 											<div class="header__treasure-name clr_white">Темная материя</div>
 											<div class="header__treasure-value clr_green" 
-                                                data-resources="darkmatter">
+                                                data-resources="darkmatter"
+                                                data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_darkmatter() ?>"
+                                                data-resources_amount="<?= $planet->getDarkmatter() ?>"
+                                                data-resources_capacity="<?= $capacity->getDarkmatterCapacity($planet->getId()) ?>"
+                                            >
                                                 <?= $planet->getDarkmatter() ?>
                                             </div>
 										</div>
@@ -289,7 +325,11 @@
 										<div class="header__treasure-row header__treasure-row_head">
 											<div class="header__treasure-name clr_white">Красная материя</div>
 											<div class="header__treasure-value clr_green" 
-                                                data-resources="redmatter">
+                                                data-resources="redmatter"
+                                                data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_redmatter() ?>"
+                                                data-resources_amount="<?= $planet->getRedmatter() ?>"
+                                                data-resources_capacity="<?= $capacity->getRedmatterCapacity($planet->getId()) ?>"
+                                            >
                                                 <?= $planet->getRedmatter() ?>
                                             </div>
 										</div>

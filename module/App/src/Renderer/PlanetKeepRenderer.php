@@ -4,6 +4,7 @@ namespace App\Renderer;
 
 use Zend\View\Model\ViewModel;
 use Entities\Model\EventRepository;
+use Entities\Model\Building;
 use App\Controller\AuthController;
 
 class PlanetKeepRenderer
@@ -35,12 +36,12 @@ class PlanetKeepRenderer
         $producedefence->setTemplate('include/producedefence');
             
         $producesrc = new ViewModel([]);
-        $event = $this->checkResourcesBuildingEvent($producesrc, $planet_id);
+        $event = $this->checkResourcesBuildingEvent($producesrc, $planet_id, Building::$BUILDING_RESOURCE);
         $producesrc->setTemplate('include/producesrc');
             
         $produceindustrial = new ViewModel([]);
+        $event = $this->checkResourcesBuildingEvent($produceindustrial, $planet_id, Building::$BUILDING_INDUSTRIAL);
         $produceindustrial->setTemplate('include/produceindustrial');
-        $produceindustrial->setVariable('is_building', false);
         
         $producetech = new ViewModel([]);
         $producetech->setTemplate('include/producetech');
@@ -55,7 +56,7 @@ class PlanetKeepRenderer
         return $planetkeep;
     }
     
-    private function checkResourcesBuildingEvent(ViewModel &$producesrc, $planetid)
+    private function checkResourcesBuildingEvent(ViewModel &$producesrc, $planetid, $buildingType)
     {
         $is_building = false;
         $event = 0;
@@ -67,7 +68,8 @@ class PlanetKeepRenderer
             $event = $this->eventRepository->findOneBy(
                     'events.user = ' . $this->authController->getUser()->getId() .
                     ' AND events.target_planet = ' . $planetid .
-                    ' AND events.targetBuildingType IS NOT NULL'
+                    ' AND events.targetBuildingType IS NOT NULL' .
+                    ' AND bt.type = ' . $buildingType
                     );
         }
         catch(\Exception $e){

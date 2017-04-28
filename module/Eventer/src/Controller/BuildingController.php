@@ -11,8 +11,11 @@ use Entities\Model\EventRepository;
 use Entities\Model\EventCommand;
 use Entities\Model\UserRepository;
 use Entities\Model\UserCommand;
+use Entities\Model\BuildingTypeErrorException;
+use Entities\Model\Building;
 use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingCommand;
+use Entities\Model\BuildingType;
 use Entities\Model\BuildingTypeRepository;
 use Entities\Model\BuildingTypeCommand;
 use Universe\Model\StarRepository;
@@ -165,7 +168,7 @@ class BuildingController extends AbstractActionController
             $events = $this->eventRepository->findAllEntities(
                 'events.user = ' . $this->user->getId() .
                 ' AND events.target_planet = ' . $planet->getId() .
-                ' AND (events.event_type = ' . EventTypes::$DO_BUILD_RESOURCES . ')'
+                ' AND (events.event_type = ' . $this->getBuildingEventType($buildingType) . ')'
                 )->buffer();
             if(count($events)) {
                 /**
@@ -236,7 +239,7 @@ class BuildingController extends AbstractActionController
                         $buildingType->getName(),
                         $buildingType->getDescription(),
                         $this->user,
-                        EventTypes::$DO_BUILD_RESOURCES,
+                        $this->getBuildingEventType($buildingType),
                         time(),
                         time() + $time,
                         null,
@@ -341,6 +344,21 @@ class BuildingController extends AbstractActionController
             $view->setVariable('data', array('result' => 'ERR', 'auth' => 'NO', 'message' => 'Пользователь не авторизован'));
         }
         return $view;
+    }
+    
+    private function getBuildingEventType(BuildingType $buildingType)
+    {
+        switch($buildingType->getType()){
+            case Building::$BUILDING_RESOURCE:
+                return EventTypes::$DO_BUILD_RESOURCES;
+                break;
+            case Building::$BUILDING_INDUSTRIAL:
+                return EventTypes::$DO_BUILD_INDUSTRIAL;
+                break;
+            default:
+                throw new BuildingTypeErrorException("type " . $buildingType . " does not acceptable!");
+                break;
+        }
     }
     
     public function buildingAction()

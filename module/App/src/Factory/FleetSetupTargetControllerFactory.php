@@ -30,11 +30,7 @@ class FleetSetupTargetControllerFactory implements FactoryInterface
     {
         return new FleetSetupTargetController(
             $container->get(AdapterInterface::class),
-            new AuthController(
-                $container->get(AdapterInterface::class),
-                $container->get(UserRepository::class),
-                $container->get(UserCommand::class)
-            ),
+            $container->get(AuthController::class),
             $container->get(GalaxyRepository::class),
             $container->get(PlanetSystemRepository::class),
             $container->get(PlanetRepository::class),

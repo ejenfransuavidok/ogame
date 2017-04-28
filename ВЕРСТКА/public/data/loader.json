@@ -1,0 +1,57 @@
+{
+  "files": [
+    {
+      "type":"SCRIPT",
+      "source":"https://threejs.org/build/three.min.js",
+      "size":145,
+      "stopExecution":true
+    },
+    {
+      "type":"SCRIPT",
+      "source":"/js/vendor.js",
+      "size":257,
+      "stopExecution":true
+    },
+    {
+      "type":"SCRIPT",
+      "source":"/js/custom.js",
+      "size":30.8,
+      "stopExecution":true
+    },
+    {
+      "type":"IMAGE",
+      "source":"/img/planets3d/big/earth-map.jpg",
+      "size":9100
+    },
+    {
+      "type":"IMAGE",
+      "source":"/img/planets3d/big/earth-bump.jpg",
+      "size":1300
+    },
+    {
+      "type":"IMAGE",
+      "source":"/img/planets3d/big/earth-specular.jpg",
+      "size":335
+    },
+    {
+      "type":"IMAGE",
+      "source":"/img/planets3d/big/earth-specular.jpg",
+      "size":335
+    },
+    {
+      "type":"IMAGE",
+      "source":"/img/planets3d/small/mercurymap.jpg",
+      "size":87.9
+    },
+    {
+      "type":"IMAGE",
+      "source":"/img/planets3d/small/venusbump.jpg",
+      "size":87.9
+    },
+    {
+      "type": "CSS",
+      "source": "/css/style.css",
+      "size": 16.819
+    }
+  ]
+}

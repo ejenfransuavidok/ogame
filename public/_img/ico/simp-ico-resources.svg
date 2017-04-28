@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="Фигура_5" data-name="Фигура 5" class="cls-1" d="M1449.08,465.982l-8.13,4.944v12.067h16.01V470.926Z" transform="translate(-1438.955 -464.485)"/>
+</svg>

@@ -28,11 +28,7 @@ class PopupFleet1RendererFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new PopupFleet1Renderer(
-            new AuthController(
-                $container->get(AdapterInterface::class),
-                $container->get(UserRepository::class),
-                $container->get(UserCommand::class)
-            ),
+            $container->get(AuthController::class),
             $container->get(GalaxyRepository::class),
             $container->get(PlanetSystemRepository::class),
             $container->get(PlanetRepository::class),

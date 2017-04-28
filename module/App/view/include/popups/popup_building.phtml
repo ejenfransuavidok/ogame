@@ -48,11 +48,16 @@
                     </div>
                     
                     <div class="tabs__content js-scroll-hor">
-                        <div data-tab-targ="building_resources" data-tab-group="building" class="build__list is-active">
+                        <div 
+                            data-tab-targ="building_resources" 
+                            data-tab-group="building" 
+                            class="build__list is-active"
+                        >
                             <?php foreach($source_buildings as $building) : ?>
                             <div class="build__item" 
-                                data-entity="srcbuilding" 
-                                data-identifier="<?= $building->getId() ?>"
+                                data-entity="srcbuilding"
+                                data-root="resources-build-block-main"
+                                data-item_identifier="<?= $building->getId() ?>"
                                 data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
                                 data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>"
                                 data-building_price_factor="<?= $building->getPriceFactor() ?>"
@@ -67,11 +72,16 @@
                             </div>
                             <?php endforeach; ?>
                         </div>
-                        <div data-tab-targ="building_industrials" data-tab-group="building" class="build__list">
+                        <div 
+                            data-tab-targ="building_industrials" 
+                            data-tab-group="building" 
+                            class="build__list"
+                        >
                             <?php foreach($industrial_buildings as $building) : ?>
                             <div class="build__item" 
-                                data-entity="srcbuilding" 
-                                data-identifier="<?= $building->getId() ?>"
+                                data-entity="industrialbuilding" 
+                                data-root="industrial-build-block-main"
+                                data-item_identifier="<?= $building->getId() ?>"
                                 data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
                                 data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>">
                                 <div class="keep__item clr_red">
@@ -86,7 +96,7 @@
                     </div>
                     
                 </div>
-                <div class="popup__pp" data-entity="popup_building-popup__pp" data-building_id="">
+                <div class="popup__pp" data-entity="popup_building-popup__pp" data-building_id="" data-root="" data-picture="" data-color="">
                     <div class="popup__pp-layout">
                         <div class="popup__pp-close"></div>
                         <div class="popup__pp-preview">

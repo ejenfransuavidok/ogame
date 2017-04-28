@@ -13,6 +13,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Db\Adapter\AdapterInterface;
 use Universe\Model\PlanetRepository;
+use Universe\Model\PlanetCommand;
+use Universe\Classes\PlanetCapacity;
 use Entities\Model\Building;
 use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingTypeRepository;
@@ -93,10 +95,15 @@ class IndexController extends AbstractActionController
      */
     private $popupBuildingRenderer;
     
+    /**
+     * @ PlanetCapacity;
+     */
+    private $planetCapacity;
+    
     public function __construct(
         AdapterInterface        $db,
         AuthController          $authController,
-        PlanetRepository        $planetRepository,
+        PlanetCapacity          $planetCapacity,
         BuildingRepository      $buildingRepository,
         BuildingTypeRepository  $buildingTypeRepository,
         EventRepository         $eventRepository,
@@ -104,12 +111,14 @@ class IndexController extends AbstractActionController
         PopupFleet1Renderer     $popupFleet1Renderer,
         PopupFleet2Renderer     $popupFleet2Renderer,
         PopupFleet3Renderer     $popupFleet3Renderer,
-        FleetMoovingActivity    $fleetMoovingActivity
+        FleetMoovingActivity    $fleetMoovingActivity,
+        PlanetRepository        $planetRepository,
+        PlanetCommand           $planetCommand
         )
     {
         $this->dbAdapter                = $db;
         $this->authController           = $authController;
-        $this->planetRepository         = $planetRepository;
+        $this->planetCapacity           = $planetCapacity;
         $this->buildingRepository       = $buildingRepository;
         $this->buildingTypeRepository   = $buildingTypeRepository;
         $this->eventRepository          = $eventRepository;
@@ -118,6 +127,8 @@ class IndexController extends AbstractActionController
         $this->popupFleet2Renderer      = $popupFleet2Renderer;
         $this->popupFleet3Renderer      = $popupFleet3Renderer;
         $this->fleetMoovingActivity     = $fleetMoovingActivity;
+        $this->planetRepository         = $planetRepository;
+        $this->planetCommand            = $planetCommand;
         
         $this->planetKeepRenderer       = new PlanetKeepRenderer($this->eventRepository, $this->authController);
         $this->popupBuildingRenderer    = new PopupBuildingRenderer(
@@ -144,29 +155,19 @@ class IndexController extends AbstractActionController
             $header = new ViewModel([
                 'planets' => $this->planetRepository->findBy('planets.owner = ' . $this->user->getId() . ' AND planets.id != ' . $planet->getId())->buffer(),
                 'planet'  => $planet,
+                'capacity'=> $this->planetCapacity,
                 'user'    => $this->user
             ]);
             $header->setTemplate('include/header');
             
+            $aside = new ViewModel([]);
+            $aside->setTemplate('include/aside');
+            
             /**
              * @ парсинг круга на главной 
              */
-            //$result = $this->parsePlanetkeep($planetid);
-            //$planetkeep = $result['planetkeep'];
             $planetkeep = $this->planetKeepRenderer->render($planetid);
-            /**
-             * @
-             */
-            /* 
-            $popup_building = new ViewModel
-                ([
-                    'source_buildings' => $this->buildingTypeRepository->findAllEntities('building_types.type = ' . Building::$BUILDING_RESOURCE)->buffer(),
-                    'industrial_buildings' => $this->buildingTypeRepository->findAllEntities('building_types.type = ' . Building::$BUILDING_INDUSTRIAL)->buffer()
-                ]);
-            $popup_building->setTemplate('include/popups/popup_building');
-            $popup_building->setVariable('buildingRepository', $this->buildingRepository);
-            $popup_building->setVariable('planet', $this->user, $planet);
-            */
+
             $popup_building = $this->popupBuildingRenderer->render($planetid);
             /**
              * @ парсинг всплывающего окна флота
@@ -204,6 +205,7 @@ class IndexController extends AbstractActionController
             $view = new ViewModel([]);
             $view
                 ->addChild($header, 'header')
+                ->addChild($aside, 'aside')
                 ->addChild($game, 'game');
             
             return $view;

@@ -1,0 +1,17 @@
+{
+  "status": "access",
+  "errors": [
+    {
+      "name": "regName",
+      "message": "Данный логин занят"
+    },
+    {
+      "name": "regEmail",
+      "message": "Такой Email уже зарегестрирован"
+    },
+    {
+      "name": "regPass",
+      "message": "Еще какая то ошибка, которая определилась на стороне сервера"
+    }
+  ]
+}

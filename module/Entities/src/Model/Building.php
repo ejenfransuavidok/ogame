@@ -13,6 +13,8 @@ use RuntimeException;
 use Zend\Math\Rand;
 use Universe\Model\Entity;
 
+class BuildingTypeErrorException extends \Exception {}
+
 class Building extends Entity
 {
     const TABLE_NAME = 'buildings';
