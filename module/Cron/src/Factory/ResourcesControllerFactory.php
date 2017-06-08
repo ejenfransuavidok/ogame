@@ -12,6 +12,7 @@ use Entities\Model\BuildingCommand;
 use Cron\Controller\ResourcesController;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
+use Settings\Model\SettingsRepositoryInterface;
 
 class ResourcesControllerFactory implements FactoryInterface
 {
@@ -25,7 +26,8 @@ class ResourcesControllerFactory implements FactoryInterface
             $container->get(UserRepository::class),
             $container->get(BuildingRepository::class),
             $container->get(BuildingCommand::class),
-            $container->get(PlanetCapacity::class)
+            $container->get(PlanetCapacity::class),
+            $container->get(SettingsRepositoryInterface::class)
         );
     }
 }

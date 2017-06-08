@@ -1,33 +1,14 @@
-
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="90px"
-	 height="270px" viewBox="0 0 90 270" style="enable-background:new 0 0 90 270;" xml:space="preserve">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="90px" height="270px" viewBox="0 0 90 270" style="enable-background:new 0 0 90 270;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#727585;}
+	.st0{fill:#ffffff;}
 
-	.st35{opacity:0.5;}
-	.st36{opacity:0.2;fill:none;stroke:#8990AD;stroke-miterlimit:10;}
-	.st37{fill:#FDC545;}
-	.st38{fill:#31343C;}
-	.st39{opacity:0.3;fill:#8990AD;}
-	.st40{opacity:0.5;fill:#8990AD;}
-	.st41{fill:#22242B;}
-	.st42{fill:none;stroke:#FFFFFF;stroke-width:3;stroke-miterlimit:10;}
-	.st43{display:inline;fill:none;stroke:#FF4332;stroke-width:5;stroke-miterlimit:10;}
-	.st44{display:inline;opacity:0.6;}
-	.st45{opacity:0.5;fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:1,2;}
-	.st46{fill:none;stroke:#727585;stroke-miterlimit:10;}
-	.st47{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:1,2;}
-	.st48{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:1.0264,2.0527;}
-	.st49{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:0.9573,1.9146;}
-	.st50{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:1.0062,2.0124;}
-	.st51{fill:none;stroke:#727585;stroke-miterlimit:10;stroke-dasharray:0.9979,1.9958;}
-	.st52{opacity:0.4;fill:#B9BAC2;}
-	.st53{opacity:0.15;fill:#727585;}
-	.st54{opacity:0.4;fill:none;stroke:#8990AD;stroke-miterlimit:10;}
-	.st55{opacity:0.4;}
-	.st56{fill:none;stroke:#8990AD;stroke-miterlimit:10;}
-	.st57{opacity:0.3;fill:#727585;}
-	.st58{fill:#80859B;}
+
+	.st47{fill:none;stroke:#ffffff;stroke-miterlimit:10;stroke-dasharray:1,2;}
+	.st52{fill:#ffffff;}
+	.st53{opacity:0.15;fill:#ffffff;}
+	.st54{opacity:0.4;fill:none;stroke:#ffffff;stroke-miterlimit:10;}
+	.st57{opacity:0.3;fill:#ffffff;}
+	.st58{fill:#ffffff;}
 
 	.stroke-animation{
     	    stroke-dasharray: 2;
@@ -46,27 +27,19 @@
 		<g class="st35">
 			<path class="st47 " d="M83.8,84.3V66.4l-4.9-0.2V34.4h4.9V17.3L45.2,5.7L5.6,17.3v17.1h4.9v31.9l-4.9,0.2v17.8H83.8z"/>
 		</g>
-		<path class="st52" d="M51.5,43.5h-0.8v-2.7c0-3.2-2.6-5.7-5.7-5.7s-5.7,2.6-5.7,5.7v2.7h-0.8c-1.2,0-2.3,1-2.3,2.3v6.9
-			c0,1.2,1,2.3,2.3,2.3h13c1.2,0,2.3-1,2.3-2.3v-6.9C53.8,44.5,52.7,43.5,51.5,43.5z M42.7,40.8c0-1.3,1-2.3,2.3-2.3s2.3,1,2.3,2.3
-			v2.7h-4.7V40.8z"/>
+		<path class="st52" d="M51.5,43.5h-0.8v-2.7c0-3.2-2.6-5.7-5.7-5.7s-5.7,2.6-5.7,5.7v2.7h-0.8c-1.2,0-2.3,1-2.3,2.3v6.9    c0,1.2,1,2.3,2.3,2.3h13c1.2,0,2.3-1,2.3-2.3v-6.9C53.8,44.5,52.7,43.5,51.5,43.5z M42.7,40.8c0-1.3,1-2.3,2.3-2.3s2.3,1,2.3,2.3    v2.7h-4.7V40.8z"/>
 		<path class="st47" d="M83.8,174.3v-17.8l-4.9-0.2v-31.9h4.9v-17.1L45.2,95.7L5.6,107.3v17.1h4.9v31.9l-4.9,0.2v17.8H83.8z"/>
-		<path class="st53" d="M45.2,101.8l32.6,9.8v6.7H73v5.9v31.9v5.7l4.9,0.2v6.2H11.5V162l4.9-0.2v-5.7v-31.9v-5.9h-4.9v-6.7
-			L45.2,101.8"/>
-		<path class="st54" d="M45.2,101.8l32.6,9.8v6.7H73v5.9v31.9v5.7l4.9,0.2v6.2H11.5V162l4.9-0.2v-5.7v-31.9v-5.9h-4.9v-6.7
-			L45.2,101.8"/>
+		<path class="st53" d="M45.2,101.8l32.6,9.8v6.7H73v5.9v31.9v5.7l4.9,0.2v6.2H11.5V162l4.9-0.2v-5.7v-31.9v-5.9h-4.9v-6.7    L45.2,101.8"/>
+		<path class="st54" d="M45.2,101.8l32.6,9.8v6.7H73v5.9v31.9v5.7l4.9,0.2v6.2H11.5V162l4.9-0.2v-5.7v-31.9v-5.9h-4.9v-6.7    L45.2,101.8"/>
 		<g>
-			<path class="st0" d="M54.9,136.9l-7.7-7.7c-0.5-0.5-1.2-0.8-1.9-0.8l-2.9,0c-0.7,0-1.3,0.6-1.3,1.3l-0.1,2.7c0,0.7,0.3,1.5,0.8,2
-				l7.8,7.8c0.5,0.5,1.4,0.5,2,0l3.3-3.3C55.4,138.3,55.4,137.4,54.9,136.9z"/>
+			<path class="st0" d="M54.9,136.9l-7.7-7.7c-0.5-0.5-1.2-0.8-1.9-0.8l-2.9,0c-0.7,0-1.3,0.6-1.3,1.3l-0.1,2.7c0,0.7,0.3,1.5,0.8,2     l7.8,7.8c0.5,0.5,1.4,0.5,2,0l3.3-3.3C55.4,138.3,55.4,137.4,54.9,136.9z"/>
 			<path class="st0" d="M35.2,144.8c-0.3,0.3-0.3,0.7,0,1l2.1,2.1c0.3,0.3,0.7,0.3,1,0l7.1-7.1l-3-3L35.2,144.8z"/>
 		</g>
 		<path class="st47 stroke-animation" d="M83.8,264.3v-17.8l-4.9-0.2v-31.9h4.9v-17.1l-38.6-11.6L5.6,197.3v17.1h4.9v31.9l-4.9,0.2v17.8H83.8z"/>
-		<path class="st57" d="M45.2,191.8l32.6,9.8v6.7H73v5.9v31.9v5.7l4.9,0.2v6.2H11.5V252l4.9-0.2v-5.7v-31.9v-5.9h-4.9v-6.7
-			L45.2,191.8"/>
-		<path class="st54" d="M45.2,191.8l32.6,9.8v6.7H73v5.9v31.9v5.7l4.9,0.2v6.2H11.5V252l4.9-0.2v-5.7v-31.9v-5.9h-4.9v-6.7
-			L45.2,191.8"/>
+		<path class="st57" d="M45.2,191.8l32.6,9.8v6.7H73v5.9v31.9v5.7l4.9,0.2v6.2H11.5V252l4.9-0.2v-5.7v-31.9v-5.9h-4.9v-6.7    L45.2,191.8"/>
+		<path class="st54" d="M45.2,191.8l32.6,9.8v6.7H73v5.9v31.9v5.7l4.9,0.2v6.2H11.5V252l4.9-0.2v-5.7v-31.9v-5.9h-4.9v-6.7    L45.2,191.8"/>
 		<g>
-			<path class="st58" d="M54.9,226.9l-7.7-7.7c-0.5-0.5-1.2-0.8-1.9-0.8l-2.9,0c-0.7,0-1.3,0.6-1.3,1.3l-0.1,2.7
-				c0,0.7,0.3,1.5,0.8,2l7.8,7.8c0.5,0.5,1.4,0.5,2,0l3.3-3.3C55.4,228.3,55.4,227.4,54.9,226.9z"/>
+			<path class="st58" d="M54.9,226.9l-7.7-7.7c-0.5-0.5-1.2-0.8-1.9-0.8l-2.9,0c-0.7,0-1.3,0.6-1.3,1.3l-0.1,2.7     c0,0.7,0.3,1.5,0.8,2l7.8,7.8c0.5,0.5,1.4,0.5,2,0l3.3-3.3C55.4,228.3,55.4,227.4,54.9,226.9z"/>
 			<path class="st0" d="M35.2,234.8c-0.3,0.3-0.3,0.7,0,1l2.1,2.1c0.3,0.3,0.7,0.3,1,0l7.1-7.1l-3-3L35.2,234.8z"/>
 		</g>
 	</g>

@@ -30,11 +30,7 @@ class FleetLauncherControllerFactory implements FactoryInterface
     {
         return new FleetLauncherController(
             $container->get(AdapterInterface::class),
-            new AuthController(
-                $container->get(AdapterInterface::class),
-                $container->get(UserRepository::class),
-                $container->get(UserCommand::class)
-            ),
+            $container->get(AuthController::class),
             $container->get(SpaceSheepRepository::class),
             $container->get(SpaceSheepCommand::class),
             $container->get(GalaxyRepository::class),

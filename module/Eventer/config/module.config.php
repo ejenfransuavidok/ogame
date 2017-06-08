@@ -5,6 +5,8 @@ namespace Eventer;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
+use App\Controller\AuthController;
+use App\Factory\AuthControllerFactory;
 
 return [
 
@@ -12,7 +14,8 @@ return [
         'aliases' => [
         ],
         'factories' => [
-            \App\Controller\AuthController::class => \App\Factory\AuthControllerFactory::class
+            AuthController::class => AuthControllerFactory::class,
+            Processor\BuildingProcessor::class => Factory\BuildingProcessorFactory::class,
         ],
     ],
     'controllers' => [

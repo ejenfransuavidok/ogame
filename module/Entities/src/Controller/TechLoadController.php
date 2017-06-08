@@ -9,10 +9,6 @@
 
 namespace Entities\Controller;
 
-require_once (dirname(dirname(__FILE__)) . '/Classes/UploadHandler.php');
-require_once (dirname(dirname(__FILE__)) . '/Classes/XmiParser.php');
-require_once (dirname(dirname(__FILE__)) . '/Classes/XmlParser.php');
-
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Entities\Model\Technology;
@@ -20,9 +16,6 @@ use Entities\Model\TechnologyConnection;
 use Entities\Model\TechnologyRepository;
 use Entities\Model\TechnologyCommand;
 use Entities\Model\TechnologyConnectionCommand;
-use Entities\Classes\UploadHandler;
-use Entities\Classes\XmiParser;
-use Entities\Classes\XmlParser;
 use Entities\Model\SpaceSheep;
 use Entities\Model\SpaceSheepCommand;
 use Entities\Model\UserRepository;
@@ -37,6 +30,14 @@ use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingType;
 use Entities\Model\BuildingTypeCommand;
 use Entities\Model\BuildingTypeRepository;
+use Entities\Classes\UploadHandler;
+use Entities\Classes\XmiParser;
+use Entities\Classes\XmlParser;
+use Entities\Classes\ObjectTypesList;
+use Entities\Classes\BuildingTypesList;
+use Entities\Classes\Destroed;
+use Entities\Classes\Multiple;
+
 class FailXmiParse extends \Exception
 {
 }
@@ -318,39 +319,57 @@ class TechLoadController extends AbstractActionController
     {
         $imported_counter = 0;
         $keys = array(
-            'name'                              =>  'Наименование здания',
-            'description'                       =>  'Описание',
-            'type'                              =>  'Тип здания',
-            'price_factor'                      =>  'Удорожание',
-            'power_factor'                      =>  'Коэффициент энергии',
-            'save_factor'                       =>  'Коэффициент хранения',
-            'building_acceleration_factor'      =>  'Увеличение скорости постройки',
-            'produce_metall'                    =>  'Производство металла',
-            'produce_heavygas'                  =>  'Производство тяжёлого газа',
-            'produce_ore'                       =>  'Производство обогощённой руды',
-            'produce_hydro'                     =>  'Производство водорода',
-            'produce_titan'                     =>  'Производство титана',
-            'produce_darkmatter'                =>  'Производство тёмной материи',
-            'produce_redmatter'                 =>  'Производство красной материи',
-            'produce_anti'                      =>  'Производство антивещества',
-            'produce_electricity'               =>  'Производство электричества',
-            'consume_metall'                    =>  'Потребление металла',
-            'consume_heavygas'                  =>  'Потребление тяжёлого газа',
-            'consume_ore'                       =>  'Потребление обогощённой руды',
-            'consume_hydro'                     =>  'Потребление водорода',
-            'consume_titan'                     =>  'Потребление титана',
-            'consume_darkmatter'                =>  'Потребление тёмной материи',
-            'consume_redmatter'                 =>  'Потребление красной материи',
-            'consume_anti'                      =>  'Потребление антивещества',
-            'consume_electricity'               =>  'Потребление электричества',
-            'capacity_metall'                   =>  'Вместимость хранилища металла',
-            'capacity_heavygas'                 =>  'Вместимость хранилища тяжёлого газа',
-            'capacity_ore'                      =>  'Вместимость хранилища руды',
-            'capacity_hydro'                    =>  'Вместимость хранилища водорода',
-            'capacity_titan'                    =>  'Вместимость хранилища титана',
-            'capacity_darkmatter'               =>  'Вместимость хранилища ТМ',
-            'capacity_redmatter'                =>  'Вместимость хранилища КМ',
-            'picture'                           =>  'Картинка'
+            'name'                                  =>  'Наименование здания',
+            'consume_metall'                        =>  'Потребление металла',
+            'consume_heavygas'                      =>  'Потребление тяжёлого газа',
+            'consume_ore'                           =>  'Потребление обогощённой руды',
+            'consume_hydro'                         =>  'Потребление водорода',
+            'consume_titan'                         =>  'Потребление титана',
+            'consume_darkmatter'                    =>  'Потребление тёмной материи',
+            'consume_redmatter'                     =>  'Потребление красной материи',
+            'consume_anti'                          =>  'Потребление антивещества',
+            'consume_electricity'                   =>  'Потребление электричества',
+            ////////////////////////////////////////////////////////////
+            'produce_metall'                        =>  'Производство металла',
+            'produce_heavygas'                      =>  'Производство тяжёлого газа',
+            'produce_ore'                           =>  'Производство обогощённой руды',
+            'produce_hydro'                         =>  'Производство водорода',
+            'produce_titan'                         =>  'Производство титана',
+            'produce_darkmatter'                    =>  'Производство тёмной материи',
+            'produce_redmatter'                     =>  'Производство красной материи',
+            'produce_anti'                          =>  'Производство антивещества',
+            'produce_electricity'                   =>  'Производство электричества',
+            ////////////////////////////////////////////////////////////
+            'capacity_metall'                       =>  'Вместимость хранилища металла',
+            'capacity_heavygas'                     =>  'Вместимость хранилища тяжёлого газа',
+            'capacity_ore'                          =>  'Вместимость хранилища руды',
+            'capacity_hydro'                        =>  'Вместимость хранилища водорода',
+            'capacity_titan'                        =>  'Вместимость хранилища титана',
+            'capacity_darkmatter'                   =>  'Вместимость хранилища ТМ',
+            'capacity_redmatter'                    =>  'Вместимость хранилища КМ',
+            ////////////////////////////////////////////////////////////
+            'price_factor'                          =>  'Удорожание',
+            'picture'                               =>  'Картинка',
+            'description'                           =>  'Описание',
+            'object_type'                           =>  'Тип объекта',
+            'building_type'                         =>  'Тип здания',
+            'power_factor'                          =>  'Коэффициент энергии',
+            'save_factor'                           =>  'Коэффициент хранения',
+            ////////////////////////////////////////////////////////////
+            'building_acceleration_factor'          =>  'Увеличение скорости постройки зданий',
+            'defence_acceleration_factor'           =>  'Увеличение скорости постройки сооружений обороны',
+            'smallsmallsheeps_acceleration_factor'  =>  'Увеличение скорости постройки маленьких кораблей',
+            'smallsheeps_acceleration_factor'       =>  'Увеличение скорости постройки малых кораблей',
+            'averagesheeps_acceleration_factor'     =>  'Увеличение скорости постройки средних кораблей',
+            'bigsheeps_acceleration_factor'         =>  'Увеличение скорости постройки больших кораблей',
+            'giantsheeps_acceleration_factor'       =>  'Увеличение скорости постройки гигантских кораблей',
+            'wartech_acceleration_factor'           =>  'Увеличение скорости исследования военных технологий',
+            'civiltech_acceleration_factor'         =>  'Увеличение скорости исследования гражданских технологий',
+            'enginetech_acceleration_factor'        =>  'Увеличение скорости исследования технологий двигателей',
+            ////////////////////////////////////////////////////////////
+            'maxlevel'                              =>  'Максимальный уровень',
+            'multiple'                              =>  'Множественное',
+            'destroed'                              =>  'Уничтожаемое'
             );
         $parser = new XmlParser();
         $result = $parser->parse($file);
@@ -386,29 +405,24 @@ class TechLoadController extends AbstractActionController
                         /**
                          * 2. такого прототипа здания нет, создадим
                          */
-                        if($one['type'] == 'Ресурсное здание')
-                            $type = Building::$BUILDING_RESOURCE;
-                        else if($one['type'] == 'Производственное здание')
-                            $type = Building::$BUILDING_INDUSTRIAL;
-                        else
-                            $type = 0;
+                        $object_type_item = new ObjectTypesList();
+                        $building_type_item = new BuildingTypesList();
+                        $destroed = new Destroed();
+                        $multiple = new Multiple();
+                        
                         $buildingType = new BuildingType(
-                            $one['name'], 
-                            $one['description'],
-                            $type,
+                            $one['name'],
+                            $object_type_item->decodeTypeStr($one['object_type']),
+                            $building_type_item->decodeTypeStr($one['building_type']),
                             $one['price_factor'],
+                            $one['picture'],
+                            $one['description'],
                             $one['power_factor'],
                             $one['save_factor'],
-                            $one['building_acceleration_factor'],
-                            $one['produce_metall'],
-                            $one['produce_heavygas'],
-                            $one['produce_ore'],
-                            $one['produce_hydro'],
-                            $one['produce_titan'],
-                            $one['produce_darkmatter'],
-                            $one['produce_redmatter'],
-                            $one['produce_anti'],
-                            $one['produce_electricity'],
+                            $one['maxlevel'],
+                            $multiple->decodeTypeStr($one['multiple']),
+                            $destroed->decodeTypeStr($one['destroed']),
+                            ////////////////////////////////////////////
                             $one['consume_metall'],
                             $one['consume_heavygas'],
                             $one['consume_ore'],
@@ -418,14 +432,36 @@ class TechLoadController extends AbstractActionController
                             $one['consume_redmatter'],
                             $one['consume_anti'],
                             $one['consume_electricity'],
+                            ////////////////////////////////////////////
+                            $one['produce_metall'],
+                            $one['produce_heavygas'],
+                            $one['produce_ore'],
+                            $one['produce_hydro'],
+                            $one['produce_titan'],
+                            $one['produce_darkmatter'],
+                            $one['produce_redmatter'],
+                            $one['produce_anti'],
+                            $one['produce_electricity'],
+                            ////////////////////////////////////////////
                             $one['capacity_metall'],
                             $one['capacity_heavygas'],
                             $one['capacity_ore'],
                             $one['capacity_hydro'],
                             $one['capacity_titan'],
                             $one['capacity_darkmatter'],
-                            $one['capacity_redmatter'],
-                            $one['picture']);
+                            $one['capacity_redmatter'],                            
+                            ////////////////////////////////////////////
+                            $one['building_acceleration_factor'],
+                            $one['defence_acceleration_factor'],
+                            $one['smallsmallsheeps_acceleration_factor'],
+                            $one['smallsheeps_acceleration_factor'],
+                            $one['averagesheeps_acceleration_factor'],
+                            $one['bigsheeps_acceleration_factor'],
+                            $one['giantsheeps_acceleration_factor'],
+                            $one['wartech_acceleration_factor'],
+                            $one['civiltech_acceleration_factor'],
+                            $one['enginetech_acceleration_factor']
+                            );
                         /**
                          * 3. сохраним в БД
                          */

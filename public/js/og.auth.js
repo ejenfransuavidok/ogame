@@ -27,9 +27,44 @@ var Auth = exports.Auth = function () {
         $(document).on('submit', '.game__login-form', function (evt) {
             return _this.form_submit(evt);
         });
+        $(document).on('click', '[data-menu_item=logout]', function (evt) {
+            return _this.logout(evt);
+        });
     }
 
     _createClass(Auth, [{
+        key: 'logout',
+        value: function logout(evt) {
+            evt.preventDefault();
+            $.ajax({
+                type: 'post',
+                url: '/dologout',
+                dataType: "json",
+                complete: function complete(res) {
+                    try {
+                        var data = res.responseJSON;
+                        if (res.status) {
+                            var status = res.status;
+                            if (status == 200) {
+                                if (data.result.result == 'error') {
+                                    $.notify(data.result.message, 'error');
+                                } else {
+                                    $.notify(data.result.message, 'message');
+                                    if (typeof data.result.redirect != 'undefined') window.location.href = data.result.redirect;
+                                }
+                            } else {
+                                $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');
+                            }
+                        } else {
+                            $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');
+                        }
+                    } catch (err) {
+                        $.notify(err.message);
+                    }
+                }
+            });
+        }
+    }, {
         key: 'form_submit',
         value: function form_submit(evt) {
             evt.preventDefault();
@@ -51,11 +86,9 @@ var Auth = exports.Auth = function () {
                                         $.notify(data.result.message, 'error');
                                     } else {
                                         $.notify(data.result.message, 'message');
-                                        //if(typeof data.result.redirect != 'undefined')
-                                        //    window.location.href = data.result.redirect;
-                                        console.log(data);
-                                        console.log(data.result);
-                                        console.log(data.result.redirect);
+                                        if (typeof data.result.redirect != 'undefined') {
+                                            window.location.href = data.result.redirect;
+                                        }
                                     }
                                 } else {
                                     $.notify('Во время запроса произошла непредвиденная ошибка, пожалуйста, обратитесь к администратору!');
@@ -66,9 +99,11 @@ var Auth = exports.Auth = function () {
                         } catch (err) {
                             $.notify(err.message);
                         }
+                        return 0;
                     }
                 });
             }
+            return 0;
         }
     }]);
 

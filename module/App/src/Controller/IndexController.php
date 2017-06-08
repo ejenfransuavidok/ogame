@@ -26,6 +26,9 @@ use App\Renderer\PopupFleet3Renderer;
 use App\Renderer\FleetMoovingActivity;
 use App\Renderer\PlanetKeepRenderer;
 use App\Renderer\PopupBuildingRenderer;
+use App\Renderer\PopupBlackmarketRenderer;
+use App\Renderer\PopupBuyRenderer;
+use App\Renderer\PopupDonateRenderer;
 
 
 class IndexController extends AbstractActionController
@@ -100,20 +103,38 @@ class IndexController extends AbstractActionController
      */
     private $planetCapacity;
     
+    /**
+     * @ PopupBlackmarketRenderer
+     */
+    private $popupBlackmarketRenderer;
+    
+    /**
+     * @ PopupBuyRenderer
+     */
+    private $popupBuyRenderer;
+    
+    /**
+     * @ PopupDonateRenderer;
+     */
+    private $popupDonateRenderer;
+    
     public function __construct(
-        AdapterInterface        $db,
-        AuthController          $authController,
-        PlanetCapacity          $planetCapacity,
-        BuildingRepository      $buildingRepository,
-        BuildingTypeRepository  $buildingTypeRepository,
-        EventRepository         $eventRepository,
-        EventCommand            $eventCommand,
-        PopupFleet1Renderer     $popupFleet1Renderer,
-        PopupFleet2Renderer     $popupFleet2Renderer,
-        PopupFleet3Renderer     $popupFleet3Renderer,
-        FleetMoovingActivity    $fleetMoovingActivity,
-        PlanetRepository        $planetRepository,
-        PlanetCommand           $planetCommand
+        AdapterInterface         $db,
+        AuthController           $authController,
+        PlanetCapacity           $planetCapacity,
+        BuildingRepository       $buildingRepository,
+        BuildingTypeRepository   $buildingTypeRepository,
+        EventRepository          $eventRepository,
+        EventCommand             $eventCommand,
+        PopupFleet1Renderer      $popupFleet1Renderer,
+        PopupFleet2Renderer      $popupFleet2Renderer,
+        PopupFleet3Renderer      $popupFleet3Renderer,
+        FleetMoovingActivity     $fleetMoovingActivity,
+        PlanetRepository         $planetRepository,
+        PlanetCommand            $planetCommand,
+        PopupBlackmarketRenderer $popupBlackmarketRenderer,
+        PopupBuyRenderer         $popupBuyRenderer,
+        PopupDonateRenderer      $popupDonateRenderer
         )
     {
         $this->dbAdapter                = $db;
@@ -129,6 +150,9 @@ class IndexController extends AbstractActionController
         $this->fleetMoovingActivity     = $fleetMoovingActivity;
         $this->planetRepository         = $planetRepository;
         $this->planetCommand            = $planetCommand;
+        $this->popupBlackmarketRenderer = $popupBlackmarketRenderer;
+        $this->popupBuyRenderer         = $popupBuyRenderer;
+        $this->popupDonateRenderer      = $popupDonateRenderer;
         
         $this->planetKeepRenderer       = new PlanetKeepRenderer($this->eventRepository, $this->authController);
         $this->popupBuildingRenderer    = new PopupBuildingRenderer(
@@ -136,6 +160,13 @@ class IndexController extends AbstractActionController
                                                     $this->buildingRepository, 
                                                     $this->planetRepository,
                                                     $this->authController);
+        /*
+        $loc = $this->getServiceLocator();
+        $translator = $loc->get('translator');
+        $lang = 'en';
+        $translator->addTranslationFile("phparray", dirname(dirname(__FILE__)) . '/language/lang.array.' . $lang . '.php');
+        $loc->get('ViewHelperManager')->get('translate')->setTranslator($translator);
+        */
     }
     
     public function indexAction()
@@ -152,6 +183,12 @@ class IndexController extends AbstractActionController
             
             $layout->setTemplate('app/layout');
             
+            $donate = new ViewModel([]);
+            $donate->setTemplate('include/popups/donate');
+            $this->popupDonateRenderer->execute($donate, $this->user);
+            
+            $layout->addChild($donate, 'popup_donate');
+            
             $header = new ViewModel([
                 'planets' => $this->planetRepository->findBy('planets.owner = ' . $this->user->getId() . ' AND planets.id != ' . $planet->getId())->buffer(),
                 'planet'  => $planet,
@@ -159,10 +196,23 @@ class IndexController extends AbstractActionController
                 'user'    => $this->user
             ]);
             $header->setTemplate('include/header');
-            
+            /**
+             * @ aside
+             */
             $aside = new ViewModel([]);
             $aside->setTemplate('include/aside');
-            
+            /**
+             * @ 
+             */
+            $blackmarket = new ViewModel([]);
+            $blackmarket->setTemplate('include/popups/blackmarket');
+            $this->popupBlackmarketRenderer->execute($blackmarket, $this->user);
+            /**
+             * @ 
+             */
+            $buy = new ViewModel([]);
+            $buy->setTemplate('include/popups/buy');
+            $this->popupBuyRenderer->execute($buy, $this->user);
             /**
              * @ парсинг круга на главной 
              */
@@ -200,7 +250,9 @@ class IndexController extends AbstractActionController
                 ->addChild($fleet_forward_1, 'fleet_forward_1')
                 ->addChild($fleet_forward_2, 'fleet_forward_2')
                 ->addChild($fleet_forward_3, 'fleet_forward_3')
-                ->addChild($fleet_mooving_activity, 'fleet_mooving_activity');
+                ->addChild($fleet_mooving_activity, 'fleet_mooving_activity')
+                ->addChild($blackmarket, 'blackmarket')
+                ->addChild($buy, 'buy');
             
             $view = new ViewModel([]);
             $view
@@ -211,7 +263,7 @@ class IndexController extends AbstractActionController
             return $view;
         }
         else{
-            return $this->redirect()->toRoute('app/auth', ['action' => 'auth']);
+            return $this->redirect()->toRoute('app', ['action' => 'auth']);
         }
     }
     

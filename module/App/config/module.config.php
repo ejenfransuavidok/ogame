@@ -16,6 +16,9 @@ return [
             Renderer\PopupFleet2Renderer::class => Factory\PopupFleet2RendererFactory::class,
             Renderer\PopupFleet3Renderer::class => Factory\PopupFleet3RendererFactory::class,
             Renderer\FleetMoovingActivity::class => Factory\FleetMoovingActivityFactory::class,
+            Renderer\PopupBlackmarketRenderer::class => Factory\PopupBlackmarketRendererFactory::class,
+            Renderer\PopupBuyRenderer::class => Factory\PopupBuyRendererFactory::class,
+            Renderer\PopupDonateRenderer::class => Factory\PopupDonateRendererFactory::class,
         ],
     ],
     'controllers' => [
@@ -31,10 +34,14 @@ return [
             'app' => [
                 'type' => Literal::class,
                 'options' => [
-                    'route'    => '/app',
+                    'route'    => '/',
                     'defaults' => [
+                    /**
                         'controller' => Controller\IndexController::class,
                         'action'     => 'index',
+                    */
+                        'controller' => Controller\AuthController::class,
+                        'action' => 'auth',
                     ],
                 ],
                 'may_terminate' => true,
@@ -43,7 +50,7 @@ return [
                     'planet' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
-                            'route'    => '/planet/:planetid',
+                            'route'    => 'planet/:planetid',
                             'defaults' => [
                                 'controller' => Controller\IndexController::class,
                                 'action' => 'index',
@@ -53,22 +60,22 @@ return [
                             ],
                         ],
                     ],
-                    
+                 /*   
                     'auth' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
-                            'route'    => '/auth',
+                            'route'    => 'auth',
                             'defaults' => [
                                 'controller' => Controller\AuthController::class,
                                 'action' => 'auth',
                             ],
                         ],
                     ],
-                    
+                 */   
                     'doauth' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
-                            'route'    => '/doauth',
+                            'route'    => 'doauth',
                             'defaults' => [
                                 'controller' => Controller\AuthController::class,
                                 'action' => 'doauth',
@@ -76,10 +83,21 @@ return [
                         ],
                     ],
                     
+                    'dologout' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => 'dologout',
+                            'defaults' => [
+                                'controller' => Controller\AuthController::class,
+                                'action' => 'dologout',
+                            ],
+                        ],
+                    ],
+                    
                     'doregister' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
-                            'route'    => '/doregister',
+                            'route'    => 'doregister',
                             'defaults' => [
                                 'controller' => Controller\AuthController::class,
                                 'action' => 'doregister',
@@ -90,7 +108,7 @@ return [
                     'planetkeep' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
-                            'route'    => '/planetkeep',
+                            'route'    => 'planetkeep',
                             'defaults' => [
                                 'controller' => Controller\IndexController::class,
                                 'action' => 'planetkeep',
@@ -101,7 +119,7 @@ return [
                     'setuptarget' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
-                            'route'    => '/setuptarget',
+                            'route'    => 'setuptarget',
                             'defaults' => [
                                 'controller' => Controller\FleetSetupTargetController::class,
                                 'action' => 'setuptarget',
@@ -112,7 +130,7 @@ return [
                     'fleetlaunch' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
-                            'route'    => '/fleetlaunch',
+                            'route'    => 'fleetlaunch',
                             'defaults' => [
                                 'controller' => Controller\FleetLauncherController::class,
                                 'action' => 'fleetlaunch',
@@ -123,7 +141,7 @@ return [
                     'fleetforwardpopupupdater' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
-                            'route'    => '/fleetforwardpopupupdater',
+                            'route'    => 'fleetforwardpopupupdater',
                             'defaults' => [
                                 'controller' => Controller\IndexController::class,
                                 'action' => 'fleetforwardpopupupdater',
@@ -141,6 +159,16 @@ return [
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
+        ],
+    ],
+    'translator' => [
+        'locale' => 'en',
+        'translation_file_patterns' => [
+            [
+                'type'     => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern'  => 'lang.array.en.php',
+            ],
         ],
     ],
 ];

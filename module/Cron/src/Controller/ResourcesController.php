@@ -13,6 +13,7 @@ use Entities\Model\Building;
 use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingCommand;
 use Universe\Classes\PlanetCapacity;
+use Settings\Model\SettingsRepositoryInterface;
 
 class ResourcesController extends AbstractActionController
 {
@@ -52,27 +53,32 @@ class ResourcesController extends AbstractActionController
      */
     protected $planetCapacity;
     
-    
+    /**
+     * @ SettingsRepositoryInterface;
+     */
+    protected $settingsRepositoryInterface;
     
     public function __construct(
-        AdapterInterface    $db, 
-        PlanetRepository    $planetRepository,
-        PlanetCommand       $planetCommand,
-        SputnikRepository   $sputnikRepository,
-        UserRepository      $userRepository,
-        BuildingRepository  $buildingRepository,
-        BuildingCommand     $buildingCommand,
-        PlanetCapacity      $planetCapacity
+        AdapterInterface            $db, 
+        PlanetRepository            $planetRepository,
+        PlanetCommand               $planetCommand,
+        SputnikRepository           $sputnikRepository,
+        UserRepository              $userRepository,
+        BuildingRepository          $buildingRepository,
+        BuildingCommand             $buildingCommand,
+        PlanetCapacity              $planetCapacity,
+        SettingsRepositoryInterface $settingsRepositoryInterface
         )
     {
-        $this->dbAdapter = $db;
-        $this->planetRepository = $planetRepository;
-        $this->planetCommand = $planetCommand;
-        $this->sputnikRepository = $sputnikRepository;
-        $this->userRepository = $userRepository;
-        $this->buildingRepository = $buildingRepository;
-        $this->buildingCommand = $buildingCommand;
-        $this->planetCapacity = $planetCapacity;
+        $this->dbAdapter                    = $db;
+        $this->planetRepository             = $planetRepository;
+        $this->planetCommand                = $planetCommand;
+        $this->sputnikRepository            = $sputnikRepository;
+        $this->userRepository               = $userRepository;
+        $this->buildingRepository           = $buildingRepository;
+        $this->buildingCommand              = $buildingCommand;
+        $this->planetCapacity               = $planetCapacity;
+        $this->settingsRepositoryInterface  = $settingsRepositoryInterface;
     }
     
     public function srccalcAction()
@@ -116,35 +122,40 @@ class ResourcesController extends AbstractActionController
                         $anti           += $building->getProduceAntiPerHour();
                     }
                     /**
-                     * @ установка скоростей обновления
+                     * @ установка скоростей обновления Building::$DELTA_REFRESH = 1 час = 3600 секунд
                      */
                     $update = $planet->getUpdate();
-                    $planet->set_velocity_per_second_mineral_metall     ($type->getMetall()     * $metall       / Building::$DELTA_REFRESH);
-                    $planet->set_velocity_per_second_mineral_heavygas   ($type->getHeavyGas()   * $heavygas     / Building::$DELTA_REFRESH);
-                    $planet->set_velocity_per_second_mineral_ore        ($type->getOre()        * $ore          / Building::$DELTA_REFRESH);
-                    $planet->set_velocity_per_second_mineral_hydro      ($type->getHydro()      * $hydro        / Building::$DELTA_REFRESH);
-                    $planet->set_velocity_per_second_mineral_titan      ($type->getTitan()      * $titan        / Building::$DELTA_REFRESH);
-                    $planet->set_velocity_per_second_mineral_darkmatter ($type->getDarkmatter() * $darkmatter   / Building::$DELTA_REFRESH);
-                    $planet->set_velocity_per_second_mineral_redmatter  ($type->getRedmatter()  * $redmatter    / Building::$DELTA_REFRESH);
-                    $planet->set_velocity_per_second_mineral_anti       ($type->getAnti()       * $anti         / Building::$DELTA_REFRESH);
+                    
+                    $base_metall_per_second     = floatval($this->settingsRepositoryInterface->findSettingByKey ('METALL_BASE_VELOCITY_PER_SECOND')->getText());
+                    $base_heavygas_per_second   = floatval($this->settingsRepositoryInterface->findSettingByKey ('HEAVYGAS_BASE_VELOCITY_PER_SECOND')->getText());
+                    $base_ore_per_second        = floatval($this->settingsRepositoryInterface->findSettingByKey ('ORE_BASE_VELOCITY_PER_SECOND')->getText());
+                    $base_hydro_per_second      = floatval($this->settingsRepositoryInterface->findSettingByKey ('HYDRO_BASE_VELOCITY_PER_SECOND')->getText());
+                    $base_titan_per_second      = floatval($this->settingsRepositoryInterface->findSettingByKey ('TITAN_BASE_VELOCITY_PER_SECOND')->getText());
+                    $base_darkmatter_per_second = floatval($this->settingsRepositoryInterface->findSettingByKey ('DARKMATTER_BASE_VELOCITY_PER_SECOND')->getText());
+                    $base_redmatter_per_second  = floatval($this->settingsRepositoryInterface->findSettingByKey ('REDMATTER_BASE_VELOCITY_PER_SECOND')->getText());
+                    $base_anti_per_second       = floatval($this->settingsRepositoryInterface->findSettingByKey ('ANTI_BASE_VELOCITY_PER_SECOND')->getText());
+                    
+                    $planet->set_velocity_per_second_mineral_metall     ($base_metall_per_second    + $type->getMetall()     * $metall       / Building::$DELTA_REFRESH);
+                    $planet->set_velocity_per_second_mineral_heavygas   ($base_heavygas_per_second  + $type->getHeavyGas()   * $heavygas     / Building::$DELTA_REFRESH);
+                    $planet->set_velocity_per_second_mineral_ore        ($base_ore_per_second       + $type->getOre()        * $ore          / Building::$DELTA_REFRESH);
+                    $planet->set_velocity_per_second_mineral_hydro      ($base_hydro_per_second     + $type->getHydro()      * $hydro        / Building::$DELTA_REFRESH);
+                    $planet->set_velocity_per_second_mineral_titan      ($base_titan_per_second     + $type->getTitan()      * $titan        / Building::$DELTA_REFRESH);
+                    $planet->set_velocity_per_second_mineral_darkmatter ($base_darkmatter_per_second+ $type->getDarkmatter() * $darkmatter   / Building::$DELTA_REFRESH);
+                    $planet->set_velocity_per_second_mineral_redmatter  ($base_redmatter_per_second + $type->getRedmatter()  * $redmatter    / Building::$DELTA_REFRESH);
+                    $planet->set_velocity_per_second_mineral_anti       ($base_anti_per_second      + $type->getAnti()       * $anti         / Building::$DELTA_REFRESH);
                     $planet->setElectricity($electricity);
                     $planet = $this->planetCommand->updateEntity($planet);
                     
                     if($now > $update + 10){
-                        $K  = ($now - $update);
-                        $metall     = $K * $planet->get_velocity_per_second_mineral_metall()        + $planet->getMetall();
-                        if($planet->getId() == 1)
-                        file_put_contents("debug.txt", 
-                            $metall . ' = ' . $K . ' * ' . $planet->get_velocity_per_second_mineral_metall() . ' + ' . $planet->getMetall() . 
-                            ' now = ' . $now . ' update = ' . $update . ';' . PHP_EOL, FILE_APPEND);
-                        
-                        $heavygas   = $K * $planet->get_velocity_per_second_mineral_heavygas()      + $planet->getHeavyGas();
-                        $ore        = $K * $planet->get_velocity_per_second_mineral_ore()           + $planet->getOre();
-                        $hydro      = $K * $planet->get_velocity_per_second_mineral_hydro()         + $planet->getHydro();
-                        $titan      = $K * $planet->get_velocity_per_second_mineral_titan()         + $planet->getTitan();
-                        $darkmatter = $K * $planet->get_velocity_per_second_mineral_darkmatter()    + $planet->getDarkmatter();
-                        $redmatter  = $K * $planet->get_velocity_per_second_mineral_redmatter()     + $planet->getRedmatter();
-                        $anti       = $K * $planet->get_velocity_per_second_mineral_anti()          + $planet->getAnti();
+                        $K                  = $now - $update;
+                        $metall             = $K * $planet->get_velocity_per_second_mineral_metall()        + $planet->getMetall();
+                        $heavygas           = $K * $planet->get_velocity_per_second_mineral_heavygas()      + $planet->getHeavyGas();
+                        $ore                = $K * $planet->get_velocity_per_second_mineral_ore()           + $planet->getOre();
+                        $hydro              = $K * $planet->get_velocity_per_second_mineral_hydro()         + $planet->getHydro();
+                        $titan              = $K * $planet->get_velocity_per_second_mineral_titan()         + $planet->getTitan();
+                        $darkmatter         = $K * $planet->get_velocity_per_second_mineral_darkmatter()    + $planet->getDarkmatter();
+                        $redmatter          = $K * $planet->get_velocity_per_second_mineral_redmatter()     + $planet->getRedmatter();
+                        $anti               = $K * $planet->get_velocity_per_second_mineral_anti()          + $planet->getAnti();
                         
                         $metall_limit       = $this->planetCapacity->getMetallCapacity($planet->getId());
                         $heavygas_limit     = $this->planetCapacity->getHeavyGasCapacity($planet->getId());

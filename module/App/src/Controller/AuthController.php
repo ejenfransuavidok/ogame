@@ -25,6 +25,7 @@ use Universe\Model\PlanetCommand;
 class UserIsNotAuthorizedException extends \Exception {}
 class UserHaveNoAnyPlanetsException extends \Exception {}
 class UserEmailDuplicateException extends \Exception {}
+class PlanetNameDuplicateException extends \Exception {}
 
 class AuthController extends AbstractActionController
 {
@@ -90,16 +91,38 @@ class AuthController extends AbstractActionController
     public function authAction()
     {
         if(!$this->auth->hasIdentity()){
+            /**
+             * @ попапы на странице приветствия
+             */
+            $contacts = new ViewModel([]);
+            $contacts->setTemplate('include/popups/contacts');
+            $support = new ViewModel([]);
+            $support->setTemplate('include/popups/support');
+            $rules = new ViewModel([]);
+            $rules->setTemplate('include/popups/rules');
+            $confident = new ViewModel([]);
+            $confident->setTemplate('include/popups/confident');
+            $conditions = new ViewModel([]);
+            $conditions->setTemplate('include/popups/conditions');
+            
             $layout = $this->layout();
             
             $layout->setTemplate('app/layout');
+            
+            $layout->addChild($contacts,    'popup_contacts')
+                ->addChild($support,        'popup_support')
+                ->addChild($rules,          'popup_rules')
+                ->addChild($confident,      'popup_confident')
+                ->addChild($conditions,     'popup_conditions');
             
             $login_form = new ViewModel();
             $login_form->setTemplate('app/auth/login');
             
             $register_form = new ViewModel();
             $register_form->setTemplate('app/auth/register');
-            
+            /**
+             * @
+             */
             $view = new ViewModel([]);
             $view
                 ->addChild($login_form, 'login')
@@ -108,7 +131,10 @@ class AuthController extends AbstractActionController
             return $view;
         }
         else {
-            return $this->redirect()->toRoute('app', ['action' => 'index']);
+            // тут надо редиректить на первую планету владельца...
+            $planets = $this->getUsersPlanets();
+            $planet = $planets->current();
+            return $this->redirect()->toRoute('app/planet', ['planetid' => $planet->getId()]);
         }
     }
     
@@ -126,11 +152,30 @@ class AuthController extends AbstractActionController
                 // тут надо редиректить на первую планету владельца...
                 $planets = $this->getUsersPlanets();
                 $planet = $planets->current();
-                $result = array('message' => 'Авторизация прошла успешно', 'result' => 'ok', 'redirect' => $this->url()->fromRoute('app/planet', ['planetid' => $planet->getId()]));
+                $result = array(
+                    'message'   => 'Авторизация прошла успешно', 
+                    'result'    => 'ok', 
+                    'redirect'  => $this->url()->fromRoute('app/planet', ['planetid' => $planet->getId()]),
+                    'type'      => 'auth'
+                );
             }
         }
         else{
             $result = array('message' => 'Вы уже авторизованы на сайте', 'result' => 'error');
+        }
+        $view = new ViewModel(['data' => array('result' => $result)]);
+        $view->setTerminal(true);
+        return $view;
+    }
+    
+    public function dologoutAction()
+    {
+        if($this->auth->hasIdentity()){
+            $this->auth->clearIdentity();
+            $result = array('message' => 'Вы вышли из системы', 'result' => 'ok', 'redirect' => $this->url()->fromRoute('app', []));
+        }
+        else{
+            $result = array('message' => 'Вы не авторизованы на сайте', 'result' => 'error');
         }
         $view = new ViewModel(['data' => array('result' => $result)]);
         $view->setTerminal(true);
@@ -152,18 +197,43 @@ class AuthController extends AbstractActionController
                  * есть юзер с таким мылом в бд ?
                  */
                 if($this->userRepository->findBy('users.email LIKE "%' . $_REQUEST['email'] . '%"')->count() == 0){
-                    // тут надо редиректить на первую пустую планету...
-                    $user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
-                    $user->setName($_REQUEST['login']);
-                    $user->setPassword(md5($_REQUEST['password']));
-                    $user->setEmail($_REQUEST['email']);
-                    $user = $this->userCommand->insertEntity($user);
-                    
-                    $planets = $this->getFreePlanet();
-                    $planet = $planets->current();
-                    $planet->setOwner($user);
-                    $planet = $this->planetCommand->updateEntity($planet);
-                    $result = array('message' => 'Поздравляем! Вы успешно зарегистрированы на нашем сайте!', 'result' => 'ok'/*, 'redirect' => $this->url()->fromRoute('app/planet', ['planetid' => $planet->getId()])*/);
+                    if($this->planetRepository->findBy('planets.name LIKE  "%' . $_REQUEST['planet'] . '%"')->count() == 0){
+                        // тут надо редиректить на первую пустую планету...
+                        $user = new User(null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null);
+                        $user->setName($_REQUEST['login']);
+                        $user->setPassword(md5($_REQUEST['password']));
+                        $user->setEmail($_REQUEST['email']);
+                        $user = $this->userCommand->insertEntity($user);
+                        /**
+                         * @ залогиним
+                         */
+                        $this->authAdapter
+                             ->setIdentity($_REQUEST['login'])
+                             ->setCredential($_REQUEST['password']);
+                        $result = $this->auth->authenticate($this->authAdapter);
+                        /**
+                         * @ назначим планету
+                         */
+                        $planets = $this->getFreePlanet();
+                        $planet = $planets->current();
+                        $planet->setOwner($user);
+                        $planet->setName($_REQUEST['planet']);
+                        /**
+                         * @ дать новым юзерам по 1000 матала и 1000 газа
+                         */
+                        $planet->setMetall(1000);
+                        $planet->setHeavyGas(1000);
+                        $planet = $this->planetCommand->updateEntity($planet);
+                        $result = array(
+                            'message'   => 'Поздравляем! Вы успешно зарегистрированы на нашем сайте!', 
+                            'result'    => 'ok',
+                            'type'      => 'register',
+                            'redirect'  => $this->url()->fromRoute('app/planet', ['planetid' => $planet->getId()])
+                        );
+                    }
+                    else{
+                        throw new PlanetNameDuplicateException('Планета с названием ' . $_REQUEST['planet'] . ' уже существует!');
+                    }
                 }
                 else{
                     throw new UserEmailDuplicateException('Пользователь с почтой ' . $_REQUEST['email'] . ' уже зарегистрирован!');

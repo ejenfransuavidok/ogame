@@ -246,7 +246,7 @@ $(function(){
 				}
 			})
             */
-
+    
 
 
 			// popups
@@ -613,7 +613,7 @@ $(function(){
 				init: function(){
 					var $pl = $(self.planetView.data.selector);
 
-					if ( $pl.size() ){
+					if ( $pl.size() || $('.game__galaxy').size() ){
 						$.getScript(self.planetView.data.three, function(){
 							self.planetView.data.inited = true;
 							//game__visual

@@ -25,6 +25,7 @@ use Universe\Model\PlanetCommand;
 use Universe\Model\SputnikRepository;
 use Universe\Model\SputnikCommand;
 use Entities\Classes\EventTypes;
+use Eventer\Processor\BuildingProcessor;
 
 class BuildingController extends AbstractActionController
 {
@@ -104,6 +105,11 @@ class BuildingController extends AbstractActionController
      */
     protected $sputnikCommand;
     
+    /**
+     * @ BuildingProcessor
+     */
+    protected $buildingProcessor;
+    
     public function __construct(
         AdapterInterface        $db,
         AuthController          $authController,
@@ -120,7 +126,8 @@ class BuildingController extends AbstractActionController
         PlanetRepository        $planetRepository,
         PlanetCommand           $planetCommand,
         SputnikRepository       $sputnikRepository,
-        SputnikCommand          $sputnikCommand
+        SputnikCommand          $sputnikCommand,
+        BuildingProcessor       $buildingProcessor
         )
     {
         $this->dbAdapter                = $db;
@@ -139,6 +146,7 @@ class BuildingController extends AbstractActionController
         $this->planetCommand            = $planetCommand;
         $this->sputnikRepository        = $sputnikRepository;
         $this->sputnikCommand           = $sputnikCommand;
+        $this->buildingProcessor        = $buildingProcessor;
     }
     
     /**
@@ -151,143 +159,9 @@ class BuildingController extends AbstractActionController
     {
         $view = new ViewModel([]);
         $view->setTerminal(true);
-        
         $planet = $this->params()->fromPost('planet');
         $buildingType = $this->params()->fromPost('buildingType');
-        
-        /**
-         * @ переводим в объекты
-         */
-        $planet = $this->planetRepository->findEntity($planet);
-        $buildingType = $this->buildingTypeRepository->findOneBy('building_types.id = ' . $buildingType);
-        if($this->authController->isAuthorized()){
-            $this->user = $this->authController->getUser();
-            /**
-             * @ выбрать все строительные события, относящиеся к данному юзеру на данной планете
-             */
-            $events = $this->eventRepository->findAllEntities(
-                'events.user = ' . $this->user->getId() .
-                ' AND events.target_planet = ' . $planet->getId() .
-                ' AND (events.event_type = ' . $this->getBuildingEventType($buildingType) . ')'
-                )->buffer();
-            if(count($events)) {
-                /**
-                 * @ если здание уже строится, то строить запрещено
-                 */
-                $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => 'На данной планете уже ведется строительство!'));
-            }
-            else {
-                /**
-                 * @ строить можно
-                 */
-                $level = 1;
-                /**
-                 * @ есть ли на данной планете уже такое здание (поиск по имени)
-                 */
-                try{
-                    if($building = $this->buildingRepository->findOneBy(
-                        'buildings.name = "' . $buildingType->getName() . '" AND buildings.planet = ' . $planet->getId())){
-                        /**
-                         * @ здание есть, увеличиваем level
-                         */
-                        $level = $building->getLevel() + 1;
-                    }
-                }
-                catch(\Exception $e){
-                    /**
-                     * @ на случай, если таблица зданий пустая
-                     */
-                    $level = 1;
-                }
-                /**
-                 * @ хватит ли ресурсов на планете
-                 */
-                $K              = pow($buildingType->getPriceFactor(), $level - 1);
-                $metall         = $planet->getMetall()      - $buildingType->getConsumeMetall()     * $K;
-                $heavygas       = $planet->getHeavyGas()    - $buildingType->getConsumeHeavygas()   * $K;
-                $ore            = $planet->getOre()         - $buildingType->getConsumeOre()        * $K;
-                $hydro          = $planet->getHydro()       - $buildingType->getConsumeHydro()      * $K;
-                $titan          = $planet->getTitan()       - $buildingType->getConsumeTitan()      * $K;
-                $darkmatter     = $planet->getDarkmatter()  - $buildingType->getConsumeDarkmatter() * $K;
-                $redmatter      = $planet->getRedmatter()   - $buildingType->getConsumeRedmatter()  * $K;
-                $anti           = $planet->getAnti()        - $buildingType->getConsumeAnti()       * $K;
-                /**
-                 * @ электричество вычисляется по другой формуле
-                 */
-                $electricity    = $planet->getElectricity() - $buildingType->getPowerFactor() * $level * $level;
-                
-                if(
-                    $metall      >= 0 && 
-                    $heavygas    >= 0 && 
-                    $ore         >= 0 && 
-                    $hydro       >= 0 && 
-                    $titan       >= 0 && 
-                    $darkmatter  >= 0 && 
-                    $redmatter   >= 0 &&
-                    $anti        >= 0 &&
-                    $electricity >= 0
-                    ) {
-                    /**
-                     * @ ресурсов хватает - строим
-                     */
-                    /**
-                     * @ время на строительство
-                     */
-                    $time = intval(ceil($K * $buildingType->getConsumeAll() / 30));
-                    
-                    $event = new Event(
-                        $buildingType->getName(),
-                        $buildingType->getDescription(),
-                        $this->user,
-                        $this->getBuildingEventType($buildingType),
-                        time(),
-                        time() + $time,
-                        null,
-                        $planet,
-                        null,
-                        $buildingType,
-                        $level
-                    );
-                    $event = $this->eventCommand->insertEntity($event);
-                    /**
-                     * @ на планете стало меньше ресурсов, электричество изменится при окончании строительства
-                     */
-                    $planet->setMetall($metall);
-                    $planet->setHeavyGas($heavygas);
-                    $planet->setOre($ore);
-                    $planet->setHydro($hydro);
-                    $planet->setTitan($titan);
-                    $planet->setDarkmatter($darkmatter);
-                    $planet->setRedmatter($redmatter);
-                    $planet->setAnti($anti);
-                    $planet = $this->planetCommand->updateEntity($planet);
-                    /**
-                     * @
-                     */
-                    $view->setVariable('data', array(
-                        'result'        => 'YES', 
-                        'auth'          => 'YES',
-                        'event_id'      => $event->getId(),
-                        'begin'         => $event->getEventBegin(),
-                        'end'           => $event->getEventEnd(),
-                        'now'           => time(),
-                        'message' => 'Строительство успешно началось!'));
-                }
-                else {
-                    /**
-                     * @ ресурсов не хватает
-                     */
-                    $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => 'Недостаточно ресурсов'));
-                }
-            }
-        }
-        else {
-            /**
-             * @ пользователь неавторизован
-             */
-            $view->setVariable('data', array('result' => 'ERR', 'auth' => 'NO', 'message' => 'Пользователь не авторизован'));
-        }
-        
+        $this->buildingProcessor->execute($planet, $buildingType, $view);
         return $view;
     }
     
@@ -344,21 +218,6 @@ class BuildingController extends AbstractActionController
             $view->setVariable('data', array('result' => 'ERR', 'auth' => 'NO', 'message' => 'Пользователь не авторизован'));
         }
         return $view;
-    }
-    
-    private function getBuildingEventType(BuildingType $buildingType)
-    {
-        switch($buildingType->getType()){
-            case Building::$BUILDING_RESOURCE:
-                return EventTypes::$DO_BUILD_RESOURCES;
-                break;
-            case Building::$BUILDING_INDUSTRIAL:
-                return EventTypes::$DO_BUILD_INDUSTRIAL;
-                break;
-            default:
-                throw new BuildingTypeErrorException("type " . $buildingType . " does not acceptable!");
-                break;
-        }
     }
     
     public function buildingAction()

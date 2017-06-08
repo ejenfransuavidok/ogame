@@ -20,28 +20,26 @@
                             <i class="ico">
                                 <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="#ffffff" d="M206.55,31.548a9.992,9.992,0,0,1-7.48-.056,1.627,1.627,0,0,0-1.188-.009q-1.845.672-3.693,1.335c-0.063.023-.127,0.041-0.228,0.074,0.113-.446.217-0.86,0.322-1.275,0.212-.834.412-1.672,0.641-2.5a1.235,1.235,0,0,0-.2-1.091,8.873,8.873,0,0,1,.447-10.7,9.647,9.647,0,0,1,6.889-3.579l0.181-.038h1.315c0.508,0.077,1.022.13,1.524,0.236a9.47,9.47,0,0,1,7.446,7.486c0.052,0.3.093,0.6,0.139,0.907v1.246c-0.077.461-.122,0.93-0.237,1.382A9.185,9.185,0,0,1,206.55,31.548Zm-8.178-9.716a1.476,1.476,0,1,0,1.522,1.46A1.485,1.485,0,0,0,198.372,21.832Zm4.527,0a1.476,1.476,0,1,0,1.5,1.479A1.485,1.485,0,0,0,202.9,21.832Zm4.508,0a1.476,1.476,0,1,0,1.5,1.457A1.487,1.487,0,0,0,207.407,21.832Z" transform="translate(-193.156 -13.719)"/></svg>
                             </i>
-                            <span class="value">Сообщения</span>
                             <span class="count">99+</span>
                         </div>
 						<div class="header__dropdown">
 							<div class="header__dropdown-list">
                                 <a href="#" class="header__dropdown-item">
-                                    <span class="value">История новостей</span>
+                                    <span class="value"><?=$this->translate('News_history')?></span>
                                     <span class="count">20</span>
                                 </a>
                                 <a href="#" class="header__dropdown-item">
-                                    <span class="value">Альянс Империя</span>
+                                    <span class="value"><?=$this->translate('Empire_alliance')?></span>
                                     <span class="count">19</span>
                                 </a>
                                 <a href="#" class="header__dropdown-item">
-                                    <span class="value">Пилоты республики</span>
+                                    <span class="value"><?=$this->translate('Repubic_pilots')?></span>
                                     <span class="count">142</span>
                                 </a>
                             </div>
 						</div>
 					</div>
 					<div class="header__treasure">
-						<div class="header__treasure-title">Ресурсы:</div>
 						<div class="header__treasure-item js-dd-wrap">
 							<div class="header__treasure-label js-dd-link">
                                 <i class="ico">
@@ -57,7 +55,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Деньги</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('Money')?></div>
 											<div class="header__treasure-value clr_green"><?= $user->getMoney() ?></div>
 										</div>
 									</div>
@@ -83,7 +81,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Электроэнергия</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('Energy')?></div>
 											<div class="header__treasure-value clr_green" 
                                                 data-resources="electricity"
                                                 data-resource_velocity_per_second="0"
@@ -118,7 +116,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Металл</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('Metall')?></div>
 											<div class="header__treasure-value clr_green" 
                                                 data-resources="metall"
                                                 data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_metall() ?>"
@@ -153,7 +151,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Тяжелый газ</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('LPG')?></div>
 											<div class="header__treasure-value clr_green" 
                                                 data-resources="heavygas"
                                                 data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_heavygas() ?>"
@@ -187,7 +185,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Обогащенная руда</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('Dressed_ore')?></div>
 											<div class="header__treasure-value clr_green" 
                                                 data-resources="ore"
                                                 data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_ore() ?>"
@@ -221,7 +219,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Водород</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('Hydrogen')?></div>
 											<div class="header__treasure-value clr_green" 
                                                 data-resources="hydro"
                                                 data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_hydro() ?>"
@@ -255,7 +253,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Титан</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('Titanium')?></div>
 											<div class="header__treasure-value clr_green" 
                                                 data-resources="titan"
                                                 data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_titan() ?>"
@@ -289,7 +287,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Темная материя</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('Dark_matter')?></div>
 											<div class="header__treasure-value clr_green" 
                                                 data-resources="darkmatter"
                                                 data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_darkmatter() ?>"
@@ -323,7 +321,7 @@
                                     </div>
 									<div class="header__treasure-info">
 										<div class="header__treasure-row header__treasure-row_head">
-											<div class="header__treasure-name clr_white">Красная материя</div>
+											<div class="header__treasure-name clr_white"><?=$this->translate('Red_matter')?></div>
 											<div class="header__treasure-value clr_green" 
                                                 data-resources="redmatter"
                                                 data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_redmatter() ?>"
@@ -642,7 +640,7 @@
 					</div>
 					<div class="header__world js-dd-wrap">
 						<div class="header__label js-dd-link">
-                            <span class="value">Вся вселенная</span>
+                            <span class="value"><?=$this->translate('Entire_universe')?></span>
                             <i class="ico">
                                 <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26"><path d="M1874.87,31.394a2.751,2.751,0,0,1-4.39,3.168A12.589,12.589,0,1,1,1874.87,31.394Zm-9.38-19.462a11.065,11.065,0,1,0,4.23,21.294,2.74,2.74,0,0,1,2.67-3.4,2.72,2.72,0,0,1,1.45.418A11.062,11.062,0,0,0,1865.49,11.932Zm0,18.969a7.864,7.864,0,0,1-5.2-1.958,2.489,2.489,0,0,1-1.08.245,2.55,2.55,0,0,1-1.46-4.641,7.927,7.927,0,0,1,5.34-9.078,2.435,2.435,0,0,1,4.81,0A7.905,7.905,0,0,1,1865.49,30.9Zm4.5-3.4A6.381,6.381,0,0,0,1867.65,17a2.434,2.434,0,0,1-4.31,0,6.359,6.359,0,0,0-4.21,6,6.572,6.572,0,0,0,.09,1.095,2.548,2.548,0,0,1,2.2,3.8A6.351,6.351,0,0,0,1869.99,27.5Zm-4.97-1.51-0.62.388-0.28-.681-0.72.176-0.05-.734-0.73-.054,0.17-.715-0.68-.278,0.39-.625L1861.94,23l0.56-.475-0.39-.625,0.68-.278-0.17-.715,0.73-.054,0.05-.734,0.72,0.176,0.28-.681L1865.02,20l0.47-.562L1865.97,20l0.62-.388,0.28,0.681,0.71-.176,0.06,0.734,0.73,0.054-0.18.715,0.68,0.278-0.38.625L1869.05,23l-0.56.475,0.38,0.625-0.68.278,0.18,0.715-0.73.053-0.06.734-0.71-.176-0.28.681-0.62-.388-0.48.562Z" transform="translate(-1852.91 -10.406)"/></svg>
                             </i>

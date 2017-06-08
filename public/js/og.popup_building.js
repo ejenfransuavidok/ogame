@@ -199,19 +199,22 @@ var PopupBuilding = exports.PopupBuilding = function () {
             /**
              * 6. возвращаем предыдущую картинку в круг
              */
-            $(root).find('.keep__item-preview-frame, .keep__item-preview-ico').each(function (idx, elm) {
-                if (!$(elm).hasClass('native')) $(elm).remove();else $(elm).css('display', 'unset');
-            });
+            //$(root).find('.keep__item-preview-frame, .keep__item-preview-ico').each((idx, elm) => {
+            //    if(!$(elm).hasClass('native')) $(elm).remove(); else $(elm).css('display', 'unset');
+            //});
             var color = this.colors[$(root).data('entity')];
             $(root).attr('class', color);
             /**
-             * 7. скрываем замок и показываем молоток
+             * 7. скрываем превью, таймер и показываем молоток
              */
             var parent = $(root).parent();
             var process = $(parent).find('[data-process]');
-            var locked = $(parent).find('[data-locked]');
+            var preview = $(parent).find('[data-process_window]');
+            var timer = $(parent).find('.keep__item-timer');
             $(process).show();
-            $(locked).hide();
+            $(preview).hide();
+            $(timer).hide();
+
             /**
              * 8. убираем таймер со здания
              */
@@ -237,18 +240,18 @@ var PopupBuilding = exports.PopupBuilding = function () {
             /**
              * 3. меняем картинку
              */
-            $(root).find('.keep__item-preview-frame').css('display', 'none').addClass('native');
-            $(root).find('.keep__item-preview-ico').css('display', 'none').addClass('native');
             $(root).find('.keep__item-preview-progress').after(picture);
             $(root).attr('class', color);
             /**
-             * 4. убираем молоток и ставим замок
+             * 4. убираем молоток и включаем превью и включаем таймер
              */
             var parent = $(root).parent();
             var process = $(parent).find('[data-process]');
-            var locked = $(parent).find('[data-locked]');
+            var preview = $(parent).find('[data-process_window]');
+            var timer = $(parent).find('.keep__item-timer');
             $(process).hide();
-            $(locked).show();
+            $(preview).show();
+            $(timer).show();
             /**
              * 5. в рут ставим id здания
              */
@@ -334,8 +337,10 @@ var PopupBuilding = exports.PopupBuilding = function () {
                 var picture = $(building).find('.keep__item-preview').first().html();
                 var color = $(building).find('.keep__item').first().attr('class');
                 this.colors[$(root).data('entity')] = $(root).attr('class');
+                /*
                 $(root).find('.keep__item-preview-frame').css('display', 'none').addClass('native');
                 $(root).find('.keep__item-preview-ico').css('display', 'none').addClass('native');
+                */
                 $(root).find('.keep__item-preview-progress').after(picture);
                 $(root).attr('class', color);
 

@@ -3,7 +3,7 @@
 <html>
 	<head>
         <meta charset="utf-8">
-        <?= $this->headTitle('Первая браузерная игра с пенальным выводом средств')->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?= $this->headTitle($this->translate('Title'))->setSeparator(' - ')->setAutoEscape(false) ?>
         <?= $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
@@ -27,6 +27,12 @@
         <div class="wrapper">
             <?= $this->content ?>
         </div>
+        <?= $this->popup_contacts ?>
+        <?= $this->popup_support ?>
+        <?= $this->popup_rules ?>
+        <?= $this->popup_confident ?>
+        <?= $this->popup_conditions ?>
+        <?= $this->popup_donate ?>
         <?= $this->headLink() ?>
         <?= $this->inlineScript() ?>
         <script src="/node/socket.io/socket.io.js"></script>

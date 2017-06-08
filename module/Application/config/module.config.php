@@ -18,7 +18,7 @@ return [
             'home' => [
                 'type' => \Zend\Router\Http\Literal::class,
                 'options' => [
-                    'route'    => '/',
+                    'route'    => '/working',
                     'defaults' => [
                         'controller' => Controller\IndexController::class, // <-- change here
                         'action'     => 'index',

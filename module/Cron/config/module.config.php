@@ -12,7 +12,8 @@ return [
         'aliases' => [
         ],
         'factories' => [
-            \App\Controller\AuthController::class => \App\Factory\AuthControllerFactory::class
+            \App\Controller\AuthController::class => \App\Factory\AuthControllerFactory::class,
+            Classes\Cbr::class => Factory\CbrFactory::class,
         ],
     ],
     'controllers' => [
@@ -20,6 +21,7 @@ return [
             Controller\IndexController::class => Factory\IndexControllerFactory::class,
             Controller\ResourcesController::class => Factory\ResourcesControllerFactory::class,
             Controller\UpdaterController::class => Factory\UpdaterControllerFactory::class,
+            Controller\CbrController::class => Factory\CbrControllerFactory::class,
         ],
     ],
     'router' => [
@@ -76,6 +78,18 @@ return [
                                      ],
                                 ],
                             ],
+                            
+                            'cbr' => [
+                                'type' => \Zend\Router\Http\Segment::class,
+                                'options' => [
+                                    'route'    => '/cbr',
+                                    'defaults' => [
+                                        'controller' => Controller\CbrController::class,
+                                        'action' => 'cbr',
+                                     ],
+                                ],
+                            ],
+                            
                         ],
                     ],
                     

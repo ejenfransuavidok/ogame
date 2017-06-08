@@ -20,6 +20,9 @@ use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingTypeRepository;
 use Entities\Model\EventCommand;
 use Entities\Model\EventRepository;
+use App\Renderer\PopupBlackmarketRenderer;
+use App\Renderer\PopupBuyRenderer;
+use App\Renderer\PopupDonateRenderer;
 
 class IndexControllerFactory implements FactoryInterface
 {
@@ -44,7 +47,10 @@ class IndexControllerFactory implements FactoryInterface
             $container->get(PopupFleet3Renderer::class),
             $container->get(FleetMoovingActivity::class),
             $container->get(PlanetRepository::class),
-            $container->get(PlanetCommand::class)
+            $container->get(PlanetCommand::class),
+            $container->get(PopupBlackmarketRenderer::class),
+            $container->get(PopupBuyRenderer::class),
+            $container->get(PopupDonateRenderer::class)
         );
     }
 }

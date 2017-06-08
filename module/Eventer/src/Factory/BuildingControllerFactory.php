@@ -18,6 +18,7 @@ use Universe\Model\PlanetCommand;
 use Universe\Model\SputnikRepository;
 use Universe\Model\SputnikCommand;
 use Eventer\Controller\BuildingController;
+use Eventer\Processor\BuildingProcessor;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -41,7 +42,8 @@ class BuildingControllerFactory implements FactoryInterface
             $container->get(PlanetRepository::class),
             $container->get(PlanetCommand::class),
             $container->get(SputnikRepository::class),
-            $container->get(SputnikCommand::class)
+            $container->get(SputnikCommand::class),
+            $container->get(BuildingProcessor::class)
         );
     }
 }

@@ -87,6 +87,14 @@ class Setting implements InputFilterAwareInterface
     {
         return $this->text;
     }
+    
+    /**
+     *
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
 
     /**
      * @return string
@@ -94,6 +102,14 @@ class Setting implements InputFilterAwareInterface
     public function getTitle()
     {
         return $this->title;
+    }
+    
+    /**
+     *
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
     
     /**

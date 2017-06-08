@@ -2,45 +2,23 @@
     <div class="popup__inner">
         <div class="popup__layout">
             <div class="popup__close"></div>
-            <div class="popup__title">Строительство</div>
+            <div class="popup__title"><?=$this->translate('Construction')?></div>
             <div class="popup__head">
-                <a href="#" class="popup__head-item" data-building_tab="building_fleets">
-                    <i class="ico">
-                        <img src="/img/ico/simp-ico-fleet.svg" alt="" class="svg">
-                    </i>
-                    <span>Флот</span>
-                </a>
-                <a href="#" class="popup__head-item" data-building_tab="building_defences">
-                    <i class="ico">
-                        <img src="/img/ico/simp-ico-defense.svg" alt="" class="svg">
-                    </i>
-                    <span>Оборона</span>
-                </a>
-                <a href="#" class="popup__head-item" data-building_tab="building_resources">
-                    <i class="ico">
-                        <img src="/img/ico/simp-ico-resources.svg" alt="" class="svg">
-                    </i> 
-                    <span>Ресурсы</span>
-                </a>
-                <a href="#" class="popup__head-item is-active" data-building_tab="building_industrials">
-                    <i class="ico">
-                        <img src="/img/ico/simp-ico-factories.svg" alt="" class="svg">
-                    </i> 
-                    <span>Заводы</span>
-                </a>
-                <a href="#" class="popup__head-item" data-building_tab="building_sciences">
-                    <i class="ico">
-                        <img src="/img/ico/simp-ico-technology.svg" alt="" class="svg">
-                    </i> 
-                    <span>Наука</span>
-                </a>
+                <?php foreach($tabs->data as $tab):?>
+                    <span class="popup__head-item" data-building_tab="<?=$tab['building_tab']?>" data-tab-group="building_group">
+                        <i class="ico">
+                            <img src="<?= $tab['image']?>" alt="" class="svg">
+                        </i>
+                        <span><?=$this->translate($tab['name'])?></span>
+                    </span>
+                <?php endforeach; ?>
             </div>
             <div class="popup__content">
                 <div class="popup__content-image"></div>
                 <div class="tabs">
                     <div class="tabs__menu">
-                        <div data-tab-link="building_resources" data-tab-group="building" class="tabs__item is-active">РЕСУРСНЫЕ</div>
-                        <div data-tab-link="building_industrials" data-tab-group="building" class="tabs__item">ПРОИЗВОДСТВЕННЫЕ</div>
+                        <div data-tab-link="building_resources" data-tab-group="building" class="tabs__item is-active"><?=$this->translate('RESOURCES')?></div>
+                        <div data-tab-link="building_industrials" data-tab-group="building" class="tabs__item"><?=$this->translate('PRODACTIONS')?></div>
 						<!--
                         <div data-tab-link="building_1" data-tab-group="building" class="tabs__item">СТАНКОСТРОИТЕЛЬНЫЕ</div>
 						<div data-tab-link="building_1" data-tab-group="building" class="tabs__item">АЭРОКОСМИЧЕСКИЕ</div>

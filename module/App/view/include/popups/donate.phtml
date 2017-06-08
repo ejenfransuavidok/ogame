@@ -1,0 +1,210 @@
+<div class="popup popup_donut" data-valuta="$" data-dollar_euro_course="<?= $dollar_euro_course ?>">
+			<div class="popup__inner">
+				<div class="popup__layout">
+					<div class="popup__close"></div>
+					<div class="popup__title">Покупка доната</div>
+					<div class="popup__head">
+						<div class="popup__head-item" data-tab_valute="$">Доллары $</div>
+						<div class="popup__head-item" data-tab_valute="€">Евро €</div>
+						<!--
+                        <div class="popup__head-item">Скида 100 Р</div>
+                        -->
+                    </div>
+					<div class="popup__content js-scroll-wrap">
+						<div class="popup__donut">
+							<div class="popup__donut-list">
+                                <!--
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+                                -->
+								<div class="popup__donut-item popup__donut-item_custom" data-donate="<?= $donate_price ?>">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">ЛЮБАЯ СУММА</div>
+										<div class="popup__donut-counter">
+											<div class="popup__donut-counter-text">ТМ</div>
+											<div class="popup__donut-counter-item">
+												<div class="counter">
+													<div class="counter__down"  data-role="donate-down"></div>
+													<input class="counter__value" data-role="donate-value" value="0">
+													<div class="counter__up"    data-role="donate-up"></div>
+												</div>
+											</div>
+											<div class="popup__donut-counter-item">
+												<div class="counter">
+													<div class="counter__down"  data-role="cash-down"></div>
+													<input class="counter__value" data-role="cash-value" value="0">
+													<div class="counter__up"    data-role="cash-up"></div>
+												</div>
+											</div>
+											<div class="popup__donut-counter-text" data-simbol="valuta">$.</div>
+										</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-popup=".popup_buy">Оплатить</a></div>
+									</div>
+								</div>
+								
+                                <div class="popup__donut-item" data-donate_amount="10">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val"><?= 10. / $donate_price ?> ТМ</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">10 $</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-role="donate">Оплатить</a></div>
+									</div>
+								</div>
+								
+                                <div class="popup__donut-item" data-donate_amount="20">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val"><?= 20. / $donate_price ?> ТМ</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">20 $</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-role="donate">Оплатить</a></div>
+									</div>
+								</div>
+								
+                                <div class="popup__donut-item" data-donate_amount="30">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val"><?= 30. / $donate_price ?> ТМ</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">30 $</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-role="donate">Оплатить</a></div>
+									</div>
+								</div>
+								
+                               <div class="popup__donut-item" data-donate_amount="50">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val"><?= 50. / $donate_price ?> ТМ</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">50 $</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-role="donate">Оплатить</a></div>
+									</div>
+								</div>
+								
+                                <div class="popup__donut-item" data-donate_amount="100">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val"><?= 100. / $donate_price ?> ТМ</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">100 $</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-role="donate">Оплатить</a></div>
+									</div>
+								</div>
+                                
+								<div class="popup__donut-item" data-donate_amount="300">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val"><?= 300. / $donate_price ?> ТМ</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">300 $</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-role="donate">Оплатить</a></div>
+									</div>
+								</div>
+								
+                                <div class="popup__donut-item" data-donate_amount="500">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val"><?= 500. / $donate_price ?> ТМ</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">500 $</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-role="donate">Оплатить</a></div>
+									</div>
+								</div>
+                                
+                                <div class="popup__donut-item" data-donate_amount="1000">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val"><?= 1000. / $donate_price ?> ТМ</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">1000 $</div>
+										<div class="popup__donut-buy"><a href="#" class="btn" data-role="donate">Оплатить</a></div>
+									</div>
+								</div>
+								<!--
+                                <div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+								<div class="popup__donut-item">
+									<div class="popup__donut-inner">
+										<div class="popup__donut-val">10 000</div>
+										<div class="popup__donut-text">Стоимость</div>
+										<div class="popup__donut-price">245 000 ТМ</div>
+										<div class="popup__donut-buy"><a href="#" class="btn">Оплатить</a></div>
+									</div>
+								</div>
+                                -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="popup__overlay"></div>
+		</div>
