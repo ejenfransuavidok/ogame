@@ -129,9 +129,12 @@ class IndexController extends AbstractActionController
         $view->setTerminal(true);
         try{
             /**
-             * @ работа с событиями для строительства ресурсных и индустриальных зданий
+             * @ работа с событиями, относящимися к строительству зданий
              */
-            $this->executeResourcesIndustrialsBuildingDoBuild();
+            $this->executeBuildings();
+            /**
+             * @ просто показываем что скрипт отработал нормально
+             */
             $view->setVariable('data', array('result' => 'YES', 'auth' => 'YES', 'message' => 'building completed'));
         }
         catch(\Exception $e){
@@ -140,14 +143,12 @@ class IndexController extends AbstractActionController
         return $view;
     }
     
-    private function executeResourcesIndustrialsBuildingDoBuild()
+    private function executeBuildings()
     {
         /**
-         * @ выберем все события по строительству ресурсных и индустриальных зданий
+         * @ выберем все события по строительству зданий
          */
-        $events = $this->eventRepository->findAllEntities(
-            'events.event_type = ' . EventTypes::$DO_BUILD_RESOURCES . ' OR ' .
-            'events.event_type = ' . EventTypes::$DO_BUILD_INDUSTRIAL)->buffer();
+        $events = getBuildingEvents::getBuildingEvents($this->eventRepository);
         if(count($events)){
             foreach($events as $event){
                 /**

@@ -14,6 +14,7 @@ use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingCommand;
 use Universe\Classes\PlanetCapacity;
 use Settings\Model\SettingsRepositoryInterface;
+use Entities\Classes\SelectBuildings;
 
 class ResourcesController extends AbstractActionController
 {
@@ -110,7 +111,10 @@ class ResourcesController extends AbstractActionController
                     $darkmatter     = 0;
                     $redmatter      = 0;
                     $anti           = 0;
-                    foreach($this->buildingRepository->findBy('buildings.planet = ' . $planet->getId() . ' AND building_types_alias.type = ' . Building::$BUILDING_RESOURCE) as $building){
+                    /**
+                     * @ выберем ресурсные здания
+                     */
+                    foreach(SelectBuildings::selectResourcesBuildings($planet, $this->buildingRepository) as $building){
                         $electricity     = $electricity + $building->getProduceElectricity() - $building->getConsumeElectricity();
                         $metall         += $building->getProduceMetallPerHour();
                         $heavygas       += $building->getProduceHeavygasPerHour();

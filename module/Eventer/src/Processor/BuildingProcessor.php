@@ -206,9 +206,12 @@ class BuildingProcessor
         }
     }
     
+    
     private function getBuildingEventType(BuildingType $buildingType)
     {
-        switch($buildingType->getType()){
+        return EventTypes::calcEventIdForBuildings($buildingType->getObjectType(), $buildingType->getBuildingType());
+        /*
+        switch($buildingType->getBuildingType()){
             case Building::$BUILDING_RESOURCE:
                 return EventTypes::$DO_BUILD_RESOURCES;
                 break;
@@ -219,6 +222,7 @@ class BuildingProcessor
                 throw new BuildingTypeErrorException("type " . $buildingType . " does not acceptable!");
                 break;
         }
+        */
     }
     
 }

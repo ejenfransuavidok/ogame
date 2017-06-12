@@ -4,8 +4,8 @@
             <div class="popup__close"></div>
             <div class="popup__title"><?=$this->translate('Construction')?></div>
             <div class="popup__head">
-                <?php foreach($tabs->data as $tab):?>
-                    <span class="popup__head-item" data-building_tab="<?=$tab['building_tab']?>" data-tab-group="building_group">
+                <?php $i=0; foreach($tabs as $tab) : $i++; ?>
+                    <span class="popup__head-item <?= ($i==1) ? 'is-active' : '';?>" data-tab-link="<?=$tab['building_tab']?>" data-tab-group="building_group">
                         <i class="ico">
                             <img src="<?= $tab['image']?>" alt="" class="svg">
                         </i>
@@ -13,89 +13,71 @@
                     </span>
                 <?php endforeach; ?>
             </div>
-            <div class="popup__content">
+            <?php $i=0; foreach($tabs as $tab) : $i++; ?>
+            <div class="popup__content <?= ($i==1) ? 'is-active' : '';?>" data-tab-targ="<?=$tab['building_tab']?>" data-tab-group="building_group">
                 <div class="popup__content-image"></div>
                 <div class="tabs">
                     <div class="tabs__menu">
-                        <div data-tab-link="building_resources" data-tab-group="building" class="tabs__item is-active"><?=$this->translate('RESOURCES')?></div>
-                        <div data-tab-link="building_industrials" data-tab-group="building" class="tabs__item"><?=$this->translate('PRODACTIONS')?></div>
-						<!--
-                        <div data-tab-link="building_1" data-tab-group="building" class="tabs__item">СТАНКОСТРОИТЕЛЬНЫЕ</div>
-						<div data-tab-link="building_1" data-tab-group="building" class="tabs__item">АЭРОКОСМИЧЕСКИЕ</div>
-                        -->
+                    <?php if(isset($tab['sub_tabs']))  : ?>
+                        <?php $j=0; foreach($tab['sub_tabs'] as $building_type => $sub_tab) : $j++; ?>
+                        <div data-tab-link="<?= $buildins_types[$building_type]['building_tab']; ?>" data-tab-group="<?= $tab['building_tab']?>" class="tabs__item <?= ($j==1) ? 'is-active' : '';?>"><?= $buildins_types[$building_type]['name']; ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                     </div>
-                    
                     <div class="tabs__content js-scroll-hor">
+                    <?php if(isset($tab['sub_tabs']))  : ?>
+                        <?php $j=0; foreach($tab['sub_tabs'] as $building_type => $sub_tab) : $j++; ?>
                         <div 
-                            data-tab-targ="building_resources" 
-                            data-tab-group="building" 
-                            class="build__list is-active"
+                            data-tab-targ="<?= $buildins_types[$building_type]['building_tab']; ?>" 
+                            data-tab-group="<?= $tab['building_tab']?>" 
+                            class="build__list <?= ($j==1) ? 'is-active' : '';?>"
                         >
-                            <?php foreach($source_buildings as $building) : ?>
-                            <div class="build__item" 
-                                data-entity="srcbuilding"
-                                data-root="resources-build-block-main"
-                                data-item_identifier="<?= $building->getId() ?>"
-                                data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
-                                data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>"
-                                data-building_price_factor="<?= $building->getPriceFactor() ?>"
-                                data-summ_resource_consume="<?= $building->getConsumeAll() ?>"
-                                >
-                                <div class="keep__item clr_red">
-                                    <?= $building->getPicture() ?>
-                                    <div class="keep__item-text"><span data-entity="keep__item-text"><?= $building->getName() ?></span></div>
-                                    <div class="keep__item-lvl"><span>lv. <?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?></span></div>
+                            <?php foreach($sub_tab as $building) : ?>
+                                <div class="build__item" 
+                                    data-entity="srcbuilding"
+                                    data-root="resources-build-block-main"
+                                    data-item_identifier="<?= $building->getId() ?>"
+                                    data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
+                                    data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>"
+                                    data-building_price_factor="<?= $building->getPriceFactor() ?>"
+                                    data-summ_resource_consume="<?= $building->getConsumeAll() ?>"
+                                    >
+                                    <div class="keep__item clr_red">
+                                        <?= $building->getPicture() ?>
+                                        <div class="keep__item-text"><span data-entity="keep__item-text"><?= $building->getName() ?></span></div>
+                                        <div class="keep__item-lvl"><span>lv. <?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?></span></div>
+                                    </div>
+                                    <div style="display:none;" data-entity="building-description"><?= $building->getDescription() ?></div>
                                 </div>
-                                <div style="display:none;" data-entity="building-description"><?= $building->getDescription() ?></div>
-                            </div>
                             <?php endforeach; ?>
                         </div>
-                        <div 
-                            data-tab-targ="building_industrials" 
-                            data-tab-group="building" 
-                            class="build__list"
-                        >
-                            <?php foreach($industrial_buildings as $building) : ?>
-                            <div class="build__item" 
-                                data-entity="industrialbuilding" 
-                                data-root="industrial-build-block-main"
-                                data-item_identifier="<?= $building->getId() ?>"
-                                data-building_period="<?= $building->getBuildingPeriod($planet, null, $buildingRepository) ?>"
-                                data-building_level="<?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?>">
-                                <div class="keep__item clr_red">
-                                    <?= $building->getPicture() ?>
-                                    <div class="keep__item-text"><span data-entity="keep__item-text"><?= $building->getName() ?></span></div>
-                                    <div class="keep__item-lvl"><span>lv. <?= $building->getCurrentLevel($planet, null, $buildingRepository) + 1 ?></span></div>
-                                </div>
-                                <div style="display:none;" data-entity="building-description"><?= $building->getDescription() ?></div>
-                            </div>
-                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            <div class="popup__pp" data-entity="popup_building-popup__pp" data-building_id="" data-root="" data-picture="" data-color="">
+                <div class="popup__pp-layout">
+                    <div class="popup__pp-close"></div>
+                    <div class="popup__pp-preview">
+                        <div class="popup__pp-control">
+                            <div class="btn btn_big btn_border">Древо технологий</div>
                         </div>
                     </div>
-                    
-                </div>
-                <div class="popup__pp" data-entity="popup_building-popup__pp" data-building_id="" data-root="" data-picture="" data-color="">
-                    <div class="popup__pp-layout">
-                        <div class="popup__pp-close"></div>
-                        <div class="popup__pp-preview">
-                            <div class="popup__pp-control">
-                                <div class="btn btn_big btn_border">Древо технологий</div>
-                            </div>
+                    <div class="popup__pp-content">
+                        <div class="popup__pp-content__title" 
+                            data-entity="popup_building-popup__pp-layout-popup__pp-content-title">
+                            Ракетостроительный<br>завод&nbsp;<span class="btn btn_lvl">lv.1</span>
                         </div>
-                        <div class="popup__pp-content">
-                            <div class="popup__pp-content__title" 
-                                data-entity="popup_building-popup__pp-layout-popup__pp-content-title">
-                                Ракетостроительный<br>завод&nbsp;<span class="btn btn_lvl">lv.1</span>
-                            </div>
-                            <div class="popup__pp-content__text">Время исследования : <span data-entity="popup_building-popup__pp-layout-popup__pp-building-period" class="clr_white">40m 0c</span></div>
-                            <div class="popup__pp-content__text"
-                                data-entity="popup_building-popup__pp-layout-popup__pp-content-description">
-                                Будет освоено производство межконтинентальных ракет баллистических и оперативно - тактических ракет для комплексов "Ярс-М", "Булава" и "Искандер"
-                            </div>
-                            <div class="popup__pp-control">
-                                <div class="btn btn_big btn_dark">Описание</div>
-                                <div data-entity="popup_building-popup__pp-popup__pp-control-build-button" class="btn btn_big btn_red">Строить</div>
-                            </div>
+                        <div class="popup__pp-content__text">Время исследования : <span data-entity="popup_building-popup__pp-layout-popup__pp-building-period" class="clr_white">40m 0c</span></div>
+                        <div class="popup__pp-content__text"
+                            data-entity="popup_building-popup__pp-layout-popup__pp-content-description">
+                            Будет освоено производство межконтинентальных ракет баллистических и оперативно - тактических ракет для комплексов "Ярс-М", "Булава" и "Искандер"
+                        </div>
+                        <div class="popup__pp-control">
+                            <div class="btn btn_big btn_dark">Описание</div>
+                            <div data-entity="popup_building-popup__pp-popup__pp-control-build-button" class="btn btn_big btn_red">Строить</div>
                         </div>
                     </div>
                 </div>

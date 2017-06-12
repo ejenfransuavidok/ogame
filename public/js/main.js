@@ -71,7 +71,10 @@ var Main = function () {
     _createClass(Main, [{
         key: 'processing',
         value: function processing() {
-            this.socket = io('http://www.ogame.zz:8000');
+            var getUrl = window.location;
+            var baseUrl = getUrl.protocol + "//" + getUrl.host + "" + getUrl.pathname.split('/')[1];
+            this.socket = io(baseUrl + ':8000');
+            //this.socket = io('http://www.ogame.zz:8000');
             this.gvars = new _ogGlobal_vars.GlobalVars();
             this.popups = new _ogPopups.Popups();
             this.universe = new _ogUniverse.Universe();
