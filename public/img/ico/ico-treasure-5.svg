@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #565656;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="ico-treasure-5" class="cls-1" d="M13.789,12l8.2-4.92v9.84ZM2.887,5.448L11.988,0l9.1,5.448-9.1,5.472ZM1.986,16.92V7.08l8.2,4.92Zm19.1,1.632L11.988,24l-9.1-5.448,9.1-5.472Z"/>
+</svg>

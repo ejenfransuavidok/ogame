@@ -11,26 +11,31 @@ $(function(){
 	function eventLoader() {
 
 
-		var $b = $('body');
+		var $b = $('body'),
+			satelliteTimer = [],
+			isTouch = (('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+
 		$b
 
 			.on('click', function (e) {
 
-				closest('.keep__item', 'is-open');
+				//closest('.keep__item', 'is-open');
 				closest('.js-dd-wrap', 'is-open');
 				closest('.enter__form-footnote', 'is-open');
 				closest('.enter__system-wrap', 'is-open');
 				closest('.sselect-wrap', 'is-open');
 				closest('.system__orbit-item .planet', 'is-open');
 
+				closest('.storage__item', 'show-plate');
+				closest('.form__select', 'is-open');
+				closest('.chat-content__head-menu', 'is-open');
+
 
 				if ( $('.aside').hasClass('aside_open') ){
-					if ( !$(e.target).closest('.aside_open').size() && !$(e.target).closest('.js-dd-asidemenu').size() ) {
+					if ( !$(e.target).closest('.aside_open').size() && !$(e.target).closest('.js-toggle-asidemenu').size() ) {
 						$('.aside').removeClass('aside_open');
 					}
 				}
-
-
 
 				function closest(el, cls){
 					if ( $(el + '.' + cls).size() ){
@@ -39,6 +44,129 @@ $(function(){
 				}
 
 			})
+
+
+
+			// v new
+
+
+			.on('click', '.storage__item', function(e){
+				e.preventDefault();
+				var $t = $(this);
+				if ( !$t.hasClass('show-plate') && $t.find('.storage__item-plate').length ){
+					$('.storage__item').not($t).removeClass('show-plate');
+					$t.addClass('show-plate');
+				}
+			})
+
+			.on('click', '.storage__item-plate-close', function(e){
+				e.stopPropagation();
+				$(this).closest('.storage__item').removeClass('show-plate');
+			})
+
+			.on('mousemove', '.game__satellite-item', function(e){
+				var $t = $(this);
+
+				if ( satelliteTimer[$t.index()] ){
+					clearTimeout(satelliteTimer[$t.index()]);
+					satelliteTimer[$t.index()] = null;
+				}
+
+				satelliteTimer[$t.index()] = setTimeout(function () {
+					$t.addClass('is-hover').closest('.game__satellite').addClass('in-hover')
+				}, 20);
+
+			})
+
+			.on('mouseover', '.game__satellite-item', function(e){
+				var $t = $(this);
+
+			})
+
+			.on('mouseleave', '.game__satellite-item', function(e){
+				var $t = $(this);
+
+				if (satelliteTimer[$t.index()]) clearTimeout(satelliteTimer[$t.index()]);
+
+				$t.removeClass('is-hover').closest('.game__satellite').removeClass('in-hover')
+			})
+
+
+
+			.on('click', '.form__select-value, .form__select-handler', function(e){
+				var $t = $(this),
+					$select = $t.closest('.form__select');
+				$select.toggleClass('is-open');
+				$('.form__select').not($select).removeClass('is-open');
+			})
+
+			.on('click', '.form__select-item', function(e){
+				var $t = $(this),
+					$select = $t.closest('.form__select');
+
+				$t.addClass('active').siblings().removeClass('active');
+				$select.find('input').val($t.data('value'));
+				$select.removeClass('is-open').find('.form__select-value').html($t.html());
+			})
+
+
+			.on('click', '.chat-content__head-handle', function(e){
+				var $t = $(this);
+
+				$t.closest('.chat-content__head-menu').toggleClass('is-open');
+
+			})
+
+
+
+
+
+
+			// ^ new
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			.on('click', '.game__history-item_message', function (e) {
+				var $t = $(this);
+				if ( !$t.hasClass('is-open') && !$t.hasClass('is-loading') ){
+					$t.addClass('is-open');
+				}
+			})
+
+			.on('click', '.game__history-close', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var $t = $(this);
+				$t.closest('.game__history-item').removeClass('is-open');
+			})
+
+			.on('click', '.game__attack-item_attack, .game__attack-item_protect', function (e) {
+				var $t = $(this);
+				if ( !$t.hasClass('is-open') && !$t.hasClass('is-loading') ){
+					$t.addClass('is-open');
+				}
+			})
+
+			.on('click', '.game__attack-close', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var $t = $(this);
+				$t.closest('.game__attack-item').removeClass('is-open');
+			})
+
 
 			.on('click', '.aside__menu-link', function (e) {
 				var $t = $(this),
@@ -55,7 +183,7 @@ $(function(){
 
 			})
 
-			.on('click', '.js-dd-asidemenu', function (e) {
+			.on('click', '.js-toggle-asidemenu', function (e) {
 				$('.aside').toggleClass('aside_open');
 			})
 
@@ -74,13 +202,13 @@ $(function(){
 				$(this).closest('.game__menu-item').addClass('is-compact');
 			})
 
-			.on('click', '.keep__item-preview', function (e) {
+			/*.on('click', '.keep__item-preview', function (e) {
 				var $wrap = $(this).closest('.keep__item');
 
 				$('.keep__item.is-open').not($wrap).removeClass('is-open');
 
 				if ($wrap.find('.keep__item-info').size() ) $wrap.addClass('is-open');
-			})
+			})*/
 			.on('click', '.keep__item-info-close', function (e) {
 				$(this).closest('.keep__item').removeClass('is-open');
 			})
@@ -196,7 +324,7 @@ $(function(){
 			})
 
 
-            /*
+
 			.on('click', '.js-submit-form', function(e){
 				e.preventDefault();
 				$(this).closest('form').submit();
@@ -218,7 +346,7 @@ $(function(){
 						type: $form.attr('method'),
 						url: $form.attr('action'),
 						data: $form.serialize(),
-						complete: function (res) {
+						compvare: function (res) {
 
 							var data = JSON.parse(res.responseText);
 
@@ -245,11 +373,11 @@ $(function(){
 					});
 				}
 			})
-            */
-    
 
 
-			// popups
+
+
+
 
 			.on('click', '.planet__item-name-title', function(e){
 				var $t = $(this);
@@ -285,11 +413,7 @@ $(function(){
 
 				if ( !$t.hasClass('is-locked')){
 
-					if ( $t.find('.keep__item-info').size() ){
-						$t.find('.keep__item').addClass('is-open');
-					} else {
-						$t.closest('.popup').find('.popup__pp').addClass('is-open');
-					}
+					$t.closest('.popup').find('.popup__pp').addClass('is-open');
 
 				}
 			})
@@ -306,6 +430,13 @@ $(function(){
 			})
 
 
+
+
+
+
+
+
+
 			.on('click', '.system__orbit-item .planet__item', function(e){
 				var $t = $(this),
 					$p = $t.closest('.planet');
@@ -319,7 +450,58 @@ $(function(){
 			})
 
 
+
+
 		;
+
+
+
+
+
+
+
+		/*(function nodes() {
+
+			if ( !isTouch ){
+
+				var $node1 = $('.game__planet-view'),
+					$node2 = $('.game__planet-desk'),
+					$win = $(window),
+					winWidth = $win.width(),
+					top = $win.scrollTop(),
+					winHeight = $win.height();
+
+				$b
+					.on('mousemove', function(e){
+					var x = e.pageX || 0,
+					y = e.pageY || 0,
+					deltaX = x - (winWidth / 2),
+					deltaY = y - (winHeight / 2)
+				;
+
+				$node1.css({
+					marginLeft: -deltaX / 200,
+					marginTop: -deltaY / 200
+				});
+
+				$node2.css({
+					marginLeft: -deltaX / 100,
+					marginTop: -deltaY / 100
+				});
+
+			});
+
+
+				$win.resize(function(){
+					winWidth = $win.width();
+				winHeight = $win.height();
+			});
+
+			}
+
+		})();*/
+			
+			
 
 	}
 
@@ -328,330 +510,6 @@ $(function(){
 (function(){
 	var app = {
 		module: {
-
-
-			planetView: {
-
-				data: {
-					//three: '//cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js',
-					three: 'https://threejs.org/build/three.min.js',
-					selector: '.tjs-planet',
-					inited: false,
-
-					timer: null,
-
-					options: {
-						map: {
-							size: 10,
-							textures: {
-								//map: '/img/planets3d/earth-map.jpg',
-								//bumpMap: '/img/planets3d/earth-bump.jpg',
-								//specularMap: '/img/planets3d/earth-specular.jpg'
-							}
-						},
-						clouds: {
-							size: 0.15,
-							textures: {
-								//map: '/img/planets3d/earth-clouds.jpg',
-								//alphaMap: '/img/planets3d/earth-cloudstransperent.jpg'
-							},
-							glow: {
-								size: 1,
-								intensity: 0.6,
-								fade: 3,
-								color: 0x93cfef
-							}
-						}
-					}
-
-				},
-
-				planet: function(options){
-
-					var planet = new THREE.Object3D(),
-						shader = options.main ? 32 : 128;
-
-
-					// add map
-					var mapGeometry = new THREE.SphereGeometry(options.map.size, shader, shader);
-					var mapMaterial = new THREE.MeshPhongMaterial({
-						bumpScale: 0.5,
-						specular: new THREE.Color('grey'),
-						shininess: 8
-					});
-					var map = new THREE.Mesh(mapGeometry, mapMaterial);
-					map.name = 'map';
-					planet.add(map);
-
-					// add clouds
-					if ( options.clouds.textures.map ){
-						var cloudsGeometry = new THREE.SphereGeometry(options.map.size + options.clouds.size, shader, shader);
-						var cloudsMaterial = new THREE.MeshPhongMaterial({
-							side: THREE.DoubleSide,
-							transparent: true,
-							opacity: 0.8
-						});
-						var clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
-						clouds.name = 'clouds';
-						planet.add(clouds);
-					}
-
-					// add glow
-					var glowGeometry = new THREE.SphereGeometry(options.map.size + options.clouds.size + options.clouds.glow.size, shader, shader);
-					var glowMaterial = new THREE.ShaderMaterial({
-						uniforms: {
-							'c': {type: 'f',value: options.clouds.glow.intensity},
-							'p': {type: 'f',value: options.clouds.glow.fade},
-							glowColor: {type: 'c',value: new THREE.Color(options.clouds.glow.color)},
-							viewVector: {type: 'v3',value: options.camera.position}
-						},
-						vertexShader: 'uniform vec3 viewVector;uniform float c;uniform float p;varying float intensity;void main() {vec3 vNormal = normalize( normalMatrix * normal );vec3 vNormel = normalize( normalMatrix * viewVector );intensity = pow( c - dot(vNormal, vNormel), p );gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}',
-						fragmentShader: 'uniform vec3 glowColor;varying float intensity;void main(){vec3 glow = glowColor * intensity;gl_FragColor = vec4( glow, 1.0 );}',
-						side: THREE.BackSide,
-						blending: THREE.AdditiveBlending,
-						transparent: true
-					});
-					var glow = new THREE.Mesh(glowGeometry, glowMaterial);
-
-					glow.name = 'glow';
-					planet.add(glow);
-
-
-					$.each( options.map.textures, function( key, value ) {
-						var loader = new THREE.TextureLoader();
-						loader.load(value, function(texture) {
-							texture.minFilter = THREE.LinearFilter;
-							mapMaterial[key] = texture;
-							mapMaterial.needsUpdate = true;
-							//console.info(mapMaterial[key]);
-
-							options.container.style.opacity = 1;
-						});
-					});
-
-					$.each( options.clouds.textures, function( key, value ) {
-						var textureLoader = new THREE.TextureLoader();
-						textureLoader.load(value, function(texture) {
-							texture.minFilter = THREE.LinearFilter;
-							cloudsMaterial[key] = texture;
-							cloudsMaterial.transparent = true;
-							cloudsMaterial.needsUpdate = true;
-						});
-					});
-
-
-					return planet;
-
-				},
-
-				orbit: function(el, opts){
-
-					var $el = $(el);
-					var options = $.extend(true, {}, self.planetView.data.options, opts);
-
-					options.container = $el[0];
-					options.width = $el.width();
-					options.height = $el.height();
-
-					options.renderer = new THREE.WebGLRenderer({ alpha: true, antialiasing: true, logarithmicDepthBuffer: true });
-					options.renderer.setSize(options.width * 2, options.height * 2);
-					options.renderer.setClearColor( 0x000000, 0 );
-					options.container.appendChild(options.renderer.domElement);
-
-					options.renderer.domElement.style.width = '100%';
-					options.renderer.domElement.style.height = '100%';
-
-					options.camera = new THREE.PerspectiveCamera(45, options.width/options.height, 0.1, 1500);
-					options.camera.position.set(0,0,29);
-
-
-					options.planet = self.planetView.planet(options);
-
-
-					options.light = new THREE.SpotLight(0xffffff);
-					options.lightBack = new THREE.SpotLight(0xffffff, 0.1);
-
-					if ( options.main ){
-						options.light = new THREE.SpotLight(0xffffff, 0.5);
-						options.lightBack = new THREE.SpotLight(0xffffff, 0.3);
-						options.light.position.set(-100, 100, 100);
-						options.lightBack.position.set(100, 0, 100);
-					} else {
-						options.light = new THREE.SpotLight(0xffffff);
-						options.lightBack = new THREE.SpotLight(0xffffff, 0.1);
-						options.light.position.set(-100, 0, 100);
-						options.lightBack.position.set(1000, 0, 100);
-					}
-
-					options.scene = new THREE.Scene();
-					options.scene.add(options.camera);
-					options.scene.add(options.planet);
-					options.scene.add(options.light);
-					options.scene.add(options.lightBack);
-
-					var render = function() {
-
-						options.planet.getObjectByName('map').rotation.y += (options.map.speed / 1000);
-						if ( options.planet.getObjectByName('clouds') ) options.planet.getObjectByName('clouds').rotation.y += (options.clouds.speed / 1000);
-						requestAnimationFrame(render);
-						options.camera.lookAt(options.planet.position);
-						options.renderer.render(options.scene, options.camera);
-					};
-
-					render();
-
-
-					$(window).resize(function(){
-						if ( self.planetView.data.timer ) clearTimeout(self.planetView.data.timer);
-						if ( self.planetView.data.inited ) self.planetView.timer = setTimeout(function(){self.planetView.resize(options)}, 200);
-					});
-				},
-
-				galaxy: function (el) {
-
-					var $el = $(el),
-						container = $el[0],
-						width = $el.width(),
-						height = $el.height(),
-						renderer = new THREE.WebGLRenderer({ alpha: true, antialiasing: true }),
-						light,
-						lightBack,
-						scene,
-						galaxy,
-						camera;
-
-					renderer.setSize(width * 2, height * 2);
-					renderer.setClearColor( 0x000000, 0 );
-					container.appendChild(renderer.domElement);
-
-					renderer.domElement.style.width = '100%';
-					renderer.domElement.style.height = '100%';
-
-					camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 1500);
-					camera.position.set(0,0,29);
-
-					//light = new THREE.SpotLight(0xffffff);
-					//light.position.set(-100, 0, 100);
-
-					//lightBack = new THREE.SpotLight(0xffffff, 0.1);
-					//lightBack.position.set(1000, 0, 100);
-
-					scene = new THREE.Scene();
-
-					//scene.add(light);
-					//scene.add(lightBack);
-
-					var galaxyGeometry = new THREE.Geometry();
-
-					for ( var i = 0; i < 10000; i ++ ) {
-
-						var star = new THREE.Vector3();
-						star.x = THREE.Math.randFloatSpread( 2000 );
-						star.y = THREE.Math.randFloatSpread( 2000 );
-						star.z = THREE.Math.randFloatSpread( 3000 );
-
-						galaxyGeometry.vertices.push( star )
-
-					}
-
-					var galaxyMaterial = new THREE.PointsMaterial( { color: 0xffffff } );
-
-					galaxy = new THREE.Points( galaxyGeometry, galaxyMaterial );
-
-					scene.add( galaxy );
-
-					/***/
-
-
-
-
-					var render = function() {
-
-						galaxy.rotation.y += 0.0002;
-						requestAnimationFrame(render);
-						renderer.render(scene, camera);
-					};
-
-					render();
-				},
-
-				resize: function(options){
-
-					options.width = $(options.container).width();
-					options.height = $(options.container).height();
-					options.camera.aspect = options.width / options.height;
-					options.camera.updateProjectionMatrix();
-					options.renderer.setSize(options.width * 2, options.height * 2);
-					options.renderer.domElement.style.width = '100%';
-					options.renderer.domElement.style.height = '100%';
-				},
-
-				getData: function($el){
-					var data = {};
-
-					data.map = {};
-					data.map.speed = parseInt($el.data('planet-mapspeed')) || 1;
-					data.map.size = $el.data('planet-mapsize') ? (parseInt($el.data('planet-mapsize')) > 10 ? 10 : $el.data('planet-mapsize')) : 10;
-					data.map.textures = {};
-					data.map.textures.map = $el.data('planet-maptexturesmap');
-					data.map.textures.bumpMap = $el.data('planet-maptexturesbumpmap');
-					data.map.textures.specularMap = $el.data('planet-maptexturesspecularmap');
-
-					data.clouds = {};
-					data.clouds.speed = parseInt($el.data('planet-cloudsspeed')) || 2;
-					data.clouds.textures = {};
-					data.clouds.textures.map = $el.data('planet-cloudstexturesmap');
-					data.clouds.textures.alphaMap = $el.data('planet-cloudstexturesalphamap');
-					data.clouds.glow = {};
-					data.clouds.glow.color =  '#555555';
-
-					data.space =  $el.data('planet-space') || false;
-
-					return data;
-				},
-
-				init: function(){
-					var $pl = $(self.planetView.data.selector);
-
-					if ( $pl.size() || $('.game__galaxy').size() ){
-						$.getScript(self.planetView.data.three, function(){
-							self.planetView.data.inited = true;
-							//game__visual
-							$pl.each(function(){
-								var $t = $(this), data = self.planetView.getData($t);
-
-								if ( $t.hasClass('game__visual') ){
-									data.clouds.glow.intensity = 0.9;
-									data.clouds.glow.fade = 10;
-									data.main = true;
-									data.map.size = 10.5;
-									data.clouds.glow.size = 0.5;
-									data.clouds.glow.fade = 6;
-								}
-
-								if ( !$t.hasClass('is-render')){
-									$t.addClass('is-render');
-									self.planetView.orbit($t, data);
-								}
-
-							});
-
-
-							$('.game__galaxy').each(function(){
-								var $t = $(this);
-
-								if ( !$t.hasClass('is-render')){
-									$t.addClass('is-render');
-									self.planetView.galaxy($t);
-								}
-
-							});
-
-						});
-					}
-
-				}
-			},
 
 			checkForm: function(form){
 				var $el = $(form),
@@ -729,92 +587,72 @@ $(function(){
 
 			},
 
-			viewPort: {
 
-				current: '',
 
-				data: {
-					'0': function(){
-						self.viewPort.current = 0;
-						console.info('-----mobile-----');
-					},
-					'640': function(){
-						self.viewPort.current = 1;
-						console.info('-----tabletVer-----');
-					},
-					'960': function(){
-						self.viewPort.current = 2;
-						console.info('-----tabletHor-----');
-					},
-					'1200': function(){
-						self.viewPort.current = 3;
-						console.info('-----desktop-----');
-					},
-					'1500': function(){
-						self.viewPort.current = 4;
-						console.info('-----desktop HD-----');
-					},
-					'1800': function(){
-						self.viewPort.current = 5;
-						console.info('-----full HD-----');
-					}
-				},
+			starWall: {
 
-				init: function(data){
-					var points = data || self.viewPort.data;
-					if ( points ){
-						points['Infinity'] = null;
-						var sbw = scrollBarWidth(), curPoint = null;
-						var ww = $(window).width() + sbw;
-						checkCurrentViewport();
-						$(window).on('resize', function(){
-							ww = $(window).width() + sbw;
-							checkCurrentViewport();
-						});
-					}
+				init: function () {
 
-					function checkCurrentViewport(){
-						var pp = 0, pc = null;
-						$.each(points, function(point, callback){
-							if ( point > ww ){
-								if ( pp !== curPoint ) {
-									curPoint = pp;
-									pc();
-								}
-								return false;
-							}
-							pp = point; pc = callback;
-						});
+					var $wall = $('.game__galaxy'),
+						j = 0,
+						max = 3000
+					;
+
+					if ( $wall.hasClass('is-init') ) return false;
+
+					$wall.addClass('is-init');
+
+					for (j; j < max; j++){
+
+
+						var $star = $('<div/>', {
+							class: 'game__galaxy-star',
+							style: 'left: ' + getRandomPoint(0, 100) + '%; ' +
+							'top: ' + getRandomPoint(0, 100) + '%; ' +
+							'opacity: ' + getRandomPoint(0.1, 1) + ';' +
+							'transform: scale(' + getRandomPoint(0.5, 2) + ')'
+						}).appendTo($wall);
+
+
+						if ( j === max - 1 ){
+
+
+							// setInterval(function () {
+							// 	var $s = $wall.find('.game__galaxy-star').eq(Math.round(getRandomPoint(0, max-1)));
+							//
+							// 	console.info($s);
+							//
+							// 	$s.addClass('is-lightning');
+							//
+							// 	setTimeout(function () {
+							// 		$s.removeClass('is-lightning');
+							// 	}, 1000);
+							//
+							// }, 1000)
+						}
 					}
 
-					function scrollBarWidth(){
-						var scrollDiv = document.createElement('div');
-						scrollDiv.className = 'scroll_bar_measure';
-						$(scrollDiv).css({
-							width: '100px',
-							height: '100px',
-							overflow: 'scroll',
-							position: 'absolute',
-							top: '-9999px'
-						});
-						document.body.appendChild(scrollDiv);
-						sbw = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-						document.body.removeChild(scrollDiv);
-						return sbw;
+
+
+
+
+					function getRandomPoint(min, max) {
+						return Math.random() * (max - min) + min;
 					}
 
 				}
 			},
+
 
 			fsRem: {
 
 				data: {
 					init: false,
 					fs: 100,
-					minWidth: 1360,
+					minWidth: 1280,
 					minHeight: 600,
-					currentWidth: 1920,
-					currentHeight: 950,
+					currentWidth: 1280,
+					currentHeight: 800,
 					screenWidth: 0,
 					screenHeight: 0,
 					timer: null
@@ -1094,14 +932,32 @@ $(function(){
 					} else {
 						$(el).not('.inited').mCustomScrollbar({
 							callbacks:{
+								whileScrolling: function(){
+									scrollPos(this);
+								},
 								onCreate: function(){
-									$(this).addClass('inited');
+									$(this).addClass('inited on-top');
+
+									if ( $(this).hasClass('js-scroll-end')){
+										$(this).mCustomScrollbar('scrollTo', 'bottom',{ scrollInertia: 0});
+									}
 								},
 								onScrollStart : function(){
 									if (!$(this).closest('.tooltip').size() ) $('.tooltip.is-open').removeClass('is-open');
 								}
 							}
 						});
+					}
+
+					function scrollPos(t) {
+						var $t = $(t);
+						if ( t.mcs.topPct <= 1 ){
+							$t.addClass('on-top')
+						} else if ( t.mcs.topPct >= 99 ){
+							$t.addClass('on-bottom')
+						} else if ( $t.hasClass('on-top') || $t.hasClass('on-bottom')) {
+							$t.removeClass('on-top on-bottom')
+						}
 					}
 				}
 			},
@@ -1142,7 +998,7 @@ $(function(){
 
 			plugs:{
 				update: function(){
-					theGame.fleetRangeSlider.init();
+					self.fleetRangeSlider.init();
 					self.scrollBar.init('.js-scroll-wrap', 'v');
 					self.scrollBar.init('.js-scroll-hor', 'h');
 				}
@@ -1152,27 +1008,15 @@ $(function(){
 
 		init: function() {
 
-			//self.viewPort.init();
 			self.popup.init();
 			self.fsRem.init();
 			self.tooltip.init();
 			self.plugs.update();
 			self.tabs.init();
-			self.planetView.init();
-			//self.bottomStick.init('.js-bottom-stick');
+			self.starWall.init();
 
 			//$('[data-required=phone]').mask('+7 (999) 999-99-99');
 
-			var $b = $('body');
-
-			$b
-				.on('click', '[data-scrollto]', function(e){
-					e.preventDefault();
-					var $el = $(this).data('scrollto');
-					$('html,body').animate({scrollTop: $($el).offset().top}, 500);
-				})
-
-			;
 		}
 	};
 	var self = {};

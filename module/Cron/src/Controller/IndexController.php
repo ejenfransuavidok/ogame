@@ -148,7 +148,7 @@ class IndexController extends AbstractActionController
         /**
          * @ выберем все события по строительству зданий
          */
-        $events = getBuildingEvents::getBuildingEvents($this->eventRepository);
+        $events = EventTypes::getBuildingEvents($this->eventRepository);
         if(count($events)){
             foreach($events as $event){
                 /**

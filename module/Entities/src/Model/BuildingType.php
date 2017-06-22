@@ -16,6 +16,8 @@ use Entities\Model\BuildingRepository;
 use Universe\Model\Planet;
 use Universe\Model\Sputnik;
 use App\Classes\TimeUtils;
+use Eventer\Processor\ResourcesCalculator;
+
 
 class BuildingType extends Entity
 {
@@ -857,10 +859,13 @@ class BuildingType extends Entity
     public function getBuildingPeriod($currentPlanet, $currentSputnik, $buildingRepository)
     {
         $level = $this->getCurrentLevel($currentPlanet, $currentSputnik, $buildingRepository);
-        
-        $K = pow($this->price_factor, $level);
-        $time = intval(ceil($K * $this->getConsumeAll() / 30));
-        
+        $time = ResourcesCalculator::getBuildingTime($this, $level);        
+        return TimeUtils::time2Interval($time);
+    }
+    
+    public function getBuildingPeriodByLevel($level)
+    {
+        $time = ResourcesCalculator::getBuildingTime($this, $level);        
         return TimeUtils::time2Interval($time);
     }
     

@@ -26,6 +26,11 @@ use Universe\Model\SputnikRepository;
 use Universe\Model\SputnikCommand;
 use Entities\Classes\EventTypes;
 use Eventer\Processor\BuildingProcessor;
+use Eventer\Processor\ResourcesCalculator;
+use Settings\Model\SettingsRepositoryInterface;
+use Eventer\Processor\Finish4DonateProcessor;
+
+
 
 class BuildingController extends AbstractActionController
 {
@@ -110,24 +115,30 @@ class BuildingController extends AbstractActionController
      */
     protected $buildingProcessor;
     
+    /**
+     * @SettingsRepositoryInterface $settingsRepository
+     */
+    protected $settingsRepository;
+
     public function __construct(
-        AdapterInterface        $db,
-        AuthController          $authController,
-        EventRepository         $eventRepository,
-        EventCommand            $eventCommand,
-        UserRepository          $userRepository,
-        UserCommand             $userCommand,
-        BuildingRepository      $buildingRepository,
-        BuildingCommand         $buildingCommand,
-        BuildingTypeRepository  $buildingTypeRepository,
-        BuildingTypeCommand     $buildingTypeCommand,
-        StarRepository          $starRepository,
-        StarCommand             $starCommand,
-        PlanetRepository        $planetRepository,
-        PlanetCommand           $planetCommand,
-        SputnikRepository       $sputnikRepository,
-        SputnikCommand          $sputnikCommand,
-        BuildingProcessor       $buildingProcessor
+        AdapterInterface            $db,
+        AuthController              $authController,
+        EventRepository             $eventRepository,
+        EventCommand                $eventCommand,
+        UserRepository              $userRepository,
+        UserCommand                 $userCommand,
+        BuildingRepository          $buildingRepository,
+        BuildingCommand             $buildingCommand,
+        BuildingTypeRepository      $buildingTypeRepository,
+        BuildingTypeCommand         $buildingTypeCommand,
+        StarRepository              $starRepository,
+        StarCommand                 $starCommand,
+        PlanetRepository            $planetRepository,
+        PlanetCommand               $planetCommand,
+        SputnikRepository           $sputnikRepository,
+        SputnikCommand              $sputnikCommand,
+        BuildingProcessor           $buildingProcessor,
+        SettingsRepositoryInterface $settingsRepository
         )
     {
         $this->dbAdapter                = $db;
@@ -147,6 +158,7 @@ class BuildingController extends AbstractActionController
         $this->sputnikRepository        = $sputnikRepository;
         $this->sputnikCommand           = $sputnikCommand;
         $this->buildingProcessor        = $buildingProcessor;
+        $this->settingsRepository       = $settingsRepository;
     }
     
     /**
@@ -186,16 +198,9 @@ class BuildingController extends AbstractActionController
                 /**
                  * вернем ресурсы обратно
                  */
-                $K              = pow($buildingType->getPriceFactor(), $level - 1);
-                $metall         = $planet->getMetall()      + $buildingType->getConsumeMetall()     * $K;
-                $heavygas       = $planet->getHeavyGas()    + $buildingType->getConsumeHeavygas()   * $K;
-                $ore            = $planet->getOre()         + $buildingType->getConsumeOre()        * $K;
-                $hydro          = $planet->getHydro()       + $buildingType->getConsumeHydro()      * $K;
-                $titan          = $planet->getTitan()       + $buildingType->getConsumeTitan()      * $K;
-                $darkmatter     = $planet->getDarkmatter()  + $buildingType->getConsumeDarkmatter() * $K;
-                $redmatter      = $planet->getRedmatter()   + $buildingType->getConsumeRedmatter()  * $K;
-                $anti           = $planet->getAnti()        + $buildingType->getConsumeAnti()       * $K;
-                
+                list($K, $electricity, $metall, $heavygas, $ore, $hydro, $titan, $darkmatter, $redmatter, $anti) 
+                    = ResourcesCalculator::resourcesCalcGetBack($buildingType, $planet, $level);
+                $planet->setElectricity($electricity);
                 $planet->setMetall($metall);
                 $planet->setHeavyGas($heavygas);
                 $planet->setOre($ore);
@@ -206,6 +211,39 @@ class BuildingController extends AbstractActionController
                 $planet->setAnti($anti);
                 $planet = $this->planetCommand->updateEntity($planet);        
                 $view->setVariable('data', array('result' => 'YES', 'auth' => 'YES', 'message' => 'Строительство данного объекта отменено'));
+            }
+            catch(\Exception $e){
+                $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => 'Строительство данного объекта не ведется!', 'error' => $e->getMessage()));
+            }
+        }
+        else{
+            /**
+             * @ пользователь неавторизован
+             */
+            $view->setVariable('data', array('result' => 'ERR', 'auth' => 'NO', 'message' => 'Пользователь не авторизован'));
+        }
+        return $view;
+    }
+    
+    public function finishfordonatebuildingAction()
+    {
+        $view = new ViewModel([]);
+        $view->setTerminal(true);
+        
+        $event_id = $this->params()->fromPost('event_id');
+        if($this->authController->isAuthorized()){
+            $this->user = $this->authController->getUser();
+            try{
+                $event = $this->eventRepository->findOneBy('events.id = ' . $event_id);
+                Finish4DonateProcessor::execute
+                    (
+                        $event, 
+                        $this->eventCommand,
+                        $this->settingsRepository,
+                        $this->planetCommand,
+                        $this->sputnikCommand,
+                        $view
+                    );
             }
             catch(\Exception $e){
                 $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => 'Строительство данного объекта не ведется!', 'error' => $e->getMessage()));

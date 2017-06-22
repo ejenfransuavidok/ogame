@@ -1,3 +1,86 @@
+<div class="storage__col storage__col_middle">
+    <div class="storage__col-title">Ресурсы</div>
+    <div style="color: #f29234;" class="storage__item storage__item_done"
+        data-root="root"
+        data-entity="Resources-build-block-main"
+        data-event_id="<?= $is_building ? $event->getId() : 0 ?>"
+        data-event_begin="<?= $is_building ? $event->getEventBegin() : 0 ?>"
+        data-event_end="<?= $is_building ? $event->getEventEnd() : 0 ?>"
+        data-event_now="<?= time() ?>"
+        data-building_id="<?= $is_building ? $event->getTargetBuildingType()->getId() : 0 ?>"
+    >
+        <div class="storage__item-inner <?= $is_building ? "display" : "no-display"; ?>" data-entity="building-column">
+            <div class="storage__item-plate">
+                <div class="storage__item-plate-close ico ico_set ico_close"></div>
+                <div class="storage__item-plate-title"><?= $is_building ? $event->getName() : '' ?></div>
+                <div class="storage__item-plate-btns">
+                    <div class="btn" data-entity="finish_4_donate_building_button">Достроить</div>
+                </div>
+            </div>
+            <div class="storage__item-frame" data-entity="process-ico">
+                <svg class="storage_ico" xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 54 54">
+  <path class="storage_ico-lock" d="M595.558,47.645H595.38V46.29a2.88,2.88,0,0,0-5.76,0v1.355h-0.178A1.353,1.353,0,0,0,588.087,49v3.038a1.353,1.353,0,0,0,1.355,1.35h6.116a1.353,1.353,0,0,0,1.355-1.35V49A1.353,1.353,0,0,0,595.558,47.645Zm-4.233-1.355a1.175,1.175,0,0,1,2.35,0v1.355h-2.35V46.29Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-ready" d="M597.3,48.1l-1.6,1.646a0.675,0.675,0,0,1-.972,0l-3.848-3.95a1.383,1.383,0,0,1-.389-1l0.031-1.343a0.658,0.658,0,0,1,.654-0.652l1.4,0.007a1.313,1.313,0,0,1,.933.4L597.3,47.1A0.72,0.72,0,0,1,597.3,48.1Zm-4.725.993-3.48,3.572a0.336,0.336,0,0,1-.483,0L587.6,51.624a0.357,0.357,0,0,1,0-.5l3.48-3.572Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-inner" d="M607,66.027V59.052H578v6.975h-5.5v-27l20.337-11.61L612.5,38.979V66.027H607Zm-3,0H581V62.041h23v3.985Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-frame" d="M592.874,21.657L617.5,36.134V70.7h-50V36.142l25.374-14.486" transform="translate(-565.5 -19.172)"/>
+                </svg>
+            </div>
+            <div class="storage__item-ico"
+                 data-entity="building-ico">
+                <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 54 54">
+  <path d="M27,44.935L14.01,37.488V22.595L27,15.148l12.99,7.447V37.488ZM34.395,25.8L27,21.563,19.606,25.8V34.28L27,38.519l7.394-4.239V25.8ZM21.949,32.937V27.146L27,24.25l5.051,2.9v5.791L27,35.833Z" transform="translate(0 -3.047)"/>
+                </svg> 
+            </div>
+            <div style="height:<?= $progress ?>%;" 
+                 class="storage__item-progress" 
+                 data-entity="progress"
+                 data-entity_progress="<?php if($is_building) { echo  $event->getId(); } ?>">
+                <svg class="storage_ico" xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 54 54">
+  <path class="storage_ico-lock" d="M595.558,47.645H595.38V46.29a2.88,2.88,0,0,0-5.76,0v1.355h-0.178A1.353,1.353,0,0,0,588.087,49v3.038a1.353,1.353,0,0,0,1.355,1.35h6.116a1.353,1.353,0,0,0,1.355-1.35V49A1.353,1.353,0,0,0,595.558,47.645Zm-4.233-1.355a1.175,1.175,0,0,1,2.35,0v1.355h-2.35V46.29Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-ready" d="M597.3,48.1l-1.6,1.646a0.675,0.675,0,0,1-.972,0l-3.848-3.95a1.383,1.383,0,0,1-.389-1l0.031-1.343a0.658,0.658,0,0,1,.654-0.652l1.4,0.007a1.313,1.313,0,0,1,.933.4L597.3,47.1A0.72,0.72,0,0,1,597.3,48.1Zm-4.725.993-3.48,3.572a0.336,0.336,0,0,1-.483,0L587.6,51.624a0.357,0.357,0,0,1,0-.5l3.48-3.572Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-inner" d="M607,66.027V59.052H578v6.975h-5.5v-27l20.337-11.61L612.5,38.979V66.027H607Zm-3,0H581V62.041h23v3.985Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-frame" d="M592.874,21.657L617.5,36.134V70.7h-50V36.142l25.374-14.486" transform="translate(-565.5 -19.172)"/>
+                </svg> 
+            </div>
+            
+            <div class="storage__item-timer"
+                 data-entity="timer-wrap">
+                <span>
+                    <i data-entity="timer"><?= $hours?>:<?= $minutes?>:<?= $seconds?></i>
+                </span>
+            </div>
+        
+        </div>
+    </div>
+    <div style="" class="storage__item storage__item_ready <?= !$is_building ? "display" : "no-display"; ?>"
+         data-entity="hammer"
+         data-tab-popup="building_resources"
+         data-process="source-building-process-slot-1">
+        <div class="storage__item-inner">
+            <div class="storage__item-frame">
+                <svg class="storage_ico" xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 54 54">
+  <path class="storage_ico-lock" d="M595.558,47.645H595.38V46.29a2.88,2.88,0,0,0-5.76,0v1.355h-0.178A1.353,1.353,0,0,0,588.087,49v3.038a1.353,1.353,0,0,0,1.355,1.35h6.116a1.353,1.353,0,0,0,1.355-1.35V49A1.353,1.353,0,0,0,595.558,47.645Zm-4.233-1.355a1.175,1.175,0,0,1,2.35,0v1.355h-2.35V46.29Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-ready" d="M597.3,48.1l-1.6,1.646a0.675,0.675,0,0,1-.972,0l-3.848-3.95a1.383,1.383,0,0,1-.389-1l0.031-1.343a0.658,0.658,0,0,1,.654-0.652l1.4,0.007a1.313,1.313,0,0,1,.933.4L597.3,47.1A0.72,0.72,0,0,1,597.3,48.1Zm-4.725.993-3.48,3.572a0.336,0.336,0,0,1-.483,0L587.6,51.624a0.357,0.357,0,0,1,0-.5l3.48-3.572Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-inner" d="M607,66.027V59.052H578v6.975h-5.5v-27l20.337-11.61L612.5,38.979V66.027H607Zm-3,0H581V62.041h23v3.985Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-frame" d="M592.874,21.657L617.5,36.134V70.7h-50V36.142l25.374-14.486" transform="translate(-565.5 -19.172)"/>
+                </svg> 
+            </div>
+        </div>
+    </div>
+    <div style="" class="storage__item storage__item_lock" data-locked="source-building-locked-slot-1">
+        <div class="storage__item-inner">
+            <div class="storage__item-frame">
+                <svg class="storage_ico" xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 54 54">
+  <path class="storage_ico-lock" d="M595.558,47.645H595.38V46.29a2.88,2.88,0,0,0-5.76,0v1.355h-0.178A1.353,1.353,0,0,0,588.087,49v3.038a1.353,1.353,0,0,0,1.355,1.35h6.116a1.353,1.353,0,0,0,1.355-1.35V49A1.353,1.353,0,0,0,595.558,47.645Zm-4.233-1.355a1.175,1.175,0,0,1,2.35,0v1.355h-2.35V46.29Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-ready" d="M597.3,48.1l-1.6,1.646a0.675,0.675,0,0,1-.972,0l-3.848-3.95a1.383,1.383,0,0,1-.389-1l0.031-1.343a0.658,0.658,0,0,1,.654-0.652l1.4,0.007a1.313,1.313,0,0,1,.933.4L597.3,47.1A0.72,0.72,0,0,1,597.3,48.1Zm-4.725.993-3.48,3.572a0.336,0.336,0,0,1-.483,0L587.6,51.624a0.357,0.357,0,0,1,0-.5l3.48-3.572Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-inner" d="M607,66.027V59.052H578v6.975h-5.5v-27l20.337-11.61L612.5,38.979V66.027H607Zm-3,0H581V62.041h23v3.985Z" transform="translate(-565.5 -19.172)"/>
+  <path class="storage_ico-frame" d="M592.874,21.657L617.5,36.134V70.7h-50V36.142l25.374-14.486" transform="translate(-565.5 -19.172)"/>
+                </svg> 
+            </div>
+        </div>
+    </div>
+</div>
+<!--
 <div class="keep__column keep__column_middle">
     <div class="keep__column-title"><?=$this->translate('Resources')?></div>
     <div class="keep__item clr_brown" 
@@ -10,7 +93,11 @@
         data-building_id="<?= $is_building ? $event->getTargetBuildingType()->getId() : 0 ?>"
     >
         <div class="keep__item-info" <?php if(! $is_building) : ?>style="display: none"<?php endif; ?>>
-            <div class="keep__item-info-header"><a href="#" class="btn">1,5x</a><a href="#" class="btn">2x</a></div>
+            <div class="keep__item-info-header">
+                <a href="#" class="btn" data-entity="finish_4_donate_building_button">
+                    Достроить
+                </a>
+            </div>
             <div class="keep__item-info-text"> <?= $is_building ? $event->getName() : '' ?></div>
             <div class="keep__item-info-close">
                 <i class="ico">
@@ -34,18 +121,6 @@
                     <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 90 90"><path d="M75.984,80.975H-0.008V23.511l0.481-.295L38.539-.013,75.984,23.519V80.975Z" transform="translate(7.016 4.516)"/></svg>
                 </i>
             </div>
-            <!--
-            <div class="keep__item-preview-frame">
-                <i>
-                    <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 90 90"><path d="M75.984,80.975H-0.008V23.511l0.481-.295L38.539-.013,75.984,23.519V80.975ZM2,78.963H73.977V24.633L38.523,2.353,2,24.641V78.963Z" transform="translate(7.016 4.516)"/></svg>
-                </i>
-            </div>
-            <div class="keep__item-preview-ico">
-                <i>
-                    <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 90 90"><path d="M6.241,0.684L10.3,7.671,0.765,7.646Zm15.3-.2L29.131,7.72,12.672,7.677l7.675-7.19h1.191Zm1.6,0H34.481l-4.1,6.892Zm6.526,8.34-8.72,21.824L12.056,8.781ZM11.38,7.373L7.393,0.487H18.73Zm-0.5,1.4,8.039,19.755L0.58,8.751ZM30.848,8.83L41.223,8.857,22.939,28.579Zm0.6-1.1,4.205-7.051,5.566,7.077Z" transform="translate(24.094 33)"/></svg>
-                </i>
-            </div>
-            -->
         </div>
         <div class="keep__item-timer"
              style="display: <?php if(!$is_building) : ?>none<?php else : ?>block<?php endif; ?>"
@@ -66,7 +141,6 @@
             </div>
         </div>
 	</div>
-    
 	<div class="keep__item clr_brown" data-locked="source-building-locked-slot-1">
 		<div class="keep__item-preview">
 			<div class="keep__item-preview-frame">
@@ -74,5 +148,5 @@
             </div>
         </div>
 	</div>
-    	
 </div>
+-->

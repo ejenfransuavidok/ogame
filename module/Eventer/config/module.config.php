@@ -69,6 +69,17 @@ return [
                         ],
                     ],
                     
+                    'finishfordonatebuilding' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/finishfordonatebuilding',
+                            'defaults' => [
+                                'controller' => Controller\BuildingController::class,
+                                'action' => 'finishfordonatebuilding',
+                            ],
+                        ],
+                    ],
+                    
                     'jsreader' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [

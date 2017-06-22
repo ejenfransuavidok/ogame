@@ -23,6 +23,8 @@ use Entities\Model\EventRepository;
 use App\Renderer\PopupBlackmarketRenderer;
 use App\Renderer\PopupBuyRenderer;
 use App\Renderer\PopupDonateRenderer;
+use Settings\Model\SettingsRepositoryInterface;
+
 
 class IndexControllerFactory implements FactoryInterface
 {
@@ -50,7 +52,8 @@ class IndexControllerFactory implements FactoryInterface
             $container->get(PlanetCommand::class),
             $container->get(PopupBlackmarketRenderer::class),
             $container->get(PopupBuyRenderer::class),
-            $container->get(PopupDonateRenderer::class)
+            $container->get(PopupDonateRenderer::class),
+            $container->get(SettingsRepositoryInterface::class)
         );
     }
 }

@@ -72,7 +72,7 @@ var Main = function () {
         key: 'processing',
         value: function processing() {
             var getUrl = window.location;
-            var baseUrl = getUrl.protocol + "//" + getUrl.host + "" + getUrl.pathname.split('/')[1];
+            var baseUrl = getUrl.protocol + "//" + getUrl.host;
             this.socket = io(baseUrl + ':8000');
             //this.socket = io('http://www.ogame.zz:8000');
             this.gvars = new _ogGlobal_vars.GlobalVars();

@@ -30,5 +30,6 @@ return [
     'Flight',
     'App',
     'Cron',
-    'Eventer'
+    'Eventer',
+    'CurrentRoute'
 ];

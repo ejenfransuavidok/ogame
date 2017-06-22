@@ -12,9 +12,14 @@ use Entities\Model\UserRepository;
 use Entities\Model\Building;
 use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingCommand;
+use Entities\Model\EventRepository;
 use Universe\Classes\PlanetCapacity;
 use Settings\Model\SettingsRepositoryInterface;
 use Entities\Classes\SelectBuildings;
+use Zend\Log\Writer\Stream;
+use Zend\Log\Logger;
+use Eventer\Processor\ResourcesCalculator;
+
 
 class ResourcesController extends AbstractActionController
 {
@@ -59,6 +64,11 @@ class ResourcesController extends AbstractActionController
      */
     protected $settingsRepositoryInterface;
     
+    /**
+     * @ EventRepository
+     */
+    protected $eventRepository;
+    
     public function __construct(
         AdapterInterface            $db, 
         PlanetRepository            $planetRepository,
@@ -68,7 +78,8 @@ class ResourcesController extends AbstractActionController
         BuildingRepository          $buildingRepository,
         BuildingCommand             $buildingCommand,
         PlanetCapacity              $planetCapacity,
-        SettingsRepositoryInterface $settingsRepositoryInterface
+        SettingsRepositoryInterface $settingsRepositoryInterface,
+        EventRepository             $eventRepository
         )
     {
         $this->dbAdapter                    = $db;
@@ -80,6 +91,16 @@ class ResourcesController extends AbstractActionController
         $this->buildingCommand              = $buildingCommand;
         $this->planetCapacity               = $planetCapacity;
         $this->settingsRepositoryInterface  = $settingsRepositoryInterface;
+        $this->eventRepository              = $eventRepository;
+        
+        $this->logpath = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/logs/resourcesController.log";
+        $this->stream = @fopen($this->logpath, 'w+', false);
+        if (! $this->stream) {
+            throw new \Exception('Failed to open stream ' . $this->logpath);
+        }
+        $this->writer = new Stream($this->stream);
+        $this->logger = new Logger();
+        $this->logger->addWriter($this->writer);
     }
     
     public function srccalcAction()
@@ -115,7 +136,12 @@ class ResourcesController extends AbstractActionController
                      * @ выберем ресурсные здания
                      */
                     foreach(SelectBuildings::selectResourcesBuildings($planet, $this->buildingRepository) as $building){
-                        $electricity     = $electricity + $building->getProduceElectricity() - $building->getConsumeElectricity();
+                        $this->logger->info('Старт - ' . $building->getName() . ', уровень - ' . $building->getLevel());
+                        $this->logger->info('Электричество до : ' . $electricity);
+                        $this->logger->info('Электричество производство : ' . $building->getProduceElectricity());
+                        $this->logger->info('Электричество потребление : ' . $building->getConsumeElectricity());
+                        $electricity    += ($building->getProduceElectricity() - $building->getConsumeElectricity());
+                        $this->logger->info('Электричество после : ' . $electricity);
                         $metall         += $building->getProduceMetallPerHour();
                         $heavygas       += $building->getProduceHeavygasPerHour();
                         $ore            += $building->getProduceOrePerHour();
@@ -124,6 +150,7 @@ class ResourcesController extends AbstractActionController
                         $darkmatter     += $building->getProduceDarkmatterPerHour();
                         $redmatter      += $building->getProduceRedmatterPerHour();
                         $anti           += $building->getProduceAntiPerHour();
+                        $this->logger->info('Стоп - ' . $building->getName());
                     }
                     /**
                      * @ установка скоростей обновления Building::$DELTA_REFRESH = 1 час = 3600 секунд
@@ -147,7 +174,6 @@ class ResourcesController extends AbstractActionController
                     $planet->set_velocity_per_second_mineral_darkmatter ($base_darkmatter_per_second+ $type->getDarkmatter() * $darkmatter   / Building::$DELTA_REFRESH);
                     $planet->set_velocity_per_second_mineral_redmatter  ($base_redmatter_per_second + $type->getRedmatter()  * $redmatter    / Building::$DELTA_REFRESH);
                     $planet->set_velocity_per_second_mineral_anti       ($base_anti_per_second      + $type->getAnti()       * $anti         / Building::$DELTA_REFRESH);
-                    $planet->setElectricity($electricity);
                     $planet = $this->planetCommand->updateEntity($planet);
                     
                     if($now > $update + 10){
@@ -177,8 +203,14 @@ class ResourcesController extends AbstractActionController
                         $planet->setDarkmatter(     $darkmatter > $darkmatter_limit ? $darkmatter_limit : $darkmatter);
                         $planet->setRedmatter(      $redmatter  > $redmatter_limit  ? $redmatter_limit  : $redmatter);
                         $planet->setAnti($anti);
-                            
-                        $planet->setUpdate($now/*Building::$DELTA_REFRESH / 600*/);
+                        /// учтем электричество, вычтенное при строительстве
+                        $this->logger->info('Электричество до коррекции : ' . $electricity);
+                        $this->logger->info('Коррекция : ' . ResourcesCalculator::getElectricityOnBuildings($planet, $this->eventRepository));
+                        $electricity -= ResourcesCalculator::getElectricityOnBuildings($planet, $this->eventRepository);
+                        $this->logger->info('Электричество после коррекции : ' . $electricity);
+                        $planet->setElectricity($electricity);
+                        /// 
+                        $planet->setUpdate($now);
                         $planet = $this->planetCommand->updateEntity($planet);
                     }
                 }

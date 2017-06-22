@@ -19,11 +19,11 @@ class ObjectTypesList extends CustomTypesList
         $this->types ['Заводы']             = $this->OTYPE_PLANTS;
         $this->types ['Наука']              = $this->OTYPE_SCIENCE;
     
-        $this->data[$this->OTYPE_FLEET]     = array('name' => 'Fleet',      'image' => '/img/ico/simp-ico-fleet.svg',       'building_tab' => 'building_fleets');
-        $this->data[$this->OTYPE_DEFENCE]   = array('name' => 'Defense',    'image' => '/img/ico/simp-ico-defense.svg',     'building_tab' => 'building_defences');
-        $this->data[$this->OTYPE_RESOURCES] = array('name' => 'Resources',  'image' => '/img/ico/simp-ico-resources.svg',   'building_tab' => 'building_resources');
-        $this->data[$this->OTYPE_PLANTS]    = array('name' => 'Plants',     'image' => '/img/ico/simp-ico-factories.svg',   'building_tab' => 'building_industrials');
-        $this->data[$this->OTYPE_SCIENCE]   = array('name' => 'Science',    'image' => '/img/ico/simp-ico-technology.svg',  'building_tab' => 'building_sciences');
+        $this->data[$this->OTYPE_FLEET]     = array('name' => 'Fleet',      'image' => '/img/ico/simp-ico-fleet.svg',       'building_tab' => 'building_fleets',        'ico' => 'ico_fleet');
+        $this->data[$this->OTYPE_DEFENCE]   = array('name' => 'Defense',    'image' => '/img/ico/simp-ico-defense.svg',     'building_tab' => 'building_defences',      'ico' => 'ico_defense');
+        $this->data[$this->OTYPE_RESOURCES] = array('name' => 'Resources',  'image' => '/img/ico/simp-ico-resources.svg',   'building_tab' => 'building_resources',     'ico' => 'ico_resources');
+        $this->data[$this->OTYPE_PLANTS]    = array('name' => 'Plants',     'image' => '/img/ico/simp-ico-factories.svg',   'building_tab' => 'building_industrials',   'ico' => 'ico_factories');
+        $this->data[$this->OTYPE_SCIENCE]   = array('name' => 'Science',    'image' => '/img/ico/simp-ico-technology.svg',  'building_tab' => 'building_sciences',      'ico' => 'ico_technology');
     }
     
 }

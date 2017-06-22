@@ -27,6 +27,7 @@ var PopupBuilding = exports.PopupBuilding = function () {
         this.interval = new _ogInterval.Interval();
         this.is_building_going_on = new _ogIs_building_going_on.IsBuildingGoingOn();
         this.building_timer = [];
+        this.timers_counters = [];
         this.buildind_block_checking('[data-entity=resources-build-block-main]');
         this.buildind_block_checking('[data-entity=industrial-build-block-main]');
         if ($('.popup_building').length) {
@@ -53,7 +54,7 @@ var PopupBuilding = exports.PopupBuilding = function () {
             var evt_begin = parseInt(begin);
             var evt_end = parseInt(end);
             var evt_now = parseInt(now);
-            var rest = evt_end - evt_now;
+            this.timers_counters[event_id] = evt_end - evt_now;
             /**
              * @ таймер на элемент
              */
@@ -69,14 +70,14 @@ var PopupBuilding = exports.PopupBuilding = function () {
                 clearInterval(this.building_timer[event_id]);
             }
             this.building_timer[event_id] = setInterval(function () {
-                if (rest <= -1) {
+                if (_this.timers_counters[event_id] <= -1) {
                     clearInterval(_this.building_timer[event_id]);
                     var current_level = parseInt($('[data-item_identifier=' + building_id + ']').attr('data-building_level'));
                     var price_factor = parseFloat($('[data-item_identifier=' + building_id + ']').attr('data-building_price_factor'));
                     var new_period = parseInt(Math.pow(parseFloat($('[data-item_identifier=' + building_id + ']').attr('data-building_price_factor')), current_level) * parseInt($('[data-item_identifier=' + building_id + ']').attr('data-summ_resource_consume')) / 30);
                     $('[data-item_identifier=' + building_id + ']').attr('data-building_period', _this.interval.interval2string(new_period));
                     $('[data-item_identifier=' + building_id + ']').attr('data-building_level', parseInt(current_level + 1));
-                    $('[data-item_identifier=' + building_id + ']').find('.keep__item-lvl').html('<span>lv. ' + parseInt(current_level + 1) + '</span>');
+                    $('[data-item_identifier=' + building_id + ']').find('[data-entity=keep__item-lvl]').html('(' + parseInt(current_level + 1) + ')');
                     $('[data-event_id=' + evt_id + ']').find('[data-entity_progress]').css('height', '0%');
                     $(main).attr('data-event_id', 0);
                     /**
@@ -92,8 +93,8 @@ var PopupBuilding = exports.PopupBuilding = function () {
                     });
                 } else {
                     var interval = evt_end - evt_begin;
-                    var time = _this.interval.resttime2string(rest, evt_begin, evt_end);
-                    var progress = Math.ceil(100 - 100 * rest / interval);
+                    var time = _this.interval.resttime2string(_this.timers_counters[event_id], evt_begin, evt_end);
+                    var progress = Math.ceil(100 - 100 * _this.timers_counters[event_id] / interval);
                     $('[data-event_id=' + evt_id + ']').find('[data-entity=timer]').html(time);
                     $('[data-event_id=' + evt_id + ']').find('[data-entity_progress]').css('height', progress + '%');
                     /**
@@ -104,7 +105,7 @@ var PopupBuilding = exports.PopupBuilding = function () {
                     /**
                      * 
                      */
-                    rest--;
+                    _this.timers_counters[event_id]--;
                 }
             }, 1000);
         }
@@ -114,13 +115,13 @@ var PopupBuilding = exports.PopupBuilding = function () {
             var _this2 = this;
 
             this.current_planet = $('[data-current_planet]').data('current_planet');
-            $(document).on('click', '[data-entity=srcbuilding], [data-entity=industrialbuilding]', function (evt) {
+            $(document).on('click', '[data-entity=Resources], [data-entity=Plants]', function (evt) {
                 return _this2.building_select(evt);
             });
             /**
              * здесь строительство только для ресурсного и индустриального здания !!! (остальные пока не предусмотрены!!!)
              */
-            $(document).on('click', '[data-entity=popup_building-popup__pp-popup__pp-control-build-button]', function (evt) {
+            $(document).on('click', '[data-entity=popup_ship_build_button]', function (evt) {
                 return _this2.build(evt);
             });
             /**
@@ -128,6 +129,18 @@ var PopupBuilding = exports.PopupBuilding = function () {
              */
             $(document).on('click', '[data-entity=reject_building_button]', function (evt) {
                 return _this2.reject_building(evt);
+            });
+            /**
+             * достроить за донат
+             */
+            $(document).on('click', '[data-entity=finish_4_donate_building_button]', function (evt) {
+                return _this2.finish_4_donate(evt);
+            });
+            /**
+             * открыть всплывающее окно строительства
+             */
+            $(document).on('click', '[data-entity=hammer]', function (evt) {
+                return _this2.open_popup_building(evt);
             });
             /*
             $(document).on('mousedown', '[data-popup_id=popup_building]', (evt) => {
@@ -153,16 +166,38 @@ var PopupBuilding = exports.PopupBuilding = function () {
             */
         }
     }, {
+        key: 'finish_4_donate',
+        value: function finish_4_donate(evt) {
+            var _this3 = this;
+
+            evt.preventDefault();
+            var obj = $(evt.target);
+            var root = $(obj).closest('[data-root=root]');
+            if (this.is_building_going_on.check(root)) {
+                (function () {
+                    var event_id = parseInt($(root).attr('data-event_id'));
+                    _this3.ajaxer.execute('post', '/eventer/finishfordonatebuilding', 'event_id=' + event_id, 'json', function (data) {
+                        /**
+                         * @ закончим строительство
+                         */
+                        _this3.timers_counters[event_id] = -1;
+                    });
+                })();
+            } else {
+                $.notify('building isnt building');
+            }
+        }
+    }, {
         key: 'reject_building',
         value: function reject_building(evt) {
-            var _this3 = this;
+            var _this4 = this;
 
             var obj = $(evt.target);
             var root = $(obj).closest('[data-root=root]');
             if (this.is_building_going_on.check(root)) {
                 var event_id = parseInt($(root).attr('data-event_id'));
                 this.ajaxer.execute('post', '/eventer/rejectbuilding', 'event_id=' + event_id, 'json', function (data) {
-                    _this3.restore_context(root);
+                    _this4.restore_context(root);
                 });
             } else {
                 $.notify('building isnt building');
@@ -183,40 +218,19 @@ var PopupBuilding = exports.PopupBuilding = function () {
             $('[data-event_id=' + event_id + ']').find('[data-entity=timer]').html('00:00:00');
             $('[data-event_id=' + event_id + ']').find('[data-entity_progress]').css('height', '0%');
             /**
-             * 3. возвращаем возможность открывать всплывающее окно с выбором зданий
-             *    здесь через data() так как через attr не работает
+             * 3. скрываем процесс и открываем молоток
              */
-            var data_popup = $(root).find('.keep__item-preview').data('popup').substr(1);
-            $(root).find('.keep__item-preview').data('popup', data_popup);
+            var parent = $(root).parent();
+            var process = $(parent).find('[data-entity=building-column]');
+            var hammer = $(parent).find('[data-entity=hammer]');
+            $(process).hide();
+            $(hammer).show();
             /**
-             * 4. запрещаем открывать окно с отменой/ускорением строительства
-             */
-            $(root).find('.keep__item-info').css('display', 'none');
-            /**
-             * 5. убираем евент в корне
+             * 4. убираем евент в корне
              */
             $(root).attr('data-event_id', 0);
             /**
-             * 6. возвращаем предыдущую картинку в круг
-             */
-            //$(root).find('.keep__item-preview-frame, .keep__item-preview-ico').each((idx, elm) => {
-            //    if(!$(elm).hasClass('native')) $(elm).remove(); else $(elm).css('display', 'unset');
-            //});
-            var color = this.colors[$(root).data('entity')];
-            $(root).attr('class', color);
-            /**
-             * 7. скрываем превью, таймер и показываем молоток
-             */
-            var parent = $(root).parent();
-            var process = $(parent).find('[data-process]');
-            var preview = $(parent).find('[data-process_window]');
-            var timer = $(parent).find('.keep__item-timer');
-            $(process).show();
-            $(preview).hide();
-            $(timer).hide();
-
-            /**
-             * 8. убираем таймер со здания
+             * 5. убираем таймер со здания
              */
             var element_timer = $('[data-item_identifier=' + building_id + ']').find('.keep__item-timer');
             if ($(element_timer).length) {
@@ -228,47 +242,35 @@ var PopupBuilding = exports.PopupBuilding = function () {
         value: function prepare_context(root, picture, color, building_id, event_id) {
             $.notify('prepend_context');
             /**
-             * 1. убираем возможность открывать всплывающее окно с выбором зданий
-             *    здесь через data() так как через attr не работает
+             * 1. меняем картинку
              */
-            var data_popup = '_' + $(root).find('.keep__item-preview').data('popup');
-            $(root).find('.keep__item-preview').data('popup', data_popup);
+            $(root).find('[data-entity=building-ico]').html(picture);
+            $(root).css('color', color);
             /**
-             * 2. разрешаем открывать окно с отменой/ускорением строительства
-             */
-            $(root).find('.keep__item-info').css('display', '');
-            /**
-             * 3. меняем картинку
-             */
-            $(root).find('.keep__item-preview-progress').after(picture);
-            $(root).attr('class', color);
-            /**
-             * 4. убираем молоток и включаем превью и включаем таймер
+             * 2. убираем молоток и включаем превью и включаем таймер
              */
             var parent = $(root).parent();
-            var process = $(parent).find('[data-process]');
-            var preview = $(parent).find('[data-process_window]');
-            var timer = $(parent).find('.keep__item-timer');
-            $(process).hide();
-            $(preview).show();
-            $(timer).show();
+            var process = $(parent).find('[data-entity=building-column]');
+            var hammer = $(parent).find('[data-entity=hammer]');
+            $(process).show();
+            $(hammer).hide();
             /**
-             * 5. в рут ставим id здания
+             * 3. в рут ставим id здания
              */
             $(root).attr('data-building_id', building_id);
             /**
-             * 6. в рут ставим id события
+             * 4. в рут ставим id события
              */
             $(root).attr('data-event_id', event_id);
         }
     }, {
         key: 'install_reject_button_handler',
         value: function install_reject_button_handler(event_id) {
-            var _this4 = this;
+            var _this5 = this;
 
             if (!(event_id in this.reject_building_button_handlers)) {
                 $(document).on('click', '[data-entity=reject_building_button_' + event_id + ']', function (evt) {
-                    _this4.ajaxer.execute('post', '/eventer/rejectbuilding', 'event_id=' + event_id, 'json', function (data) {
+                    _this5.ajaxer.execute('post', '/eventer/rejectbuilding', 'event_id=' + event_id, 'json', function (data) {
                         $.notify(data.message);
                     });
                 });
@@ -278,32 +280,33 @@ var PopupBuilding = exports.PopupBuilding = function () {
     }, {
         key: 'updatePlanetkeep',
         value: function updatePlanetkeep() {
-            var _this5 = this;
+            var _this6 = this;
 
             this.ajaxer.execute('post', '/app/planetkeep', 'planetid=' + this.current_planet, 'json', function (data) {
                 $('[data-entity=game__planet-keep-keep]').html(data.content);
                 $('.popup_building').remove();
                 $(data.popup_building).insertAfter('.game');
-                _this5.start_continue_timer(data.event_id, data.begin, data.end, data.now);
-                _this5.install_reject_button_handler(data.event_id);
+                _this6.start_continue_timer(data.event_id, data.begin, data.end, data.now);
+                _this6.install_reject_button_handler(data.event_id);
                 window.theGame.plugs.update();
             });
         }
     }, {
         key: 'build',
         value: function build(evt) {
-            var _this6 = this;
+            var _this7 = this;
 
             /**
              * @ запуск строительства
              */
-            var obj = $(evt.target);
             window.theGame.popup.close('.popup');
-            $(obj).closest('.popup__pp').removeClass('is-open');
-            var building_id = $(obj).closest('.popup__pp').data('building_id');
-            var root = $(obj).closest('.popup__pp').data('root');
-            var picture = $(obj).closest('.popup__pp').data('picture');
-            var color = $(obj).closest('.popup__pp').data('color');
+            var obj = $(evt.target);
+            var win = $(obj).closest('.popup_ship');
+            $(win).removeClass('is-open');
+            var building_id = $(win).data('building_id');
+            var root = $(win).data('root');
+            var picture = $(win).data('picture');
+            var color = $(win).data('color');
             root = $('[data-entity=' + root + ']').first();
             this.ajaxer.execute('post', '/eventer/initbuild', 'planet=' + this.current_planet + '&buildingType=' + building_id, 'json', function (data) {
                 /**
@@ -313,11 +316,11 @@ var PopupBuilding = exports.PopupBuilding = function () {
                 /**
                  * 2. готовим контекст
                  */
-                _this6.prepare_context(root, picture, color, building_id, data.event_id);
+                _this7.prepare_context(root, picture, color, building_id, data.event_id);
                 /**
                  * 3. запускаем строительство
                  */
-                _this6.start_continue_timer(data.event_id, data.begin, data.end, data.now, building_id, root);
+                _this7.start_continue_timer(data.event_id, data.begin, data.end, data.now, building_id, root);
             });
         }
     }, {
@@ -354,19 +357,152 @@ var PopupBuilding = exports.PopupBuilding = function () {
             var root = $(obj).data('root');
             var id = $(obj).attr('data-item_identifier');
             var period = $(obj).attr('data-building_period');
-            var level = $(obj).attr('data-building_level');
-            var picture = $(obj).find('.keep__item-preview').first().html();
-            var color = $(obj).find('.keep__item').first().attr('class');
+            var level = parseFloat($(obj).attr('data-building_level'));
+            var picture = $(obj).find('.storage__item-ico').first().html();
+            var color = $(obj).find('.storage__item_done').first().css('color');
             var title = $(obj).find('[data-entity=keep__item-text]').first().html();
             var description = $(obj).find('[data-entity=building-description]').first().html();
-            this.colors[root] = $('[data-entity=' + root + ']').first().attr('class');
-            $('[data-entity=popup_building-popup__pp]').data('building_id', id);
-            $('[data-entity=popup_building-popup__pp]').data('root', root);
-            $('[data-entity=popup_building-popup__pp]').data('picture', picture);
-            $('[data-entity=popup_building-popup__pp]').data('color', color);
-            $('[data-entity=popup_building-popup__pp-layout-popup__pp-content-title]').html(title + '<br><span class="btn btn_lvl">lv.' + level + '</span>');
+            var price_factor = parseFloat($(obj).data('building_price_factor'));
+            var consume_metall = parseFloat($(obj).data('consume_metall'));
+            var consume_heavygas = parseFloat($(obj).data('consume_heavygas'));
+            var consume_ore = parseFloat($(obj).data('consume_ore'));
+            var consume_hydro = parseFloat($(obj).data('consume_hydro'));
+            var consume_titan = parseFloat($(obj).data('consume_titan'));
+            var consume_darkmatter = parseFloat($(obj).data('consume_darkmatter'));
+            var consume_redmatter = parseFloat($(obj).data('consume_redmatter'));
+            var consume_anti = parseFloat($(obj).data('consume_anti'));
+            var power_factor = parseFloat($(obj).data('power_factor'));
+            var donate_needle = 0; //parseFloat($(obj).data('total_donate_needle'));
+
+            var names = {};
+            names.metall = ['металл', 'металла'];
+            names.heavygas = ['тяжелый газ', 'тяжелого газа'];
+            names.ore = ['шахта', 'шахты'];
+            names.hydro = ['водород', 'водорода'];
+            names.titan = ['титан', 'титана'];
+            names.darkmatter = ['темная материя', 'темной материи'];
+            names.redmatter = ['красная материя', 'красной материи'];
+            names.anti = ['антивещество', 'антивещества'];
+            names.electricity = ['электричество', 'электричества'];
+
+            var pictures = {};
+            pictures.electricity = $('[data-resources=electricity]').prev().find('img').attr('src');
+            pictures.metall = $('[data-resources=metall]').prev().find('img').attr('src');
+            pictures.heavygas = $('[data-resources=heavygas]').prev().find('img').attr('src');
+            pictures.ore = $('[data-resources=ore]').prev().find('img').attr('src');
+            pictures.hydro = $('[data-resources=hydro]').prev().find('img').attr('src');
+            pictures.titan = $('[data-resources=titan]').prev().find('img').attr('src');
+            pictures.darkmatter = $('[data-resources=darkmatter]').prev().find('img').attr('src');
+            pictures.redmatter = $('[data-resources=redmatter]').prev().find('img').attr('src');
+            pictures.anti = $('[data-resources=anti]').prev().find('img').attr('src');
+
+            var consume = {};
+            var K = Math.pow(parseFloat(price_factor), level - 1); //level == 1 ? 1 : Math.pow(parseFloat(price_factor), level - 1) - Math.pow(parseFloat(price_factor), level - 2);
+            consume.metall = parseFloat(consume_metall) * K;
+            consume.heavygas = parseFloat(consume_heavygas) * K;
+            consume.ore = parseFloat(consume_ore) * K;
+            consume.hydro = parseFloat(consume_hydro) * K;
+            consume.titan = parseFloat(consume_titan) * K;
+            consume.darkmatter = parseFloat(consume_darkmatter) * K;
+            consume.redmatter = parseFloat(consume_redmatter) * K;
+            consume.anti = parseFloat(consume_anti) * K;
+            consume.electricity = parseFloat(power_factor) * K;
+
+            var are_electricity = parseFloat($('[data-resources=electricity]').data('resources_amount'));
+            var are_metall = parseFloat($('[data-resources=metall]').data('resources_amount'));
+            var are_heavygas = parseFloat($('[data-resources=heavygas]').data('resources_amount'));
+            var are_ore = parseFloat($('[data-resources=ore]').data('resources_amount'));
+            var are_hydro = parseFloat($('[data-resources=hydro]').data('resources_amount'));
+            var are_titan = parseFloat($('[data-resources=titan]').data('resources_amount'));
+            var are_darkmatter = parseFloat($('[data-resources=darkmatter]').data('resources_amount'));
+            var are_redmatter = parseFloat($('[data-resources=redmatter]').data('resources_amount'));
+            var are_anti = parseFloat($('[data-resources=anti]').data('resources_amount'));
+
+            var different = {};
+            different.metall = are_metall - consume.metall;
+            different.heavygas = are_heavygas - consume.heavygas;
+            different.ore = are_ore - consume.ore;
+            different.hydro = are_hydro - consume.hydro;
+            different.titan = are_titan - consume.titan;
+            different.darkmatter = are_darkmatter - consume.darkmatter;
+            different.redmatter = are_redmatter - consume.redmatter;
+            different.anti = are_anti - consume.anti;
+            different.electricity = are_electricity - consume.electricity;
+
+            var donate_prices = {};
+            donate_prices.metall = parseFloat($('[data-resources=metall]').data('donate_price'));
+            donate_prices.heavygas = parseFloat($('[data-resources=heavygas]').data('donate_price'));
+            donate_prices.ore = parseFloat($('[data-resources=ore]').data('donate_price'));
+            donate_prices.hydro = parseFloat($('[data-resources=hydro]').data('donate_price'));
+            donate_prices.titan = parseFloat($('[data-resources=titan]').data('donate_price'));
+            donate_prices.darkmatter = parseFloat($('[data-resources=darkmatter]').data('donate_price'));
+            donate_prices.redmatter = parseFloat($('[data-resources=redmatter]').data('donate_price'));
+
+            var needles = '';
+            for (var key in consume) {
+                if (consume[key] != 0) {
+                    var cl = different[key] > 0 ? ' green ' : ' red ';
+                    needles += '<div class="resourses__item"><i class="ico"><img style="height: 16px; width: 16px;" src="' + pictures[key] + '">' + '</i><span class="val ' + cl + '">' + Math.round(consume[key]) + '</span></div>';
+                    if (key in consume && key in donate_prices) {
+                        donate_needle += parseFloat(consume[key]) * donate_prices[key];
+                    }
+                }
+            }
+
+            ///
+            var have_resources_for_buildings = true;
+            for (var _key in different) {
+                if (parseFloat(different[_key]) < 0) have_resources_for_buildings = false;
+            }
+            var have_donate_for_buildings = are_anti > donate_needle;
+            if (!have_resources_for_buildings) {
+                if (!$('[data-entity=popup_ship_build_button]').hasClass('is-disable')) {
+                    $('[data-entity=popup_ship_build_button]').addClass('is-disable');
+                    $('[data-entity=popup_ship_build_button]').text('Недоступно');
+                    $('.popup_ship').find('.popup__footer-right').hide();
+                    if (!$('.popup_ship').find('.popup__content-tax-resourses').hasClass('is-over')) {
+                        $('.popup_ship').find('.popup__content-tax-resourses').addClass('is-over');
+                    }
+                }
+            } else {
+                $('[data-entity=popup_ship_build_button]').removeClass('is-disable');
+                $('.popup_ship').find('.popup__content-tax-resourses').removeClass('is-over');
+                $('[data-entity=popup_ship_build_button]').text('Строить');
+                $('.popup_ship').find('.popup__footer-right').show();
+            }
+            ///
+
+            this.colors[root] = $(obj).find('.storage__item_done').css('color');
+
+            var win = $('.popup_ship');
+            $(win).data('building_id', id);
+            $(win).data('root', root);
+            $(win).data('picture', picture);
+            $(win).data('color', color);
+            $(win).find('.popup__header-title').html(title);
+            $(win).find('.popup__content-text').html('<p>' + description + '</p>');
+            $(win).find('.popup__content-info-title').html('Уровень ' + level);
+            $(win).find('[data-entity=period]').html(period);
+            $(win).find('.resourses__list').html(needles);
+            $(win).find('[data-entity=total_donate_needle]').html(Math.round(donate_needle));
+            /*
+            $('[data-entity=popup_building-popup__pp-layout-popup__pp-content-title]').html(title + '<br><span class="btn btn_lvl">lv.'+level+'</span>');
             $('[data-entity=popup_building-popup__pp-layout-popup__pp-content-description]').html(description);
             $('[data-entity=popup_building-popup__pp-layout-popup__pp-building-period]').html(period);
+            $('[data-entity=popup_building-popup__pp-layout-popup__pp-content-needles]').html(needles);
+            */
+            //window.theGame.popup.close('.popup');
+            window.theGame.popup.open('.popup_ship');
+        }
+    }, {
+        key: 'open_popup_building',
+        value: function open_popup_building(evt) {
+            var obj = $(evt.target).closest('[data-entity=hammer]');
+            var popup = $(obj).data('tab-popup');
+            $('.popup__head-menu-group > [data-tab-group]').removeClass('is-active');
+            $('.popup__head-menu-group > [data-tab-link=' + popup + ']').trigger('click');
+            window.theGame.popup.close('.popup');
+            window.theGame.popup.open('.popup_building');
         }
     }]);
 

@@ -10,6 +10,8 @@ use Entities\Model\BuildingTypeRepository;
 use Entities\Classes\ObjectTypesList;
 use Entities\Classes\BuildingTypesList;
 use App\Controller\AuthController;
+use Eventer\Processor\Finish4DonateProcessor;
+use Settings\Model\SettingsRepositoryInterface;
 
 
 class PopupBuildingRenderer
@@ -34,17 +36,24 @@ class PopupBuildingRenderer
      */
     private $planetRepository;
     
+    /**
+     * @SettingsRepositoryInterface $settingsRepository
+     */
+    private $settingsRepository;
+    
     public function __construct(
-        BuildingTypeRepository  $buildingTypeRepository,
-        BuildingRepository      $buildingRepository,
-        PlanetRepository        $planetRepository,
-        AuthController          $authController
+        BuildingTypeRepository      $buildingTypeRepository,
+        BuildingRepository          $buildingRepository,
+        PlanetRepository            $planetRepository,
+        AuthController              $authController,
+        SettingsRepositoryInterface $settingsRepository
         )
     {
         $this->buildingTypeRepository   = $buildingTypeRepository;
         $this->buildingRepository       = $buildingRepository;
         $this->planetRepository         = $planetRepository;
         $this->authController           = $authController;
+        $this->settingsRepository       = $settingsRepository;
     }
     
     public function render($planetid)
@@ -52,7 +61,7 @@ class PopupBuildingRenderer
         $planet = $this->planetRepository->findOneBy('planets.id = ' . $planetid);
         $popup_building = new ViewModel
             ([
-                'tabs'                  => $this->createBuildingsIerarchy(),
+                'tabs'                  => $this->createBuildingsIerarchy($planet),
                 'objects_types'         => (new ObjectTypesList())->data,
                 'buildins_types'        => (new BuildingTypesList())->data
             ]);
@@ -62,7 +71,7 @@ class PopupBuildingRenderer
         return $popup_building;
     }
     
-    public function createBuildingsIerarchy()
+    public function createBuildingsIerarchy($planet)
     {
         $tabs = new ObjectTypesList();
         $buildings_types = new BuildingTypesList();
@@ -78,6 +87,10 @@ class PopupBuildingRenderer
             if(! isset($tabs [$object_type] ['sub_tabs'][$building_type])){
                 $tabs [$object_type] ['sub_tabs'] [$building_type] = array ();
             }
+            $building->temp_current_level = $building->getCurrentLevel($planet, null, $this->buildingRepository) + 1;
+            $building->temp_building_period = $building->getBuildingPeriodByLevel($building->temp_current_level);
+            $building->temp_total_donate_needle = 
+                Finish4DonateProcessor::getTotalDonateNeedle($this->settingsRepository, $building, $building->temp_current_level, 1);
             $tabs [$object_type] ['sub_tabs'] [$building_type] [] = $building;
         }
         //print_r($tabs);

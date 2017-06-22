@@ -153,7 +153,7 @@ class JsreaderController extends AbstractActionController
                 $result = array();
                 foreach($events as $event){
                     $id = $event->getId();
-                    $result[$id]['name'] = $event->getName();
+                    $result[$id]['name']                = $event->getName();
                     $result[$id]['description']         = $event->getDescription();
                     $result[$id]['event_type']          = $event->getEventType();
                     $result[$id]['event_begin']         = intval($event->getEventBegin());

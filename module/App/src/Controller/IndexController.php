@@ -29,6 +29,7 @@ use App\Renderer\PopupBuildingRenderer;
 use App\Renderer\PopupBlackmarketRenderer;
 use App\Renderer\PopupBuyRenderer;
 use App\Renderer\PopupDonateRenderer;
+use Settings\Model\SettingsRepositoryInterface;
 
 
 class IndexController extends AbstractActionController
@@ -118,23 +119,29 @@ class IndexController extends AbstractActionController
      */
     private $popupDonateRenderer;
     
+    /**
+     * @SettingsRepositoryInterface $settingsRepository
+     */
+    private $settingsRepository;
+    
     public function __construct(
-        AdapterInterface         $db,
-        AuthController           $authController,
-        PlanetCapacity           $planetCapacity,
-        BuildingRepository       $buildingRepository,
-        BuildingTypeRepository   $buildingTypeRepository,
-        EventRepository          $eventRepository,
-        EventCommand             $eventCommand,
-        PopupFleet1Renderer      $popupFleet1Renderer,
-        PopupFleet2Renderer      $popupFleet2Renderer,
-        PopupFleet3Renderer      $popupFleet3Renderer,
-        FleetMoovingActivity     $fleetMoovingActivity,
-        PlanetRepository         $planetRepository,
-        PlanetCommand            $planetCommand,
-        PopupBlackmarketRenderer $popupBlackmarketRenderer,
-        PopupBuyRenderer         $popupBuyRenderer,
-        PopupDonateRenderer      $popupDonateRenderer
+        AdapterInterface            $db,
+        AuthController              $authController,
+        PlanetCapacity              $planetCapacity,
+        BuildingRepository          $buildingRepository,
+        BuildingTypeRepository      $buildingTypeRepository,
+        EventRepository             $eventRepository,
+        EventCommand                $eventCommand,
+        PopupFleet1Renderer         $popupFleet1Renderer,
+        PopupFleet2Renderer         $popupFleet2Renderer,
+        PopupFleet3Renderer         $popupFleet3Renderer,
+        FleetMoovingActivity        $fleetMoovingActivity,
+        PlanetRepository            $planetRepository,
+        PlanetCommand               $planetCommand,
+        PopupBlackmarketRenderer    $popupBlackmarketRenderer,
+        PopupBuyRenderer            $popupBuyRenderer,
+        PopupDonateRenderer         $popupDonateRenderer,
+        SettingsRepositoryInterface $settingsRepository
         )
     {
         $this->dbAdapter                = $db;
@@ -153,13 +160,15 @@ class IndexController extends AbstractActionController
         $this->popupBlackmarketRenderer = $popupBlackmarketRenderer;
         $this->popupBuyRenderer         = $popupBuyRenderer;
         $this->popupDonateRenderer      = $popupDonateRenderer;
+        $this->settingsRepository       = $settingsRepository;
         
         $this->planetKeepRenderer       = new PlanetKeepRenderer($this->eventRepository, $this->authController);
         $this->popupBuildingRenderer    = new PopupBuildingRenderer(
                                                     $this->buildingTypeRepository, 
                                                     $this->buildingRepository, 
                                                     $this->planetRepository,
-                                                    $this->authController);
+                                                    $this->authController,
+                                                    $this->settingsRepository);
         /*
         $loc = $this->getServiceLocator();
         $translator = $loc->get('translator');
@@ -193,7 +202,8 @@ class IndexController extends AbstractActionController
                 'planets' => $this->planetRepository->findBy('planets.owner = ' . $this->user->getId() . ' AND planets.id != ' . $planet->getId())->buffer(),
                 'planet'  => $planet,
                 'capacity'=> $this->planetCapacity,
-                'user'    => $this->user
+                'user'    => $this->user,
+                'settings'=> $this->settingsRepository
             ]);
             $header->setTemplate('include/header');
             /**

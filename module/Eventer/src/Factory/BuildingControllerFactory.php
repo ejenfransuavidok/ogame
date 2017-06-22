@@ -21,6 +21,8 @@ use Eventer\Controller\BuildingController;
 use Eventer\Processor\BuildingProcessor;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
+use Settings\Model\SettingsRepositoryInterface;
+
 
 class BuildingControllerFactory implements FactoryInterface
 {
@@ -43,7 +45,8 @@ class BuildingControllerFactory implements FactoryInterface
             $container->get(PlanetCommand::class),
             $container->get(SputnikRepository::class),
             $container->get(SputnikCommand::class),
-            $container->get(BuildingProcessor::class)
+            $container->get(BuildingProcessor::class),
+            $container->get(SettingsRepositoryInterface::class)
         );
     }
 }

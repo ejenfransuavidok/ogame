@@ -116,42 +116,12 @@ class BuildingProcessor
                      */
                     $level = 1;
                 }
-                /**
-                 * @ хватит ли ресурсов на планете
-                 */
-                $K              = pow($buildingType->getPriceFactor(), $level - 1);
-                $metall         = $planet->getMetall()      - $buildingType->getConsumeMetall()     * $K;
-                $heavygas       = $planet->getHeavyGas()    - $buildingType->getConsumeHeavygas()   * $K;
-                $ore            = $planet->getOre()         - $buildingType->getConsumeOre()        * $K;
-                $hydro          = $planet->getHydro()       - $buildingType->getConsumeHydro()      * $K;
-                $titan          = $planet->getTitan()       - $buildingType->getConsumeTitan()      * $K;
-                $darkmatter     = $planet->getDarkmatter()  - $buildingType->getConsumeDarkmatter() * $K;
-                $redmatter      = $planet->getRedmatter()   - $buildingType->getConsumeRedmatter()  * $K;
-                $anti           = $planet->getAnti()        - $buildingType->getConsumeAnti()       * $K;
-                /**
-                 * @ электричество вычисляется по другой формуле
-                 */
-                $electricity    = $planet->getElectricity() - $buildingType->getPowerFactor() * $level * $level;
-                
-                if(
-                    $metall      >= 0 && 
-                    $heavygas    >= 0 && 
-                    $ore         >= 0 && 
-                    $hydro       >= 0 && 
-                    $titan       >= 0 && 
-                    $darkmatter  >= 0 && 
-                    $redmatter   >= 0 &&
-                    $anti        >= 0 &&
-                    $electricity >= 0
-                    ) {
+                list($K, $electricity, $metall, $heavygas, $ore, $hydro, $titan, $darkmatter, $redmatter, $anti, $electricity, $areResourcesEnough, $time) =
+                    ResourcesCalculator::resourcesCalc($buildingType, $planet, $level);
+                if($areResourcesEnough) {
                     /**
                      * @ ресурсов хватает - строим
-                     */
-                    /**
-                     * @ время на строительство
-                     */
-                    $time = intval(ceil($K * $buildingType->getConsumeAll() / 30));
-                    
+                     */                    
                     $event = new Event(
                         $buildingType->getName(),
                         $buildingType->getDescription(),
@@ -167,8 +137,9 @@ class BuildingProcessor
                     );
                     $event = $this->eventCommand->insertEntity($event);
                     /**
-                     * @ на планете стало меньше ресурсов, электричество изменится при окончании строительства
+                     * @ на планете стало меньше ресурсов
                      */
+                    $planet->setElectricity($electricity);
                     $planet->setMetall($metall);
                     $planet->setHeavyGas($heavygas);
                     $planet->setOre($ore);

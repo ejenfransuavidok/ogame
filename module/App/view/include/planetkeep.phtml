@@ -1,9 +1,14 @@
-<div class="keep__title"><?=$this->translate('Production')?></div>
-<div class="keep__contens">
-    <?= $this->producefleet; ?>
-    <?= $this->producedefence; ?>
-    <?= $this->producesrc; ?>
-    <?= $this->produceindustrial; ?>
-    <?= $this->producetech; ?>
+<div class="game__planet-desk">
+    <div class="game__planet-title"></div>
+    <div class="game__planet-storage">
+        <div class="storage__table">
+            <div class="storage__table-title">Производство</div>
+            <?= $this->producefleet; ?>
+            <?= $this->producedefence; ?>
+            <?= $this->producesrc; ?>
+            <?= $this->produceindustrial; ?>
+            <?= $this->producetech; ?>
+        </div>
+    </div>
+    <div class="game__planet-more"><a href="#" class="btn"><span>Верфь</span><i class="ico ico-rocket"></i></a><a href="#" class="btn"><span>Альянсы</span><i class="ico ico-orden"></i></a></div>
 </div>
-<div class="keep__footer"></div>

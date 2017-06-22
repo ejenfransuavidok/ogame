@@ -103,9 +103,9 @@ class EventCommand implements EntityCommandInterface
             'event_type'            => $event->getEventType(),
             'event_begin'           => $event->getEventBegin(),
             'event_end'             => $event->getEventEnd(),
-            'star'                  => $event->getTargetStar() ? $event->getTargetStar()->getId() : null,
-            'planet'                => $event->getTargetPlanet() ? $event->getTargetPlanet()->getId() : null,
-            'sputnik'               => $event->getTargetSputnik() ? $event->getTargetSputnik()->getId() : null,
+            'target_star'           => $event->getTargetStar() ? $event->getTargetStar()->getId() : null,
+            'target_planet'         => $event->getTargetPlanet() ? $event->getTargetPlanet()->getId() : null,
+            'target_sputnik'        => $event->getTargetSputnik() ? $event->getTargetSputnik()->getId() : null,
             'targetBuildingType'    => $event->getTargetBuildingType() ? $event->getTargetBuildingType()->getId() : null,
             'targetLevel'           => $event->getTargetLevel()
         ]);

@@ -9,6 +9,7 @@ use Universe\Classes\PlanetCapacity;
 use Entities\Model\UserRepository;
 use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingCommand;
+use Entities\Model\EventRepository;
 use Cron\Controller\ResourcesController;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -27,7 +28,8 @@ class ResourcesControllerFactory implements FactoryInterface
             $container->get(BuildingRepository::class),
             $container->get(BuildingCommand::class),
             $container->get(PlanetCapacity::class),
-            $container->get(SettingsRepositoryInterface::class)
+            $container->get(SettingsRepositoryInterface::class),
+            $container->get(EventRepository::class)
         );
     }
 }

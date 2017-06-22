@@ -5,22 +5,19 @@
         <meta charset="utf-8">
         <?= $this->headTitle($this->translate('Title'))->setSeparator(' - ')->setAutoEscape(false) ?>
         <?= $this->headMeta()
-            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendName('viewport', 'width=device-width')
             ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
         ?>
-		<style>
-			body {
-				opacity: 0;
-			}
-		</style>
 	</head>
     <body>
         <?php
-            $this->headLink()->appendStylesheet($this->basePath('css/style.css'));
+            $css = $this->currentRoute()->getRoute() == 'app' ? 'css/15.06.2017.style.css' : 'css/style.css';
+            $custom = $this->currentRoute()->getRoute() == 'app' ? 'js/15.06.2017custom.js' : 'js/custom.js';
+            $this->headLink()->appendStylesheet($this->basePath($css));
             $this->inlineScript()
                 ->appendFile($this->basePath('js/jquery.min.js'))
                 ->appendFile($this->basePath('js/vendor.js'))
-                ->appendFile($this->basePath('js/custom.js'))
+                ->appendFile($this->basePath($custom))
                 ->appendFile($this->basePath('js/notify.js'))
                 ->appendFile($this->basePath('js/system.js'));
         ?>
@@ -36,9 +33,6 @@
         <?= $this->headLink() ?>
         <?= $this->inlineScript() ?>
         <script src="/node/socket.io/socket.io.js"></script>
-        <script>
-            //var socket = io('http://www.ogame.zz:8000');
-        </script>
         <script>
             SystemJS.config({
                 baseURL: '<?= $this->basePath('/js/') ?>'

@@ -163,7 +163,7 @@ class ZendDbSqlRepository implements SettingsRepositoryInterface
         if (! $result instanceof ResultInterface || ! $result->isQueryResult()) {
             throw new RuntimeException(sprintf(
                 'Failed retrieving setting with identifier "%s"; unknown database error.',
-                $id
+                $key
             ));
         }
 
@@ -174,7 +174,7 @@ class ZendDbSqlRepository implements SettingsRepositoryInterface
         if (! $setting) {
             throw new InvalidArgumentException(sprintf(
                 'Setting with identifier "%s" not found.',
-                $id
+                $key
             ));
         }
 

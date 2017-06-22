@@ -3,6 +3,8 @@
 namespace Entities\Classes;
 
 use Entities\Model\EventRepository;
+use Universe\Model\Planet;
+use Universe\Model\Sputnik;
 
 class EventTypes
 {
@@ -25,4 +27,17 @@ class EventTypes
         return
             $eventRepository->findAllEntities('events.event_type < ' . self::$MAX_FOR_BUILDING)->buffer();
     }
+    
+    static public function getBuildingEventsByPlanet(EventRepository $eventRepository, Planet $planet)
+    {
+        return
+            $eventRepository->findAllEntities('events.event_type < ' . self::$MAX_FOR_BUILDING . ' AND events.target_planet = ' . $planet->getId())->buffer();
+    }
+    
+    static public function getBuildingEventsBySputnik(EventRepository $eventRepository, Sputnik $sputnik)
+    {
+        return
+            $eventRepository->findAllEntities('events.event_type < ' . self::$MAX_FOR_BUILDING . ' AND events.target_sputnik = ' . $sputnik->getId())->buffer();
+    }
+    
 }
