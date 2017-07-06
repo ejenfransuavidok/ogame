@@ -20,6 +20,7 @@ use Entities\Model\BuildingRepository;
 use Entities\Model\BuildingTypeRepository;
 use Entities\Model\EventCommand;
 use Entities\Model\EventRepository;
+use App\Renderer\HeaderRenderer;
 use App\Renderer\PopupFleet1Renderer;
 use App\Renderer\PopupFleet2Renderer;
 use App\Renderer\PopupFleet3Renderer;
@@ -27,6 +28,7 @@ use App\Renderer\FleetMoovingActivity;
 use App\Renderer\PlanetKeepRenderer;
 use App\Renderer\PopupBuildingRenderer;
 use App\Renderer\PopupBlackmarketRenderer;
+use App\Renderer\PopupBigBlackmarketRenderer;
 use App\Renderer\PopupBuyRenderer;
 use App\Renderer\PopupDonateRenderer;
 use Settings\Model\SettingsRepositoryInterface;
@@ -105,6 +107,11 @@ class IndexController extends AbstractActionController
     private $planetCapacity;
     
     /**
+     * @ PopupBigBlackmarketRenderer
+     */
+    private $popupBigBlackmarketRenderer;
+    
+    /**
      * @ PopupBlackmarketRenderer
      */
     private $popupBlackmarketRenderer;
@@ -138,44 +145,39 @@ class IndexController extends AbstractActionController
         FleetMoovingActivity        $fleetMoovingActivity,
         PlanetRepository            $planetRepository,
         PlanetCommand               $planetCommand,
+        PopupBigBlackmarketRenderer $popupBigBlackmarketRenderer,
         PopupBlackmarketRenderer    $popupBlackmarketRenderer,
         PopupBuyRenderer            $popupBuyRenderer,
         PopupDonateRenderer         $popupDonateRenderer,
         SettingsRepositoryInterface $settingsRepository
         )
     {
-        $this->dbAdapter                = $db;
-        $this->authController           = $authController;
-        $this->planetCapacity           = $planetCapacity;
-        $this->buildingRepository       = $buildingRepository;
-        $this->buildingTypeRepository   = $buildingTypeRepository;
-        $this->eventRepository          = $eventRepository;
-        $this->eventCommand             = $eventCommand;
-        $this->popupFleet1Renderer      = $popupFleet1Renderer;
-        $this->popupFleet2Renderer      = $popupFleet2Renderer;
-        $this->popupFleet3Renderer      = $popupFleet3Renderer;
-        $this->fleetMoovingActivity     = $fleetMoovingActivity;
-        $this->planetRepository         = $planetRepository;
-        $this->planetCommand            = $planetCommand;
-        $this->popupBlackmarketRenderer = $popupBlackmarketRenderer;
-        $this->popupBuyRenderer         = $popupBuyRenderer;
-        $this->popupDonateRenderer      = $popupDonateRenderer;
-        $this->settingsRepository       = $settingsRepository;
+        $this->dbAdapter                    = $db;
+        $this->authController               = $authController;
+        $this->planetCapacity               = $planetCapacity;
+        $this->buildingRepository           = $buildingRepository;
+        $this->buildingTypeRepository       = $buildingTypeRepository;
+        $this->eventRepository              = $eventRepository;
+        $this->eventCommand                 = $eventCommand;
+        $this->popupFleet1Renderer          = $popupFleet1Renderer;
+        $this->popupFleet2Renderer          = $popupFleet2Renderer;
+        $this->popupFleet3Renderer          = $popupFleet3Renderer;
+        $this->fleetMoovingActivity         = $fleetMoovingActivity;
+        $this->planetRepository             = $planetRepository;
+        $this->planetCommand                = $planetCommand;
+        $this->popupBigBlackmarketRenderer  = $popupBigBlackmarketRenderer;
+        $this->popupBlackmarketRenderer     = $popupBlackmarketRenderer;
+        $this->popupBuyRenderer             = $popupBuyRenderer;
+        $this->popupDonateRenderer          = $popupDonateRenderer;
+        $this->settingsRepository           = $settingsRepository;
         
-        $this->planetKeepRenderer       = new PlanetKeepRenderer($this->eventRepository, $this->authController);
-        $this->popupBuildingRenderer    = new PopupBuildingRenderer(
+        $this->planetKeepRenderer           = new PlanetKeepRenderer($this->eventRepository, $this->authController);
+        $this->popupBuildingRenderer        = new PopupBuildingRenderer(
                                                     $this->buildingTypeRepository, 
                                                     $this->buildingRepository, 
                                                     $this->planetRepository,
                                                     $this->authController,
                                                     $this->settingsRepository);
-        /*
-        $loc = $this->getServiceLocator();
-        $translator = $loc->get('translator');
-        $lang = 'en';
-        $translator->addTranslationFile("phparray", dirname(dirname(__FILE__)) . '/language/lang.array.' . $lang . '.php');
-        $loc->get('ViewHelperManager')->get('translate')->setTranslator($translator);
-        */
     }
     
     public function indexAction()
@@ -198,19 +200,20 @@ class IndexController extends AbstractActionController
             
             $layout->addChild($donate, 'popup_donate');
             
-            $header = new ViewModel([
-                'planets' => $this->planetRepository->findBy('planets.owner = ' . $this->user->getId() . ' AND planets.id != ' . $planet->getId())->buffer(),
-                'planet'  => $planet,
-                'capacity'=> $this->planetCapacity,
-                'user'    => $this->user,
-                'settings'=> $this->settingsRepository
-            ]);
+            $header = new ViewModel([]);
+            HeaderRenderer::render($header, $this->planetRepository, $planet, $this->planetCapacity, $this->user, $this->settingsRepository);
             $header->setTemplate('include/header');
             /**
              * @ aside
              */
             $aside = new ViewModel([]);
             $aside->setTemplate('include/aside');
+            /**
+             * @ 
+             */
+            $bigblackmarket = new ViewModel([]);
+            $bigblackmarket->setTemplate('include/popups/bigblackmarket');
+            $this->popupBigBlackmarketRenderer->execute($bigblackmarket, $this->user, $planet);
             /**
              * @ 
              */
@@ -261,6 +264,7 @@ class IndexController extends AbstractActionController
                 ->addChild($fleet_forward_2, 'fleet_forward_2')
                 ->addChild($fleet_forward_3, 'fleet_forward_3')
                 ->addChild($fleet_mooving_activity, 'fleet_mooving_activity')
+                ->addChild($bigblackmarket, 'bigblackmarket')
                 ->addChild($blackmarket, 'blackmarket')
                 ->addChild($buy, 'buy');
             

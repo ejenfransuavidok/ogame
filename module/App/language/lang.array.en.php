@@ -1,6 +1,6 @@
 <?php
 return array(
-    'Title'                     => 'This is the first brauserify game with penal output money',
+    'Title'                     => 'Play, Win, Conquer',
     'Alliance'                  => 'Alliance',
     'ALLIANCE'                  => 'ALLIANCE',
     'Peace_treaty_expires'      => 'Peace treaty expires',

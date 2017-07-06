@@ -1,0 +1,15 @@
+<div class="header__item header__item_treasure">
+    <div class="header__item-val">
+        <i class="ico">
+            <img src="<?= $settings->findSettingByKey ('THUMB_ELECTRICITY')->getText()?>" alt="">
+        </i>
+        <div class="val value" 
+            data-resources="electricity"
+            data-resource_velocity_per_second="0"
+            data-resources_limit="1000000000"
+            data-resources_amount="<?= $planet->getElectricity() ?>"
+            data-resources_capacity="1000000000">
+            <?= $planet->getElectricityPretty() ?>
+        </div>
+    </div>
+</div>

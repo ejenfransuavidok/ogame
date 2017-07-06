@@ -29,7 +29,7 @@ use Eventer\Processor\BuildingProcessor;
 use Eventer\Processor\ResourcesCalculator;
 use Settings\Model\SettingsRepositoryInterface;
 use Eventer\Processor\Finish4DonateProcessor;
-
+use Eventer\Processor\Build4DonateProcessor;
 
 
 class BuildingController extends AbstractActionController
@@ -247,6 +247,44 @@ class BuildingController extends AbstractActionController
             }
             catch(\Exception $e){
                 $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => 'Строительство данного объекта не ведется!', 'error' => $e->getMessage()));
+            }
+        }
+        else{
+            /**
+             * @ пользователь неавторизован
+             */
+            $view->setVariable('data', array('result' => 'ERR', 'auth' => 'NO', 'message' => 'Пользователь не авторизован'));
+        }
+        return $view;
+    }
+    
+    public function buildingfordonateAction()
+    {
+        $view = new ViewModel([]);
+        $view->setTerminal(true);
+        if($this->authController->isAuthorized()){
+            $this->user = $this->authController->getUser();
+            try{
+                $buildingType = $this->buildingTypeRepository->findEntity($this->params()->fromPost('buildingtypeid'));
+                $planet = $this->planetRepository->findEntity($this->params()->fromPost('planet'));
+                Build4DonateProcessor::execute
+                    (
+                        $this->user,
+                        $buildingType,
+                        $planet,
+                        $this->buildingTypeRepository,
+                        $this->buildingRepository,
+                        $this->buildingCommand,
+                        $this->planetRepository,
+                        $this->sputnikRepository,
+                        $this->planetCommand,
+                        $this->sputnikCommand,
+                        $this->settingsRepository,
+                        $view
+                    );
+            }
+            catch(\Exception $e){
+                $view->setVariable('data', array('result' => 'ERR', 'auth' => 'YES', 'message' => 'Произошла ошибка!', 'error' => $e->getMessage()));
             }
         }
         else{

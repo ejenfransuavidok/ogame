@@ -1,0 +1,49 @@
+<div class="header__item header__item_treasure">
+    <div class="header__item-val">
+        <i class="ico">
+            <img src="<?= $settings->findSettingByKey ('THUMB_DARKMATTER')->getText() ?>" alt="">
+        </i>
+        <div class="val value" 
+            data-resources="darkmatter"
+            data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_darkmatter() ?>"
+            data-resources_limit="<?= $planet->getDarkmatter() ?>"
+            data-resources_amount="<?= $planet->getDarkmatter() ?>"
+            data-resources_capacity="<?= $capacity->getDarkmatterCapacity($planet->getId()) ?>"
+            data-donate_price="<?= floatval($settings->findSettingByKey ('DONATE_2_DARKMATTER_4_FINISHING_BUILDING')->getText()); ?>">
+            <?= $planet->getDarkmatterPretty() ?>
+        </div>
+    </div>
+    <div class="header__item-info header__item-info_bottom">
+        <div class="header__item-info-content">
+            <div class="header__item-info-ico"><img src="<?= $settings->findSettingByKey ('THUMB_DARKMATTER')->getText() ?>" alt=""></div>
+            <div class="header__item-info-title">Темная материя</div>
+            <div class="header__item-info-list">
+                <div class="header__item-info-item">
+                    <div class="header__item-info-item-name"><i class="ico ico_info ico_load"></i> Вместимость</div>
+                    <div class="header__item-info-item-val"><?= $capacity->getDarkmatterCapacity($planet->getId()) ?></div>
+                </div>
+                <div class="header__item-info-item">
+                    <div class="header__item-info-item-name"><i class="ico ico_info ico_up"></i> Производство</div>
+                    <div class="header__item-info-item-val"><?= round(3600 * $planet->get_velocity_per_second_mineral_darkmatter()) ?> / ч.</div>
+                </div>
+                <div class="header__item-info-item">
+                    <div class="header__item-info-item-name"><i class="ico ico_info ico_timeup"></i> До заполнения</div>
+                    <div class="header__item-info-item-val">-</div>
+                </div>
+            </div>
+            <div class="header__item-info-btn">
+                <div class="btn">Ускорить <i class="ico ico-flash"></i></div>
+            </div>
+        </div>
+        <div class="header__item-info-foot">
+            <div class="cargo">
+                <div class="cargo-fill">
+                    <div class="cargo-current">280 000 [ 100% ]</div>
+                    <div class="cargo-line">
+                        <div style="width:80.5%" class="cargo-progress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

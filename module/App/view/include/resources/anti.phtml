@@ -1,0 +1,16 @@
+<div class="header__item header__item_treasure">
+    <div class="header__item-val">
+        <i class="ico">
+            <img src="/img/ico/icon-08.svg" alt="">
+        </i>
+        <div class="val value" 
+            data-resources="anti"
+            data-resource_velocity_per_second="<?= $planet->get_velocity_per_second_mineral_anti() ?>"
+            data-resources_limit="<?= $planet->getAnti() ?>"
+            data-resources_amount="<?= $planet->getAnti() ?>"
+            data-resources_capacity="1000000000"
+            data-donate_price="<?= floatval($settings->findSettingByKey ('DONATE_2_ANTI_4_FINISHING_BUILDING')->getText()); ?>">
+            <?= $planet->getAntiPretty() ?>
+        </div>
+    </div>
+</div>

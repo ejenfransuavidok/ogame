@@ -46,6 +46,16 @@ var PopupBuilding = exports.PopupBuilding = function () {
             //}
         }
     }, {
+        key: 'update_building_into_list',
+        value: function update_building_into_list(building_id) {
+            var current_level = parseInt($('[data-item_identifier=' + building_id + ']').attr('data-building_level'));
+            var price_factor = parseFloat($('[data-item_identifier=' + building_id + ']').attr('data-building_price_factor'));
+            var new_period = parseInt(Math.pow(parseFloat($('[data-item_identifier=' + building_id + ']').attr('data-building_price_factor')), current_level) * parseInt($('[data-item_identifier=' + building_id + ']').attr('data-summ_resource_consume')) / 30);
+            $('[data-item_identifier=' + building_id + ']').attr('data-building_period', this.interval.interval2string(new_period));
+            $('[data-item_identifier=' + building_id + ']').attr('data-building_level', parseInt(current_level + 1));
+            $('[data-item_identifier=' + building_id + ']').find('[data-entity=keep__item-lvl]').html('(' + parseInt(current_level + 1) + ')');
+        }
+    }, {
         key: 'start_continue_timer',
         value: function start_continue_timer(event_id, begin, end, now, building_id, main) {
             var _this = this;
@@ -137,6 +147,12 @@ var PopupBuilding = exports.PopupBuilding = function () {
                 return _this2.finish_4_donate(evt);
             });
             /**
+             * построить за донат
+             */
+            $(document).on('click', '[data-entity=building_4_donate_building_button]', function (evt) {
+                return _this2.building_4_donate(evt);
+            });
+            /**
              * открыть всплывающее окно строительства
              */
             $(document).on('click', '[data-entity=hammer]', function (evt) {
@@ -166,9 +182,23 @@ var PopupBuilding = exports.PopupBuilding = function () {
             */
         }
     }, {
+        key: 'building_4_donate',
+        value: function building_4_donate(evt) {
+            var _this3 = this;
+
+            evt.preventDefault();
+            var win = $('.popup_ship');
+            var building_id = $(win).data('building_id');
+            this.ajaxer.execute('post', '/eventer/buildingfordonate', 'planet=' + this.current_planet + '&buildingtypeid=' + building_id, 'json', function (data) {
+                $.notify(data.message);
+                window.theGame.popup.close('.popup');
+                _this3.update_building_into_list(building_id);
+            });
+        }
+    }, {
         key: 'finish_4_donate',
         value: function finish_4_donate(evt) {
-            var _this3 = this;
+            var _this4 = this;
 
             evt.preventDefault();
             var obj = $(evt.target);
@@ -176,11 +206,11 @@ var PopupBuilding = exports.PopupBuilding = function () {
             if (this.is_building_going_on.check(root)) {
                 (function () {
                     var event_id = parseInt($(root).attr('data-event_id'));
-                    _this3.ajaxer.execute('post', '/eventer/finishfordonatebuilding', 'event_id=' + event_id, 'json', function (data) {
+                    _this4.ajaxer.execute('post', '/eventer/finishfordonatebuilding', 'event_id=' + event_id, 'json', function (data) {
                         /**
                          * @ закончим строительство
                          */
-                        _this3.timers_counters[event_id] = -1;
+                        _this4.timers_counters[event_id] = -1;
                     });
                 })();
             } else {
@@ -190,14 +220,14 @@ var PopupBuilding = exports.PopupBuilding = function () {
     }, {
         key: 'reject_building',
         value: function reject_building(evt) {
-            var _this4 = this;
+            var _this5 = this;
 
             var obj = $(evt.target);
             var root = $(obj).closest('[data-root=root]');
             if (this.is_building_going_on.check(root)) {
                 var event_id = parseInt($(root).attr('data-event_id'));
-                this.ajaxer.execute('post', '/eventer/rejectbuilding', 'event_id=' + event_id, 'json', function (data) {
-                    _this4.restore_context(root);
+                this.ajaxer.execute('post', '/eventer/rejectbuilding', 'planet=' + this.current_planet, 'json', function (data) {
+                    _this5.restore_context(root);
                 });
             } else {
                 $.notify('building isnt building');
@@ -266,11 +296,11 @@ var PopupBuilding = exports.PopupBuilding = function () {
     }, {
         key: 'install_reject_button_handler',
         value: function install_reject_button_handler(event_id) {
-            var _this5 = this;
+            var _this6 = this;
 
             if (!(event_id in this.reject_building_button_handlers)) {
                 $(document).on('click', '[data-entity=reject_building_button_' + event_id + ']', function (evt) {
-                    _this5.ajaxer.execute('post', '/eventer/rejectbuilding', 'event_id=' + event_id, 'json', function (data) {
+                    _this6.ajaxer.execute('post', '/eventer/rejectbuilding', 'event_id=' + event_id, 'json', function (data) {
                         $.notify(data.message);
                     });
                 });
@@ -280,21 +310,21 @@ var PopupBuilding = exports.PopupBuilding = function () {
     }, {
         key: 'updatePlanetkeep',
         value: function updatePlanetkeep() {
-            var _this6 = this;
+            var _this7 = this;
 
             this.ajaxer.execute('post', '/app/planetkeep', 'planetid=' + this.current_planet, 'json', function (data) {
                 $('[data-entity=game__planet-keep-keep]').html(data.content);
                 $('.popup_building').remove();
                 $(data.popup_building).insertAfter('.game');
-                _this6.start_continue_timer(data.event_id, data.begin, data.end, data.now);
-                _this6.install_reject_button_handler(data.event_id);
+                _this7.start_continue_timer(data.event_id, data.begin, data.end, data.now);
+                _this7.install_reject_button_handler(data.event_id);
                 window.theGame.plugs.update();
             });
         }
     }, {
         key: 'build',
         value: function build(evt) {
-            var _this7 = this;
+            var _this8 = this;
 
             /**
              * @ запуск строительства
@@ -316,11 +346,11 @@ var PopupBuilding = exports.PopupBuilding = function () {
                 /**
                  * 2. готовим контекст
                  */
-                _this7.prepare_context(root, picture, color, building_id, data.event_id);
+                _this8.prepare_context(root, picture, color, building_id, data.event_id);
                 /**
                  * 3. запускаем строительство
                  */
-                _this7.start_continue_timer(data.event_id, data.begin, data.end, data.now, building_id, root);
+                _this8.start_continue_timer(data.event_id, data.begin, data.end, data.now, building_id, root);
             });
         }
     }, {
@@ -459,7 +489,6 @@ var PopupBuilding = exports.PopupBuilding = function () {
                 if (!$('[data-entity=popup_ship_build_button]').hasClass('is-disable')) {
                     $('[data-entity=popup_ship_build_button]').addClass('is-disable');
                     $('[data-entity=popup_ship_build_button]').text('Недоступно');
-                    $('.popup_ship').find('.popup__footer-right').hide();
                     if (!$('.popup_ship').find('.popup__content-tax-resourses').hasClass('is-over')) {
                         $('.popup_ship').find('.popup__content-tax-resourses').addClass('is-over');
                     }
@@ -468,6 +497,10 @@ var PopupBuilding = exports.PopupBuilding = function () {
                 $('[data-entity=popup_ship_build_button]').removeClass('is-disable');
                 $('.popup_ship').find('.popup__content-tax-resourses').removeClass('is-over');
                 $('[data-entity=popup_ship_build_button]').text('Строить');
+            }
+            if (!have_donate_for_buildings) {
+                $('.popup_ship').find('.popup__footer-right').hide();
+            } else {
                 $('.popup_ship').find('.popup__footer-right').show();
             }
             ///
@@ -485,13 +518,7 @@ var PopupBuilding = exports.PopupBuilding = function () {
             $(win).find('[data-entity=period]').html(period);
             $(win).find('.resourses__list').html(needles);
             $(win).find('[data-entity=total_donate_needle]').html(Math.round(donate_needle));
-            /*
-            $('[data-entity=popup_building-popup__pp-layout-popup__pp-content-title]').html(title + '<br><span class="btn btn_lvl">lv.'+level+'</span>');
-            $('[data-entity=popup_building-popup__pp-layout-popup__pp-content-description]').html(description);
-            $('[data-entity=popup_building-popup__pp-layout-popup__pp-building-period]').html(period);
-            $('[data-entity=popup_building-popup__pp-layout-popup__pp-content-needles]').html(needles);
-            */
-            //window.theGame.popup.close('.popup');
+
             window.theGame.popup.open('.popup_ship');
         }
     }, {

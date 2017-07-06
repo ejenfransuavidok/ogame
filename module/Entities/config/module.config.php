@@ -29,6 +29,7 @@ return [
             Model\UserRepository::class => Factory\UserRepositoryFactory::class,
             Model\EventCommand::class => Factory\EventCommandFactory::class,
             Model\EventRepository::class => Factory\EventRepositoryFactory::class,
+            Model\SourceRepository::class => Factory\SourceRepositoryFactory::class,
         ],
     ],
     'controllers' => [

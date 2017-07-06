@@ -1,0 +1,20 @@
+<svg id="Группа_2" data-name="Группа 2" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fc0;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #d9ae00;
+      }
+    </style>
+  </defs>
+  <path id="Фигура_7" data-name="Фигура 7" class="cls-1" d="M77.17,137C72.088,137,72,131.844,72,131.844V99.212c0-5.324,4.393-8.587,4.393-8.587L110.762,64V94.06h17.227V137H77.17Z" transform="translate(-60 -60.5)"/>
+  <path id="Фигура_7_копия" data-name="Фигура 7 копия" class="cls-2" d="M119.375,94.06h-8.613v17.175L78.893,132.7l40.482-12.881V94.06" transform="translate(-60 -60.5)"/>
+  <path id="Фигура_7_копия_2" data-name="Фигура 7 копия 2" class="cls-3" d="M98.7,91.054c2.412-1.031,4.307,0,4.307,2.4A7.6,7.6,0,0,1,98.7,99.728c-2.412,1.03-4.307,0-4.307-2.4A7.377,7.377,0,0,1,98.7,91.054Z" transform="translate(-60 -60.5)"/>
+</svg>

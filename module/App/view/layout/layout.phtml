@@ -14,6 +14,7 @@
             $css = $this->currentRoute()->getRoute() == 'app' ? 'css/15.06.2017.style.css' : 'css/style.css';
             $custom = $this->currentRoute()->getRoute() == 'app' ? 'js/15.06.2017custom.js' : 'js/custom.js';
             $this->headLink()->appendStylesheet($this->basePath($css));
+            $this->headLink()->appendStylesheet($this->basePath('css/custom.css'));
             $this->inlineScript()
                 ->appendFile($this->basePath('js/jquery.min.js'))
                 ->appendFile($this->basePath('js/vendor.js'))
@@ -29,7 +30,6 @@
         <?= $this->popup_rules ?>
         <?= $this->popup_confident ?>
         <?= $this->popup_conditions ?>
-        <?= $this->popup_donate ?>
         <?= $this->headLink() ?>
         <?= $this->inlineScript() ?>
         <script src="/node/socket.io/socket.io.js"></script>

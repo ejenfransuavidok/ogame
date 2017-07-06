@@ -83,7 +83,7 @@ class Finish4DonateProcessor
         $ore        = floatval($ore)           * floatval($portion) *
             floatval($settingsRepository->findSettingByKey ('DONATE_2_ORE_4_FINISHING_BUILDING')->getText());
         $hydro      = floatval($hydro)         * floatval($portion) *
-            floatval($settingsRepository->findSettingByKey ('DONATE_2_HYDROGENIUM_4_FINISHING_BUILDING')->getText());
+            floatval($settingsRepository->findSettingByKey ('DONATE_2_HYDRO_4_FINISHING_BUILDING')->getText());
         $titan      = floatval($titan)         * floatval($portion) *
             floatval($settingsRepository->findSettingByKey ('DONATE_2_TITAN_4_FINISHING_BUILDING')->getText());
         $darkmatter = floatval($darkmatter)    * floatval($portion) *

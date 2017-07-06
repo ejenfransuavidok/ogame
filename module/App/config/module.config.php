@@ -17,6 +17,7 @@ return [
             Renderer\PopupFleet3Renderer::class => Factory\PopupFleet3RendererFactory::class,
             Renderer\FleetMoovingActivity::class => Factory\FleetMoovingActivityFactory::class,
             Renderer\PopupBlackmarketRenderer::class => Factory\PopupBlackmarketRendererFactory::class,
+            Renderer\PopupBigBlackmarketRenderer::class => Factory\PopupBigBlackmarketRendererFactory::class,
             Renderer\PopupBuyRenderer::class => Factory\PopupBuyRendererFactory::class,
             Renderer\PopupDonateRenderer::class => Factory\PopupDonateRendererFactory::class,
         ],

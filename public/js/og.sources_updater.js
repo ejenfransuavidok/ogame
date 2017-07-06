@@ -76,6 +76,12 @@ var SrcUpdater = exports.SrcUpdater = function () {
                     $(electricity).data('resources_limit', 1000000000);
                     $(electricity).data('resources_amount', values.electricity);
                     _this.prettier(values.electricity, 'electricity');
+
+                    var anti = $('[data-resources=anti]');
+                    $(anti).data('resource_velocity_per_second', 0);
+                    $(anti).data('resources_limit', 1000000000);
+                    $(anti).data('resources_amount', values.mineral_anti);
+                    _this.prettier(values.mineral_anti, 'anti');
                 } catch (err) {
                     console.log(err.message);
                 }

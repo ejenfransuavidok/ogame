@@ -31,7 +31,7 @@ class PopupBlackmarketRenderer
     {
         if($this->authController->isAuthorized()){
             //$spacesheeps = $this->spaceSheepRepository->findBy('spacesheeps.owner = ' . $user->getId() . ' AND spacesheeps.planet = ' . $currentPlanet->getId())->buffer();
-            $donate_price = intval($this->settingsRepository->findSettingByKey ('DONATE_ITEM_PRICE')->getText());
+            $donate_price = floatval($this->settingsRepository->findSettingByKey ('DONATE_ITEM_PRICE')->getText());
             $dollar_euro_course = floatval($this->settingsRepository->findSettingByKey ('DOLLAR_EURO_COURSE')->getText());
             $template
                 ->setVariable('donate_price', $donate_price)

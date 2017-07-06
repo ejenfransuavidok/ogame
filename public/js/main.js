@@ -28,6 +28,8 @@ var _ogSocket = require('og.socket.js');
 
 var _ogDonate = require('og.donate.js');
 
+var _ogBlackmarket = require('og.blackmarket.js');
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var JQueryStarter = function () {
@@ -86,7 +88,8 @@ var Main = function () {
             this.popup_fleet_2_handler = new _ogFleet_2.Fleet_2();
             this.popup_fleet_3_handler = new _ogFleet_3.Fleet_3();
             this.ogsocket = new _ogSocket.OGSocket(this.socket);
-            this.donate = new _ogDonate.Donate();
+            this.blackmarket = new _ogBlackmarket.Blackmarket(this.socket);
+            //this.donate = new Donate();
             //this.dbeventer = new DBEventer(this.popup_building_handler);
 
             //this.socket.emit('currentData', {currentUser: this.gvars.getCurrentUser(), currentPlanet: this.gvars.getCurrentPlanet()});

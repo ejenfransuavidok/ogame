@@ -22,6 +22,8 @@ return [
         'factories' => [
             Controller\BuildingController::class => Factory\BuildingControllerFactory::class,
             Controller\JsreaderController::class => Factory\JsreaderControllerFactory::class,
+            Controller\BuydonateController::class => Factory\BuydonateControllerFactory::class,
+            Controller\BuysourcesController::class => Factory\BuysourcesControllerFactory::class,
         ],
     ],
     'router' => [
@@ -80,6 +82,17 @@ return [
                         ],
                     ],
                     
+                    'buildingfordonate' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/buildingfordonate',
+                            'defaults' => [
+                                'controller' => Controller\BuildingController::class,
+                                'action' => 'buildingfordonate',
+                            ],
+                        ],
+                    ],
+                    
                     'jsreader' => [
                         'type' => \Zend\Router\Http\Segment::class,
                         'options' => [
@@ -87,6 +100,28 @@ return [
                             'defaults' => [
                                 'controller' => Controller\JsreaderController::class,
                                 'action' => 'jsreader',
+                            ],
+                        ],
+                    ],
+                    
+                    'buydonate' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/buydonate',
+                            'defaults' => [
+                                'controller' => Controller\BuydonateController::class,
+                                'action' => 'buydonate',
+                            ],
+                        ],
+                    ],
+                    
+                    'buysources' => [
+                        'type' => \Zend\Router\Http\Segment::class,
+                        'options' => [
+                            'route'    => '/buysources',
+                            'defaults' => [
+                                'controller' => Controller\BuysourcesController::class,
+                                'action' => 'buysources',
                             ],
                         ],
                     ],

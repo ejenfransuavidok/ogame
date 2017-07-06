@@ -1,0 +1,91 @@
+<div id="popupMarket2" class="popup popup_bigblackmarket">
+    <div class="popup__overlay"></div>
+    <div class="popup__inner">
+        <div class="popup__layout">
+            <div class="popup__close"></div>
+            <div class="popup__title">Черный рынок</div>
+            <div class="popup__head">
+                <div class="popup__head-menu">
+                    <div class="popup__head-menu-group">
+                        <a href="#" class="popup__head-menu-item is-active">
+                            <span>Ресурсы</span>
+                        </a>
+                        <a href="#" class="popup__head-menu-item">
+                            <span>Корабли</span>
+                        </a>
+                        <a href="#" class="popup__head-menu-item">
+                            <span>Здания</span>
+                        </a>
+                        <a href="#" class="popup__head-menu-item">
+                            <span>Технологии</span>
+                        </a>
+                    </div>
+                    <div class="popup__head-menu-donut"><i class="ico"><img src="/img/ico_resurses/ico_resurce-09.svg" alt=""></i>
+                        <div class="cost">15 000 000</div>
+                        <div class="add"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="popup__market popup__market_resurces">
+                <div class="popup__market-content js-scroll-wrap">
+                    <div class="storage">
+                        <div class="storage__list">
+                        <?php foreach($sources as $source) : if(($source->getId()=='ELECTRICITY')||($source->getId()=='ANTI')) continue; ?>
+                            <?php foreach(array(50, 75, 100) as $item) : ?>
+                            <?php 
+                                if($item - 1 >= $source->part){
+                                    $amount = $source->capacity * ($item - $source->part) / 100;
+                                    $total = intval ($amount * $source->getPrice());
+                                }
+                                else{
+                                    $total = 0;
+                                }
+                            ?>
+                            <div class="storage__card <?php echo ($item - 1 >= $source->part) ? '' : 'is-disable'; ?>"
+                                 data-entity="blackmarket-source"
+                                 data-price="<?=$source->getPrice(); ?>"
+                                 data-sourcetype="<?=strtolower($source->getId()); ?>"
+                                 data-capacity="<?=$source->capacity; ?>"
+                                 data-fullness="<?=$item; ?>"
+                                 data-total="<?=$total; ?>"
+                            >
+                                <div class="storage__card-inner">
+                                    <div class="storage__card-ico">
+                                        <div class="ico ico-resource"><img src="<?= $source->getPicture(); ?>" alt=""></div>
+                                    </div>
+                                    <div class="storage__card-title"><?= $source->getName(); ?></div>
+                                    <div class="storage__card-fill">
+                                        Заполнить <br> 
+                                        <b>на <?= $item; ?>%</b>
+                                    </div>
+                                    <div class="storage__card-text">
+                                        Стоимость <br>
+                                        <span class="donut">
+                                            <i class="ico"><img src="/img/ico_resurses/ico_resurce-09.svg" alt=""></i>
+                                            <div class="val">
+                                                <?=$total; ?>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <a href="#" class="storage__card-buy storage__card-buy_violet">Купить</a> 
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+						</div>
+						<div class="popup__market-footer">
+							<div class="cargo">
+								<div class="cargo-fill">
+									<div class="cargo-current">Хранилище: 140 000 т. / 10 000 000</div>
+									<div class="cargo-line">
+										<div style="width:80.5%" class="cargo-progress"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+</div>
